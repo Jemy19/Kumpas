@@ -80,9 +80,15 @@ const getProfile = (req, res) => {
     }
 }
 
+const logoutUser = (req, res) => {
+    res.cookie('token', '', { maxAge: 1 }).json('Logged out');
+  };
+  
+
 module.exports =  {
     test,
     registerUser,
     loginUser,
-    getProfile
+    getProfile,
+    logoutUser
 }

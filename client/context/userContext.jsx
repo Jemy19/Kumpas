@@ -11,9 +11,16 @@ export function UserContextProvider({children}) {
                 setUser(data)
             })
         }
-    }, [])
+    }, [user])
+
+    const logout = () => {
+        axios.post('/logout').then(() => {
+          setUser(null);
+        });
+    };
+
     return (
-        <UserContext.Provider value={{user, setUser}}>
+        <UserContext.Provider value={{user, setUser, logout}}>
             {children}
         </UserContext.Provider>
     )
