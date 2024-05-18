@@ -11,6 +11,8 @@ import {toast} from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../../context/userContext';
 
+import Navbar from "@/components/Navbar";
+
 export function Log() {
   useEffect(() => {
     // Set overflow-y to hidden on body when component mounts
@@ -48,8 +50,10 @@ export function Log() {
   }
 
   return (
+    <>
+    <Navbar />
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
-      <div className="flex items-center justify-center py-12">
+      <div className="flex items-center justify-center mt-20 lg:-mt-20">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Login</h1>
@@ -74,13 +78,10 @@ export function Log() {
             <Button type="submit" className="w-full">
               Login
             </Button>
-            <Button variant="outline" className="w-full">
-              Login with Google
-            </Button>
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="#" className="underline">
+            <Link to="/register" className="underline">
               Sign up
             </Link>
           </div>
@@ -97,6 +98,7 @@ export function Log() {
         />
       </div>
     </div>
+    </>
   )
 }
 

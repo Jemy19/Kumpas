@@ -6,7 +6,7 @@ import {Toaster} from 'react-hot-toast'
 import { UserContextProvider } from '../context/userContext'
 import Dashboard from './pages/Dashboard'
 import PrivateRoute from './components/PrivateRoute'
-import Login from './pages/login'
+import Login from './pages/Login'
 import Navbar from './components/Navbar';
 
 axios.defaults.baseURL = 'http://localhost:8000';
