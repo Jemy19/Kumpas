@@ -5,23 +5,30 @@ export const UserContext = createContext({})
 
 export function UserContextProvider({children}) {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true); // Add loading state
+
     useEffect(() => {
-        if(!user) {
-            axios.get('/profile').then(({data}) => {
-                setUser(data)
+        axios.get('/profile', { withCredentials: true })
+            .then(({ data }) => {
+                setUser(data);
             })
-        }
-    }, [user])
+            .catch((error) => {
+                console.error("Error fetching profile data:", error);
+            })
+            .finally(() => {
+                setLoading(false); // Set loading to false when request completes
+            });
+    }, []);
 
     const logout = () => {
         axios.post('/logout').then(() => {
-          setUser(null);
+            setUser(null);
         });
     };
 
     return (
-        <UserContext.Provider value={{user, setUser, logout}}>
+        <UserContext.Provider value={{ user, setUser, logout, loading }}>
             {children}
         </UserContext.Provider>
     )
-}   
+}

@@ -7,7 +7,7 @@ import { UserContextProvider } from '../context/userContext'
 import Dashboard from './pages/Dashboard'
 import PrivateRoute from './components/PrivateRoute'
 import Login from './pages/Login'
-import Navbar from './components/Navbar';
+import OldDashboard from './pages/Oldashboard'
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true
@@ -21,6 +21,7 @@ function App() {
         <Route path='/Login' element={<Login />} />
         <Route path='/Register' element={<Register />} />
         <Route path='/Dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path='/OldDashboard' element={<PrivateRoute><OldDashboard /></PrivateRoute>} />
       </Routes>
     </UserContextProvider>  
   )

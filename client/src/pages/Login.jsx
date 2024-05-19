@@ -13,7 +13,7 @@ import { UserContext } from '../../context/userContext';
 
 import Navbar from "@/components/Navbar";
 
-export function Log() {
+export function Login() {
   useEffect(() => {
     // Set overflow-y to hidden on body when component mounts
     document.body.style.overflowY = 'hidden';
@@ -53,7 +53,7 @@ export function Log() {
     <>
     <Navbar />
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
-      <div className="flex items-center justify-center mt-20 lg:-mt-20">
+      <div className="flex items-center justify-center mt-20 lg:-mt-20 mb-20">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Login</h1>
@@ -102,4 +102,4 @@ export function Log() {
   )
 }
 
-export default Log;
+export default Login;
