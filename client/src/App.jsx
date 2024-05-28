@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard'
 import PrivateRoute from './components/PrivateRoute'
 import Login from './pages/Login'
 import OldDashboard from './pages/Oldashboard'
+import Management from './pages/Management';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true
@@ -22,6 +23,7 @@ function App() {
         <Route path='/Register' element={<Register />} />
         <Route path='/Dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path='/OldDashboard' element={<PrivateRoute><OldDashboard /></PrivateRoute>} />
+        <Route path='/Management' element={<PrivateRoute><Management /></PrivateRoute>} />
       </Routes>
     </UserContextProvider>  
   )

@@ -66,7 +66,7 @@ export function Dashboard() {
             Dashboard
           </Link>
           <Link
-            href="#"
+            to="/Management"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
             Management
