@@ -40,7 +40,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-//login
+//login  
 const loginUser = async(req, res) => {
  try {
     const {email, password} = req.body;
@@ -81,18 +81,32 @@ const getProfile = (req, res) => {
     }
 }
 
+const getWords = async (req, res) => {
+    try {
+        const words = await Word.find();
+        res.json(words);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 const logoutUser = (req, res) => {
     res.cookie('token', '', { maxAge: 1 }).json('Logged out');
 };
 
 const addWord = async (req, res) => {
     try {
-      const {title, category, video} = req.body;
+      const {title, description, category, video} = req.body;
       if (!title){
           return res.json({
             error: 'Title is required'
           })
         }
+        if (!description) {
+            return res.json({
+              error: 'Description is Required'
+            })
+          }
         if (!category) {
           return res.json({
             error: 'no category chosen'
@@ -106,6 +120,7 @@ const addWord = async (req, res) => {
   
         const word = await Word.create ({
           title,
+          description,
           category,
           video,
         });
@@ -122,5 +137,6 @@ module.exports =  {
     loginUser,
     getProfile,
     logoutUser,
-    addWord
+    addWord,
+    getWords
 }

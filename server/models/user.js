@@ -8,7 +8,7 @@ const userSchema = new Schema({
         unique: true
     },
     password: String
-})
+}, {timestamps: true})
 
 const UserModel = mongoose.model('User', userSchema);
 

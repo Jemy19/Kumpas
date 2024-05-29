@@ -6,6 +6,10 @@ const wordSchema = new Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
     category: {
         type: String,
         required: true
@@ -14,7 +18,7 @@ const wordSchema = new Schema({
         type: String,
         required: true
     }
-});
+}, {timestamps: true});
 
 const WordModel = mongoose.model('Word', wordSchema);
 
