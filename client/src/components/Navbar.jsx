@@ -1,9 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
-import {
-  Package2,
-} from "lucide-react"
 import Logo from '@/assets/Logo.svg'
 
 const Navbar = () => {

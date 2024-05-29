@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const Word = require('../models/signs')
 const { hashPassword, comparePassword} = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
 
@@ -82,7 +83,37 @@ const getProfile = (req, res) => {
 
 const logoutUser = (req, res) => {
     res.cookie('token', '', { maxAge: 1 }).json('Logged out');
-  };
+};
+
+const addWord = async (req, res) => {
+    try {
+      const {title, category, video} = req.body;
+      if (!title){
+          return res.json({
+            error: 'Title is required'
+          })
+        }
+        if (!category) {
+          return res.json({
+            error: 'no category chosen'
+          })
+        }
+        if (!video) {
+          return res.json({
+            error: 'missing video'
+          })
+        }
+  
+        const word = await Word.create ({
+          title,
+          category,
+          video,
+        });
+        return res.json(word);
+    } catch (error) {
+      console.log(error)
+    }
+  }
   
 
 module.exports =  {
@@ -90,5 +121,6 @@ module.exports =  {
     registerUser,
     loginUser,
     getProfile,
-    logoutUser
+    logoutUser,
+    addWord
 }

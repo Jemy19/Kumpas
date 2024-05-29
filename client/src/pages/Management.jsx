@@ -36,6 +36,7 @@ import {
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import {
     Table,
@@ -56,12 +57,47 @@ import {
     TooltipContent,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
+  import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+    DialogClose,
+  } from "@/components/ui/dialog"
+  
   
 import { UserContext } from '../../context/userContext';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import {toast} from 'react-hot-toast'
+import axios from 'axios'
+
 
 export function Management() {
     const { user, logout } = useContext(UserContext);
+    const [data, setData] = useState({
+      name: '',
+      email: '',
+      password: '',
+    })
+    const addWord = async (e) => {
+      e.preventDefault()
+      const {title, category, video} = data
+      try {
+        const {data} = await axios.post ('/addNewWord', {
+          title, category, video
+        })
+        if(data.error){
+          toast.error(data.error)
+        } else {
+          setData({ title: '', category: '', video: '' });
+          toast.success('Added New Word!')  
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -79,7 +115,7 @@ export function Management() {
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <Link
-                href="#"
+                to="/Dashboard"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
                 <Home className="h-4 w-4" />
@@ -143,7 +179,7 @@ export function Management() {
                   <span className="sr-only">Acme Inc</span>
                 </Link>
                 <Link
-                  href="#"
+                  to="/Dashboard"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
                   <Home className="h-5 w-5" />
@@ -267,12 +303,37 @@ export function Management() {
                     Export
                   </span>
                 </Button>
-                <Button size="sm" className="h-8 gap-1">
-                  <PlusCircle className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Add Product
-                  </span>
-                </Button>
+                <Dialog>
+                  <DialogTrigger>
+                    <Button size="sm" className="h-8 gap-1">
+                      <PlusCircle className="h-3.5 w-3.5" />
+                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                        Add New Sign
+                      </span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Add New Sign Language</DialogTitle>
+                      <DialogDescription>
+                      <form onSubmit={addWord}>
+                        <div className="grid gap-4">
+                          <Label>Title</Label>
+                          <Input type='text' placeholder='Enter Title...' value={data.title} onChange={(e) => setData({...data, title: e.target.value})} />
+                          <Label>Category</Label>
+                          <Input type='text' placeholder='Enter Category...' value={data.category} onChange={(e) => setData({...data, category: e.target.value})}/>
+                          <Label>Video</Label>
+                          <Input type='text' placeholder='Enter Video...' value={data.video} onChange={(e) => setData({...data, video: e.target.value})}/>
+                            <Button type="submit" variant="secondary">
+                              SUBMIT
+                            </Button>
+                        </div>
+                      </form>
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+
               </div>
             </div>
             <TabsContent value="all">
