@@ -89,8 +89,6 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
   
-  
-  
 import { UserContext } from '../../context/userContext';
 import React, { useContext, useState, useEffect } from 'react';
 import {toast} from 'react-hot-toast'
@@ -140,9 +138,7 @@ export function Management() {
                 setLoading(false);
             });
     }, []);
-    if (loading) {
-      return <div>Loading...</div>;
-    }
+    
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -167,7 +163,7 @@ export function Management() {
                 Dashboard
               </Link>
               <Link
-                href="#"
+                to="/Management"
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
               >
                 <Package className="h-4 w-4" />
