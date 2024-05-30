@@ -96,41 +96,88 @@ const logoutUser = (req, res) => {
 
 const addWord = async (req, res) => {
     try {
-      const {title, description, category, video} = req.body;
-      if (!title){
-          return res.json({
+        const {title, description, category, video} = req.body;
+        if (!title){
+            return res.json({
             error: 'Title is required'
-          })
+            })
         }
         if (!description) {
             return res.json({
-              error: 'Description is Required'
+                error: 'Description is Required'
             })
-          }
+            }
         if (!category) {
-          return res.json({
+            return res.json({
             error: 'no category chosen'
-          })
+            })
         }
         if (!video) {
-          return res.json({
+            return res.json({
             error: 'missing video'
-          })
+            })
         }
-  
+
         const word = await Word.create ({
-          title,
-          description,
-          category,
-          video,
+            title,
+            description,
+            category,
+            video,
         });
         return res.json(word);
     } catch (error) {
-      console.log(error)
+        console.log(error)
     }
-  }
+}
   
+const deleteWordDoc = async (req, res) => {
+    const { id } = req.params;
+    console.log('Received delete request for id:', id); 
+    try {
+        const result = await Word.deleteOne({ _id: id });
+        if (result.deletedCount === 0) {
+            return res.json({
+                error: 'word not found'
+            })
+        }
+        res.json({
+            message: 'Word deleted successfully'
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            error: 'An error occurred while deleting the word'
+        });
+    }
+};
 
+const updateWordDoc = async (req, res) => {
+    const { id } = req.params;
+    const { title, description, category, video } = req.body;
+    console.log('Received update request for id:', id); 
+    try {
+      const word = await Word.findById(id);
+      if (!word) {
+        return res.status(404).json({
+          error: 'Word not found',
+        });
+      }
+  
+      word.title = title || word.title;
+      word.description = description || word.description;
+      word.category = category || word.category;
+      word.video = video || word.video;
+  
+      const updatedWord = await word.save();
+      res.json(updatedWord);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: 'An error occurred while updating the word',
+      });
+    }
+  };
+  
 module.exports =  {
     test,
     registerUser,
@@ -138,5 +185,7 @@ module.exports =  {
     getProfile,
     logoutUser,
     addWord,
-    getWords
+    getWords,
+    deleteWordDoc,
+    updateWordDoc
 }

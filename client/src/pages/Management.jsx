@@ -37,7 +37,16 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import {
     Table,
     TableBody,
@@ -100,9 +109,10 @@ export function Management() {
     const categories = ['Basic Greetings', 'Survival Signs', 'Common Words', 'Questions', 'Alphbet'];
     const { user, logout } = useContext(UserContext);
     const [data, setData] = useState({
-      name: '',
-      email: '',
-      password: '',
+      title: '',
+      description: '',
+      category: '',
+      video: '',
     })
     const addWord = async (e) => {
       e.preventDefault()
@@ -116,7 +126,7 @@ export function Management() {
         } else {
           setData({ title: '', description: '', category: '', video: '' });
           toast.success('New Word Succesfully Added!')  
-          window.location.reload();
+          setWords(prevWords => [...prevWords, data]);
         }
       } catch (error) {
         console.log(error)
@@ -138,6 +148,64 @@ export function Management() {
                 setLoading(false);
             });
     }, []);
+    // for Delete Function
+    const deleteWord = async (id) => {
+      try {
+        const response = await axios.delete(`/deleteWord/${id}`, {
+          withCredentials: true, // if you need to send cookies with the request
+        });
+    
+        if (response.status === 200) {
+          console.log('Word deleted successfully:');
+          toast.success('Word Deleted!')  
+          setWords((prevWords) => prevWords.filter((word) => word._id !== id));
+        } else {
+          console.error('Error deleting word:', response.data.error);
+        }
+      } catch (error) {
+        console.error('An error occurred while deleting the word:', error);
+      }
+    };
+    // for update function
+
+    const [updateData, setUpdateData] = useState({
+      id: null,
+      title: '',
+      description: '',
+      category: '',
+      video: '',
+    });
+
+    const updateWord = async (e, id, updatedData) => {
+      e.preventDefault();
+      try {
+        const response = await axios.put(`/updateWord/${id}`, updatedData, {
+          withCredentials: true,
+        });
+    
+        if (response.error) {
+          toast.error(response.error)
+        } else {
+          console.log('Word updated successfully:');
+          toast.success('Word Successfully Updated!');
+          setWords((prevWords) => prevWords.map((word) =>
+            word._id === id ? response.data : word
+          ));
+        }
+      } catch (error) {
+        console.error('An error occurred while updating the word:', error);
+      }
+    };
+
+    const handleEdit = (word) => {
+      setUpdateData({
+        id: word._id,
+        title: word.title,
+        description: word.description,
+        category: word.category,
+        video: word.video,
+      });
+    };
     
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -440,7 +508,66 @@ export function Management() {
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <Button className="block py-2 px-4 rounded mb-1 w-32 h-10" variant="outline">Edit</Button>
+                                <Sheet>
+                                  <SheetTrigger asChild>
+                                    <Button onClick={() => handleEdit(word)} className="block py-2 px-4 rounded mb-1 w-32 h-10" variant="outline">Edit</Button>
+                                  </SheetTrigger>
+                                  <SheetContent>
+                                    <SheetHeader>
+                                      <SheetTitle>Edit Word</SheetTitle>
+                                      <SheetDescription>
+                                        Make changes to your Word here. Click Update when you're done.
+                                      </SheetDescription>
+                                    </SheetHeader>
+                                    <form onSubmit={(e) => updateWord(e, updateData.id, updateData)}>
+                                      <div className="grid gap-4">
+                                        <Label>Title</Label>
+                                        <Input
+                                          type='text'
+                                          placeholder='Enter Title...'
+                                          value={updateData.title}
+                                          onChange={(e) => setUpdateData({ ...updateData, title: e.target.value })}
+                                        />
+                                        <Label>Description</Label>
+                                        <Input
+                                          type='text'
+                                          placeholder='Enter Description...'
+                                          value={updateData.description}
+                                          onChange={(e) => setUpdateData({ ...updateData, description: e.target.value })}
+                                        />
+                                        <Label>Category</Label>
+                                        <select
+                                          name="category"
+                                          value={updateData.category}
+                                          onChange={(e) => setUpdateData({ ...updateData, category: e.target.value })}
+                                          required
+                                        >
+                                          <option value="" disabled>Select a category</option>
+                                          {categories.map((category) => (
+                                            <option key={category} value={category}>
+                                              {category}
+                                            </option>
+                                          ))}
+                                        </select>
+                                        <Label>Video</Label>
+                                        <Input
+                                          type='text'
+                                          placeholder='Enter Video...'
+                                          value={updateData.video}
+                                          onChange={(e) => setUpdateData({ ...updateData, video: e.target.value })}
+                                        />
+                                        <SheetFooter>
+                                          <SheetClose asChild>
+                                            <Button type="submit">
+                                              UPDATE
+                                            </Button>
+                                          </SheetClose>
+                                        </SheetFooter>
+                                      </div>
+                                    </form>
+                                  </SheetContent>
+                                </Sheet>
+                                
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild>
                                     <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
@@ -449,12 +576,12 @@ export function Management() {
                                     <AlertDialogHeader>
                                       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                       <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete the Sign language selected.
+                                        This action cannot be undone. This will permanently delete {word.title}.
                                       </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction>Continue</AlertDialogAction>
+                                      <AlertDialogAction onClick={() => deleteWord(word._id)}>Continue</AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>

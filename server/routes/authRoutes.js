@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors')
-const { test, registerUser, loginUser, getProfile, logoutUser, addWord, getWords } = require('../controllers/authController')
+const { test, registerUser, loginUser, getProfile, logoutUser, addWord, getWords, deleteWordDoc, updateWordDoc } = require('../controllers/authController')
 
 router.use(
     cors({
@@ -17,5 +17,8 @@ router.get('/profile', getProfile)
 router.post('/logout', logoutUser)
 router.post('/addNewWord', addWord)
 router.get('/signWords', getWords)
+router.delete('/deleteWord/:id', deleteWordDoc);
+router.put('/updateWord/:id', updateWordDoc);
+
 
 module.exports = router
