@@ -489,10 +489,10 @@ export function Management() {
                             {word.category}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {word.createdAt}
+                            {word.updatedAt}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {word.updatedAt}
+                            {word.createdAt}
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>
