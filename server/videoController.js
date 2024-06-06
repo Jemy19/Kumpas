@@ -1,15 +1,17 @@
-const express = require('express');
-const dotenv = require('dotenv').config();
+const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const multer = require("multer");
 const { GridFSBucket } = require('mongodb');
-const cookieParser = require('cookie-parser');
-
 const app = express();
 
-mongoose.connect(process.env.MONGO_URL)
+const mongoURI = 'mongodb+srv://jeremy19:qweasdzxc123@cluster0.ycodben.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
 .then(() => {
   console.log('Database Connected');
   const conn = mongoose.connection;
@@ -20,14 +22,12 @@ mongoose.connect(process.env.MONGO_URL)
   // Define routes
   app.use(cors({
     credentials: true,
-    origin: 'http://localhost:5173'
+    origin: 'http://localhost:3000'
   }));
   app.use(express.json());
-  app.use(cookieParser());
-  app.use(express.urlencoded({ extended: false }));
 
   const storage = new GridFsStorage({
-    url: process.env.MONGO_URL,
+    url: mongoURI,
     file: (req, file) => {
       return {
         filename: file.originalname,
@@ -75,9 +75,10 @@ mongoose.connect(process.env.MONGO_URL)
     }
   });
 
-  app.use('/', require('./routes/authRoutes'));
-
   const port = 8000;
-  app.listen(port, () => console.log(`Server is running on port ${port}`));
+  app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+  });
 })
 .catch((err) => console.log('Database not Connected', err));
+
