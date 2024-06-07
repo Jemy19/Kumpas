@@ -20,6 +20,6 @@ const wordSchema = new Schema({
     }
 }, {timestamps: true});
 
-const WordModel = mongoose.model('Word', wordSchema);
+const WordModel = mongoose.model('sign language', wordSchema);
 
 module.exports = WordModel;

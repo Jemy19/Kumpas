@@ -10,7 +10,7 @@ import Login from './pages/Login'
 import OldDashboard from './pages/Oldashboard'
 import Management from './pages/Management';
 import PublicRoute from './components/PublicRoute';
-import Vidtest from './pages/vidtest';
+import Vidtest from './pages/Vidtest';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true

@@ -97,7 +97,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-  
+import Vidtest from './Vidtest';
 import { UserContext } from '../../context/userContext';
 import React, { useContext, useState, useEffect } from 'react';
 import {toast} from 'react-hot-toast'
@@ -114,6 +114,10 @@ export function Management() {
       category: '',
       video: '',
     })
+    const handleVideoUpload = (videoUrl) => {
+      setData({ ...data, video: videoUrl });
+    };
+    
     const addWord = async (e) => {
       e.preventDefault()
       const {title, description, category, video} = data
@@ -419,6 +423,7 @@ export function Management() {
                             ))}
                         </select>
                           <Label>Video</Label>
+                          <Vidtest onUploadComplete={handleVideoUpload} />
                           <Input type='text' placeholder='Enter Video...' value={data.video} onChange={(e) => setData({...data, video: e.target.value})}/>
                           
                             <Button type="submit" variant="secondary">
