@@ -75,6 +75,23 @@ mongoose.connect(process.env.MONGO_URL)
     }
   });
 
+  app.delete("/delvideo/:filename", async (req, res) => {
+    try {
+      const filename = req.params.filename;
+      const file = await gfs.find({ filename }).toArray();
+      console.log('Received update request for file:', file); 
+      if (!file || file.length === 0) {
+        res.status(404).send(`File not found: ${filename}`);
+        return;
+      }
+      await gfs.delete(file[0]._id);
+      res.status(204).send(`File deleted: ${filename}`);
+    } catch (err) {
+      console.error("Error deleting file:", err);
+      res.status(500).send("Error deleting file");
+    }
+  });
+
   app.use('/', require('./routes/authRoutes'));
 
   const port = 8000;

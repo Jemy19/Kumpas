@@ -55,6 +55,16 @@ function App() {
     setVideoUrl(`http://localhost:8000/videos/${e.target.value}`); // Updated URL
   };
 
+  const handleDeleteVideo = async (filename) => {
+    try {
+      await axios.delete(`http://localhost:8000/delvideo/${filename}`);
+      setVideoList(videoList.filter((video) => video !== filename));
+      setSelectedVideo("");
+      setVideoUrl("");
+    } catch (error) {
+      console.error("Error deleting video:", error);
+    }
+  };
   return (
     <div className="App">
       <h1>Video Upload and Stream</h1>
@@ -69,12 +79,32 @@ function App() {
           <option key={index} value={video}>{video}</option>
         ))}
       </select>
+      
       {videoUrl && (
         <div>
           <h2>Video Stream</h2>
           <video controls width="400" src={videoUrl} type="video/mp4" />
         </div>
       )}
+
+
+
+
+      <label>delete Video:</label>
+      <ul>
+  {videoList.map((video, index) => (
+    <li key={index}>
+      {video}
+      <button
+        onClick={(e) => {
+          handleDeleteVideo(video);
+        }}
+      >
+        Delete
+      </button>
+    </li>
+  ))}
+</ul>
     </div>
   );
 }
