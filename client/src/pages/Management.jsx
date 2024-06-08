@@ -97,7 +97,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-  
+import VidUp from './vidup';
 import { UserContext } from '../../context/userContext';
 import React, { useContext, useState, useEffect } from 'react';
 import {toast} from 'react-hot-toast'
@@ -383,8 +383,7 @@ export function Management() {
                             ))}
                         </select>
                           <Label>Video</Label>
-                          <Input type='text' placeholder='Enter Video...' value={data.video} onChange={(e) => setData({...data, video: e.target.value})}/>
-                          
+                          <VidUp onUpload={(videoUrl) => setData({ ...data, video: videoUrl })} />
                             <Button type="submit" variant="secondary">
                               SUBMIT
                             </Button>
