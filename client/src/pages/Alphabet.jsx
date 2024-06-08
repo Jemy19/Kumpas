@@ -104,23 +104,23 @@ export function Alphabet() {
             });
     }, []);
     // for Delete Function
-    const deleteWord = async (id) => {
-      try {
-        const response = await axios.delete(`/deleteWord/${id}`, {
-          withCredentials: true, // if you need to send cookies with the request
-        });
-    
-        if (response.status === 200) {
-          console.log('Word deleted successfully:');
-          toast.success('Word Deleted!')  
-          setWords((prevWords) => prevWords.filter((word) => word._id !== id));
-        } else {
-          console.error('Error deleting word:', response.data.error);
+    const deleteWord = async (id, videopath) => {
+        try {
+          const response = await axios.delete(`/deleteWord/${id}`, {
+            withCredentials: true, // if you need to send cookies with the request
+          });
+          await axios.delete(`http://localhost:8000/delvideo/${videopath}`);
+          if (response.status === 200) {
+            console.log('Word deleted successfully:');
+            toast.success('Word Deleted!')  
+            setWords((prevWords) => prevWords.filter((word) => word._id !== id));
+          } else {
+            console.error('Error deleting word:', response.data.error);
+          }
+        } catch (error) {
+          console.error('An error occurred while deleting the word:', error);
         }
-      } catch (error) {
-        console.error('An error occurred while deleting the word:', error);
-      }
-    };
+      };
     // for update function
 
     const [updateData, setUpdateData] = useState({
@@ -214,7 +214,7 @@ export function Alphabet() {
                                     <DialogDescription>
                                     <div>
                                     <h2>Video Stream</h2>
-                                    <video controls width="400" src={word.video} type="video/mp4" />
+                                    <video controls width="400" src={`http://localhost:8000/videos/${word.video}`} type="video/mp4" />
                                     </div>
                                     </DialogDescription>
                                 </DialogHeader>
@@ -324,7 +324,7 @@ export function Alphabet() {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction onClick={() => deleteWord(word._id)}>Continue</AlertDialogAction>
+                                      <AlertDialogAction onClick={() => deleteWord(word._id, word.video)}>Continue</AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>

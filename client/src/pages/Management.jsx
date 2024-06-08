@@ -135,12 +135,13 @@ export function Management() {
         if (vidUpRef.current) {
           videoUrl = await vidUpRef.current.uploadVideo();
         }
-  
+        const urlString = videoUrl;
+        const vidname = urlString.slice(urlString.lastIndexOf('/') + 1);
         const response = await axios.post('/addNewWord', {
           title,
           description,
           category,
-          video: videoUrl,
+          video: vidname,
         });
   
         if (response.data.error) {
@@ -160,6 +161,7 @@ export function Management() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(8);
+    const [steam, setStream] = useState();
 
     useEffect(() => {
         axios.get('/signWords')
@@ -174,12 +176,12 @@ export function Management() {
             });
     }, []);
     // for Delete Function
-    const deleteWord = async (id) => {
+    const deleteWord = async (id, videopath) => {
       try {
         const response = await axios.delete(`/deleteWord/${id}`, {
           withCredentials: true, // if you need to send cookies with the request
         });
-    
+        await axios.delete(`http://localhost:8000/delvideo/${videopath}`);
         if (response.status === 200) {
           console.log('Word deleted successfully:');
           toast.success('Word Deleted!')  
@@ -468,7 +470,7 @@ export function Management() {
                                       <DialogDescription>
                                       <div>
                                       <h2>Video Stream</h2>
-                                      <video controls width="400" src={word.video} type="video/mp4" />
+                                      <video controls width="400" src={`http://localhost:8000/videos/${word.video}`} type="video/mp4" />
                                       </div>
                                       </DialogDescription>
                                   </DialogHeader>
@@ -563,8 +565,7 @@ export function Management() {
                                       </div>
                                     </form>
                                   </SheetContent>
-                                </Sheet>
-                                
+                                </Sheet>  
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild>
                                     <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
@@ -578,7 +579,7 @@ export function Management() {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction onClick={() => deleteWord(word._id)}>Continue</AlertDialogAction>
+                                      <AlertDialogAction onClick={() => deleteWord(word._id, word.video)}>Continue</AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>
