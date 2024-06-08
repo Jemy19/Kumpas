@@ -106,7 +106,11 @@ import {
     PaginationNext,
     PaginationPrevious,
   } from "@/components/ui/pagination"
-import Alphabet from './Alphabet'
+import Alphabet from '../components/managetab/Alphabet'
+import BasicGreetings from '../components/managetab/basicgreetings'
+import CommonWords from '../components/managetab/CommonWords'
+import Questions from '../components/managetab/Questions'
+import SurvivalSigns from '../components/managetab/SurvivalSigns'
 import VidUp from './vidup';
 import { UserContext } from '../../context/userContext';
 import React, { useContext, useState, useEffect, useRef  } from 'react';
@@ -161,7 +165,6 @@ export function Management() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(8);
-    const [steam, setStream] = useState();
 
     useEffect(() => {
         axios.get('/signWords')
@@ -461,9 +464,12 @@ export function Management() {
                       {paginatedWords.map((word) => (
                         <TableRow>
                           <TableCell className="hidden sm:table-cell">
-                            <Button>
                               <Dialog>
-                                  <DialogTrigger>Play Video</DialogTrigger>
+                                  <DialogTrigger>
+                                  <Button>
+                                    Play Video
+                                  </Button>
+                                  </DialogTrigger>
                                   <DialogContent>
                                       <DialogHeader>
                                       <DialogTitle>{word.video}</DialogTitle>
@@ -476,7 +482,6 @@ export function Management() {
                                   </DialogHeader>
                                   </DialogContent>
                                 </Dialog>
-                              </Button>
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
                             {word.title}
@@ -618,6 +623,18 @@ export function Management() {
             </TabsContent>
             <TabsContent value="Alphabet">
               <Alphabet/>
+            </TabsContent>
+            <TabsContent value="Basic Greetings">
+              <BasicGreetings/>
+            </TabsContent>
+            <TabsContent value="Common Words">
+              <CommonWords/>
+            </TabsContent>
+            <TabsContent value="Questions">
+              < Questions/>
+            </TabsContent>
+            <TabsContent value="Survival Signs">
+              <SurvivalSigns/>
             </TabsContent>
           </Tabs>
         </main>

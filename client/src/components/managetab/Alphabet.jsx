@@ -83,7 +83,6 @@ export function Alphabet() {
       category: '',
       video: '',
     })
-    const vidUpRef = useRef(null);
   
     // for fetching sign language
     const [words, setWords] = useState([]);
@@ -205,9 +204,12 @@ export function Alphabet() {
                       {paginatedAlphabetWords.map((word) => (
                         <TableRow key={word._id}>
                           <TableCell className="hidden sm:table-cell">
-                            <Button>
                             <Dialog>
-                                <DialogTrigger>Play Video</DialogTrigger>
+                                <DialogTrigger>
+                                  <Button>
+                                    Play Video
+                                  </Button>
+                                </DialogTrigger>
                                 <DialogContent>
                                     <DialogHeader>
                                     <DialogTitle>{word.video}</DialogTitle>
@@ -220,7 +222,6 @@ export function Alphabet() {
                                 </DialogHeader>
                                 </DialogContent>
                                 </Dialog>
-                            </Button>
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
                             {word.title}
