@@ -16,7 +16,9 @@ const Hero = () => {
           </p>
         </div>
         <p className='md:text-2xl text-xl font-bold text-gray-500'>Join us in creating a more inclusive world for individuals with diverse hearing abilities.</p>
-        <button className='bg-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto py-3 text-black'>About Us</button>
+        <a href='#about'>
+          <button className='bg-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto py-3 text-black'>About Us</button>
+        </a>
       </div>
     </div>
   );

@@ -1,11 +1,4 @@
 import React from 'react';
-import {
-  FaDribbbleSquare,
-  FaFacebookSquare,
-  FaGithubSquare,
-  FaInstagram,
-  FaTwitterSquare,
-} from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -17,10 +10,14 @@ const Footer = () => {
 
       <div className='lg:col-span-2 flex justify-end mt-6'>
         <div className='mr-6'>
-          <h6 className='font-medium text-gray-400'>About Us</h6>
+          <a href='#about'>
+            <h6 className='font-medium text-gray-400'>About Us</h6>
+          </a>
         </div>
         <div>
-          <h6 className='font-medium text-gray-400'>Contact</h6>
+          <a href='#contact'>
+            <h6 className='font-medium text-gray-400'>Contact</h6>
+          </a>
         </div>
       </div>
     </div>

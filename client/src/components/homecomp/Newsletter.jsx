@@ -2,6 +2,7 @@ import React from 'react';
 
 const Newsletter = () => {
   return (
+    <section id="contact">
     <div className='w-full py-16 text-white px-4'>
       <div className='max-w-[1240px] mx-auto grid lg:grid-cols-3'>
         <div className='lg:col-span-2 my-4'>
@@ -18,6 +19,7 @@ const Newsletter = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 
