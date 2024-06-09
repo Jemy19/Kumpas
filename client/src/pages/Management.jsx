@@ -209,7 +209,16 @@ export function Management() {
     const updateWord = async (e, id, updatedData) => {
       e.preventDefault();
       try {
-        const response = await axios.put(`/updateWord/${id}`, updatedData, {
+          const oldvid = updatedData.video;
+          let videoUrl = '';
+          if (vidUpRef.current) {
+            videoUrl = await vidUpRef.current.uploadVideo();
+            await axios.delete(`http://localhost:8000/delvideo/${oldvid}`);
+          }
+          const urlString = videoUrl;
+          const vidname = urlString.slice(urlString.lastIndexOf('/') + 1);
+          updatedData.video = vidname;
+          const response = await axios.put(`/updateWord/${id}`, updatedData, {
           withCredentials: true,
         });
     
@@ -226,7 +235,6 @@ export function Management() {
         console.error('An error occurred while updating the word:', error);
       }
     };
-
     const handleEdit = (word) => {
       setUpdateData({
         id: word._id,
@@ -418,7 +426,7 @@ export function Management() {
                             ))}
                           </select>
                           <Label>Video</Label>
-                          <VidUp ref={vidUpRef} />
+                          <VidUp value={data.video} ref={vidUpRef} />
                           <Button type="submit" variant="secondary">
                             SUBMIT
                           </Button>
@@ -525,50 +533,45 @@ export function Management() {
                                     </SheetHeader>
                                     <form onSubmit={(e) => updateWord(e, updateData.id, updateData)}>
                                       <div className="grid gap-4">
-                                        <Label>Title</Label>
-                                        <Input
+                                      <Label>Title</Label>
+                                      <Input
                                           type='text'
                                           placeholder='Enter Title...'
                                           value={updateData.title}
                                           onChange={(e) => setUpdateData({ ...updateData, title: e.target.value })}
-                                        />
-                                        <Label>Description</Label>
-                                        <Input
+                                      />
+                                      <Label>Description</Label>
+                                      <Input
                                           type='text'
                                           placeholder='Enter Description...'
                                           value={updateData.description}
                                           onChange={(e) => setUpdateData({ ...updateData, description: e.target.value })}
-                                        />
-                                        <Label>Category</Label>
-                                        <select
+                                      />
+                                      <Label>Category</Label>
+                                      <select
                                           name="category"
                                           value={updateData.category}
                                           onChange={(e) => setUpdateData({ ...updateData, category: e.target.value })}
                                           required
-                                        >
+                                      >
                                           <option value="" disabled>Select a category</option>
                                           {categories.map((category) => (
-                                            <option key={category} value={category}>
+                                          <option key={category} value={category}>
                                               {category}
-                                            </option>
+                                          </option>
                                           ))}
-                                        </select>
-                                        <Label>Video</Label>
-                                        <Input
-                                          type='text'
-                                          placeholder='Enter Video...'
-                                          value={updateData.video}
-                                          onChange={(e) => setUpdateData({ ...updateData, video: e.target.value })}
-                                        />
-                                        <SheetFooter>
+                                      </select>
+                                      <Label>Video</Label>
+                                      <VidUp ref={vidUpRef} />
+                                      <SheetFooter>
                                           <SheetClose asChild>
-                                            <Button type="submit">
+                                          <Button type="submit">
                                               UPDATE
-                                            </Button>
+                                          </Button>
                                           </SheetClose>
-                                        </SheetFooter>
+                                      </SheetFooter>
                                       </div>
-                                    </form>
+                                      </form>
                                   </SheetContent>
                                 </Sheet>  
                                 <AlertDialog>
