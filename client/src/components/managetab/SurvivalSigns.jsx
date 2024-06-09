@@ -174,9 +174,9 @@ import {
               <TabsContent value="all">
                 <Card x-chunk="dashboard-06-chunk-0">
                   <CardHeader>
-                    <CardTitle>Aphabet</CardTitle>
+                    <CardTitle>Survival Signs</CardTitle>
                     <CardDescription>
-                      View the latest sign language phrases, words, and alphabet signs added to our library.
+                      View and manage the full range of Survival Signs Sign Language.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>

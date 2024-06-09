@@ -176,7 +176,7 @@ import {
                   <CardHeader>
                     <CardTitle>Common Words</CardTitle>
                     <CardDescription>
-                      View the latest sign language phrases, words, and alphabet signs added to our library.
+                    View and manage the full range of Common Words Sign Language.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>

@@ -174,9 +174,9 @@ import {
               <TabsContent value="all">
                 <Card x-chunk="dashboard-06-chunk-0">
                   <CardHeader>
-                    <CardTitle>Aphabet</CardTitle>
+                    <CardTitle>Basic Greetings</CardTitle>
                     <CardDescription>
-                      View the latest sign language phrases, words, and alphabet signs added to our library.
+                      View and manage the full range of Basic Greetings Sign Language.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
