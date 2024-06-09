@@ -111,7 +111,7 @@ import BasicGreetings from '../components/managetab/basicgreetings'
 import CommonWords from '../components/managetab/CommonWords'
 import Questions from '../components/managetab/Questions'
 import SurvivalSigns from '../components/managetab/SurvivalSigns'
-import VidUp from './vidup';
+import VidUp from '../components/vidup';
 import { UserContext } from '../../context/userContext';
 import React, { useContext, useState, useEffect, useRef  } from 'react';
 import {toast} from 'react-hot-toast'
@@ -208,27 +208,39 @@ export function Management() {
 
     const updateWord = async (e, id, updatedData) => {
       e.preventDefault();
+      const originalData = words.find((word) => word._id === id);
+      
+      console.log(originalData);
+      console.log(updateData);
       try {
-          const oldvid = updatedData.video;
-          let videoUrl = '';
-          if (vidUpRef.current) {
-            videoUrl = await vidUpRef.current.uploadVideo();
-            await axios.delete(`http://localhost:8000/delvideo/${oldvid}`);
-          }
-          const urlString = videoUrl;
-          const vidname = urlString.slice(urlString.lastIndexOf('/') + 1);
+        let videoUrl = await vidUpRef.current.uploadVideo();
+        const urlString = videoUrl;
+        const vidname = urlString.slice(urlString.lastIndexOf('/') + 1);
+        console.log(vidname)
+        if(originalData.title == updateData.title 
+          && originalData.description == updateData.description
+          && originalData.category == updateData.category
+          && !vidname.endsWith('.mp4') 
+        ) 
+        {
+          toast.error('No changes detected. Word not updated.');
+          return;
+        }
+        if(vidname.endsWith('.mp4')) {
+          await axios.delete(`http://localhost:8000/delvideo/${updatedData.video}`);
           updatedData.video = vidname;
-          const response = await axios.put(`/updateWord/${id}`, updatedData, {
+        }
+        
+        const response = await axios.put(`/updateWord/${id}`, updatedData, {
           withCredentials: true,
         });
     
         if (response.error) {
-          toast.error(response.error)
+          toast.error(response.error);
         } else {
-          console.log('Word updated successfully:');
           toast.success('Word Successfully Updated!');
           setWords((prevWords) => prevWords.map((word) =>
-            word._id === id ? response.data : word
+            word._id === id? response.data : word
           ));
         }
       } catch (error) {
@@ -562,7 +574,9 @@ export function Management() {
                                           ))}
                                       </select>
                                       <Label>Video</Label>
+                                      {word.video}
                                       <VidUp ref={vidUpRef} />
+                                      <input type="hidden" name="originalVideo" value={word.video} />
                                       <SheetFooter>
                                           <SheetClose asChild>
                                           <Button type="submit">

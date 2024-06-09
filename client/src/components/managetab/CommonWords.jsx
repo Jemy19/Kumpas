@@ -68,7 +68,7 @@ import {
       DialogTitle,
       DialogTrigger,
     } from "@/components/ui/dialog"
-    
+    import VidUp from "../vidup"
   import React, { useContext, useState, useEffect, useRef  } from 'react';
   import {toast} from 'react-hot-toast'
   import axios from 'axios'
@@ -129,21 +129,43 @@ import {
         category: '',
         video: '',
       });
-  
+      
+      const vidUpRef = useRef(null);
       const updateWord = async (e, id, updatedData) => {
         e.preventDefault();
+        const originalData = words.find((word) => word._id === id);
+        
+        console.log(originalData);
+        console.log(updateData);
         try {
+          let videoUrl = await vidUpRef.current.uploadVideo();
+          const urlString = videoUrl;
+          const vidname = urlString.slice(urlString.lastIndexOf('/') + 1);
+          console.log(vidname)
+          if(originalData.title == updateData.title 
+            && originalData.description == updateData.description
+            && originalData.category == updateData.category
+            && !vidname.endsWith('.mp4') 
+          ) 
+          {
+            toast.error('No changes detected. Word not updated.');
+            return;
+          }
+          if(vidname.endsWith('.mp4')) {
+            await axios.delete(`http://localhost:8000/delvideo/${updatedData.video}`);
+            updatedData.video = vidname;
+          } 
+          
           const response = await axios.put(`/updateWord/${id}`, updatedData, {
             withCredentials: true,
           });
       
           if (response.error) {
-            toast.error(response.error)
+            toast.error(response.error);
           } else {
-            console.log('Word updated successfully:');
             toast.success('Word Successfully Updated!');
             setWords((prevWords) => prevWords.map((word) =>
-              word._id === id ? response.data : word
+              word._id === id? response.data : word
             ));
           }
         } catch (error) {
@@ -294,12 +316,8 @@ import {
                                             ))}
                                           </select>
                                           <Label>Video</Label>
-                                          <Input
-                                            type='text'
-                                            placeholder='Enter Video...'
-                                            value={updateData.video}
-                                            onChange={(e) => setUpdateData({ ...updateData, video: e.target.value })}
-                                          />
+                                          {word.video}
+                                          <VidUp ref={vidUpRef} />
                                           <SheetFooter>
                                             <SheetClose asChild>
                                               <Button type="submit">

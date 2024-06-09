@@ -8,7 +8,16 @@ const VidUp = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     uploadVideo: async () => {
       if (!file) return '';
-
+      try {
+        const response = await axios.get('http://localhost:8000/videos');
+        const filenames = response.data;
+        if (filenames.includes(file.name)) {
+          alert(`A file with the name ${file.name} already exists. Please rename the file and try again.`);
+          return '';
+        }
+      } catch (error) {
+        console.error("Error checking file existence:", error);
+      }
       const formData = new FormData();
       formData.append("file", file);
 

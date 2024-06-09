@@ -79,7 +79,7 @@ mongoose.connect(process.env.MONGO_URL)
     try {
       const filename = req.params.filename;
       const file = await gfs.find({ filename }).toArray();
-      console.log('Received update request for file:', file); 
+      console.log('Received delete request for vid file:', file); 
       if (!file || file.length === 0) {
         res.status(404).send(`File not found: ${filename}`);
         return;
