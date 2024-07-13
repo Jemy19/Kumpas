@@ -42,7 +42,11 @@ export function Login() {
         } else {
           setUser(data);
           setData({});
-          navigate('/Dashboard')
+          if (data.role === 'super_admin') {
+            navigate('/SaDashboard');
+          } else if (data.role === 'admin') {
+            navigate('/Dashboard');
+          } 
         }
       } catch (error) {
         

@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
 
 const PrivateRoute = ({ children }) => {
-  const { user, loading } = useContext(UserContext);
+  const { user, loading, isAdmin  } = useContext(UserContext);
 
   if (loading) {
     // You can customize this part to show a loading spinner or a placeholder
@@ -13,6 +13,10 @@ const PrivateRoute = ({ children }) => {
   if (!user) {
     return <Navigate to="/login" />;
   }
+
+  if (!isAdmin) {
+    return <Navigate to="/SaDashboard" />;
+}
 
   return children;
 };

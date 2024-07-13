@@ -33,6 +33,7 @@ const registerUser = async (req, res) => {
             name, 
             email, 
             password: hashedPassword,
+            role: 'admin'
         });
         return res.json(user)
     } catch (error) {
@@ -53,12 +54,13 @@ const loginUser = async(req, res) => {
     }
 
     const match = await comparePassword(password, user.password)
-    if(match) {
-        jwt.sign({email: user.email, id: user._id, name: user.name}, process.env.JWT_SECRET, {}, (err, token) => {
+    if(match && user.role === 'super_admin'|| user.role === 'admin') {
+        jwt.sign({email: user.email, id: user._id, name: user.name, role: user.role }, process.env.JWT_SECRET, {}, (err, token) => {
             if(err) throw err;
-            res.cookie('token', token).json(user)
+            res.cookie('token', token).json({ ...user.toObject(), token });
+            
         })
-    }
+    } 
     if(!match) {
         res.json({
             error: 'Password do not match'

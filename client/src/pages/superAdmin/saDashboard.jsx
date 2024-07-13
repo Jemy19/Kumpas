@@ -98,7 +98,7 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
   
-import { UserContext } from '../../context/userContext';
+import { UserContext } from '../../../context/userContext';
 import React, { useContext, useState, useEffect } from 'react';
 import {toast} from 'react-hot-toast'
 import axios from 'axios'
