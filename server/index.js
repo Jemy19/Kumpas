@@ -6,12 +6,15 @@ const { GridFsStorage } = require("multer-gridfs-storage");
 const multer = require("multer");
 const { GridFSBucket } = require('mongodb');
 const cookieParser = require('cookie-parser');
+const User = require('./models/user'); 
+const { hashPassword } = require('./helpers/auth'); 
 
 const app = express();
 
 mongoose.connect(process.env.MONGO_URL)
 .then(() => {
   console.log('Database Connected');
+  seedSuperAdmin(); 
   const conn = mongoose.connection;
   const gfs = new mongoose.mongo.GridFSBucket(conn.db, {
     bucketName: "uploads"
@@ -98,3 +101,25 @@ mongoose.connect(process.env.MONGO_URL)
   app.listen(port, () => console.log(`Server is running on port ${port}`));
 })
 .catch((err) => console.log('Database not Connected', err));
+
+const seedSuperAdmin = async () => {
+  try {
+    const existingUser = await User.findOne({ name: process.env.SUPERADMIN_USERNAME });
+    if (existingUser) {
+      console.log('Super Admin already exists');
+    } else {
+      console.log('Creating Super Admin...');
+      const hashedPassword = await hashPassword(process.env.SUPERADMIN_PASSWORD);
+      const superAdmin = new User({
+        name: process.env.SUPERADMIN_USERNAME,
+        email: process.env.SUPERADMIN_EMAIL,
+        password: hashedPassword,
+        role: 'super_admin'
+      });
+      await superAdmin.save();
+      console.log('Super Admin created');
+    }
+  } catch (error) {
+    console.error('Error creating Super Admin:', error);
+  }
+};
