@@ -1,5 +1,3 @@
-const User = require('./models/User'); // Adjust the path as necessary
-
 const requireRole = (role) => {
   return (req, res, next) => {
     if (!req.user) {

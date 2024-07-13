@@ -1,31 +1,19 @@
+import React, { useContext, useState, useEffect } from 'react';
+import { UserContext } from '../../../context/userContext';
 import { Link } from 'react-router-dom';
-import {
-  Bell,
-  CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  Search,
-  ShoppingCart,
-  Users,
-  ListFilter,
-  MoreHorizontal,
-  PlusCircle,
-  File,
-} from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
+import { CircleUser, Menu, Package2, Search } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,273 +21,80 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
-  import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-  } from "@/components/ui/tabs"
-  import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-  } from "@/components/ui/tooltip"
-  import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogClose,
-  } from "@/components/ui/dialog"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
-  import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-  
-  import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"
-  
-import { UserContext } from '../../../context/userContext';
-import React, { useContext, useState, useEffect } from 'react';
-import {toast} from 'react-hot-toast'
-import axios from 'axios'
-
-
-export function Feedback() {
-    const categories = ['Basic Greetings', 'Survival Signs', 'Common Words', 'Questions', 'Alphbet'];
-    const { user, logout } = useContext(UserContext);
-    const [data, setData] = useState({
-      title: '',
-      description: '',
-      category: '',
-      video: '',
-    })
-    const addWord = async (e) => {
-      e.preventDefault()
-      const {title, description, category, video} = data
-      try {
-        const {data} = await axios.post ('/addNewWord', {
-          title, description, category, video
-        })
-        if(data.error){
-          toast.error(data.error)
-        } else {
-          setData({ title: '', description: '', category: '', video: '' });
-          toast.success('New Word Succesfully Added!')  
-          setWords(prevWords => [...prevWords, data]);
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    // for fetching sign language
-    const [words, setWords] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        axios.get('/signWords')
-            .then(({ data }) => {
-                setWords(data);
-            })
-            .catch((error) => {
-                console.error('Error fetching words data:', error);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, []);
-    // for Delete Function
-    const deleteWord = async (id) => {
-      try {
-        const response = await axios.delete(`/deleteWord/${id}`, {
-          withCredentials: true, // if you need to send cookies with the request
-        });
-    
-        if (response.status === 200) {
-          console.log('Word deleted successfully:');
-          toast.success('Word Deleted!')  
-          setWords((prevWords) => prevWords.filter((word) => word._id !== id));
-        } else {
-          console.error('Error deleting word:', response.data.error);
-        }
-      } catch (error) {
-        console.error('An error occurred while deleting the word:', error);
-      }
-    };
-    // for update function
-
-    const [updateData, setUpdateData] = useState({
-      id: null,
-      title: '',
-      description: '',
-      category: '',
-      video: '',
-    });
-
-    const updateWord = async (e, id, updatedData) => {
-      e.preventDefault();
-      try {
-        const response = await axios.put(`/updateWord/${id}`, updatedData, {
-          withCredentials: true,
-        });
-    
-        if (response.error) {
-          toast.error(response.error)
-        } else {
-          console.log('Word updated successfully:');
-          toast.success('Word Successfully Updated!');
-          setWords((prevWords) => prevWords.map((word) =>
-            word._id === id ? response.data : word
-          ));
-        }
-      } catch (error) {
-        console.error('An error occurred while updating the word:', error);
-      }
-    };
-
-    const handleEdit = (word) => {
-      setUpdateData({
-        id: word._id,
-        title: word.title,
-        description: word.description,
-        category: word.category,
-        video: word.video,
-      });
-    };
+export function SaDashboard() {
+  const { user, logout } = useContext(UserContext);
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <div className="hidden border-r bg-muted/40 md:block">
-        <div className="flex h-full max-h-screen flex-col gap-2">
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
+    <div className="flex min-h-screen w-full flex-col">
+      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+        <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+          <Link href="/" className="flex items-center gap-2 font-semibold">
               <Package2 className="h-6 w-6" />
-              <span className="">E-Kumpas</span>
+              <span className="whitespace-nowrap">E-KUMPAS</span>
             </Link>
-          </div>
-          <div className="flex-1">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+          <div>|</div>
+          <Link
+            to="/SaDashboard"
+            className="text-muted-foreground text-primary transition-colors hover:text-foreground"
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/AccManagement"
+            className="text-muted-foreground transition-colors hover:text-foreground whitespace-nowrap"
+          >
+           Account Management
+          </Link>
+        </nav>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="shrink-0 md:hidden"
+            >
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle navigation menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left">
+            <nav className="grid gap-6 text-lg font-medium">
               <Link
-                to="/Dashboard"
-                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                to="/SaDashboard"
+                className="flex items-center gap-2 text-lg font-semibold"
               >
-                <Home className="h-4 w-4" />
+                <Package2 className="h-6 w-6" />
+                <span className="sr-only">E-Kumpas</span>
+              </Link>
+              <Link
+                to="/SaDashboard"
+                className="text-primary hover:text-foreground"
+              >
                 Dashboard
               </Link>
               <Link
-                to="/Management"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
+                to="/AccManagement"
+                className="text-muted-foreground hover:text-foreground"
               >
-                <Package className="h-4 w-4" />
-                Sign Management{" "}
-              </Link>
-              <Link
-                to="/Feedback"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-primary transition-all hover:text-primary" 
-              >
-                <Users className="h-4 w-4" />
-                Feedback{" "}
+                Managment
               </Link>
             </nav>
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-col">
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="shrink-0 md:hidden"
-              >
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col">
-              <nav className="grid gap-2 text-lg font-medium">
-                <Link
-                  href="#"
-                  className="flex items-center gap-2 text-lg font-semibold"
-                >
-                  <Package2 className="h-6 w-6" />
-                  <span className="sr-only">Acme Inc</span>
-                </Link>
-                <Link
-                  to="/Dashboard"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Home className="h-5 w-5" />
-                  Dashboard
-                </Link>
-                <Link
-                  to="/Management"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Package className="h-5 w-5" />
-                  Sign Management
-                </Link>
-                <Link
-                  to="/FeedBack"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Users className="h-5 w-5" />
-                  Feedback
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
-          <div className="w-full flex-1">
-            <form>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search Sign Languages..."
-                  className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-                />
-              </div>
-            </form>
-          </div>
+          </SheetContent>
+        </Sheet>
+        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+          <form className="ml-auto flex-1 sm:flex-initial">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search products..."
+                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
+              />
+            </div>
+          </form>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
@@ -316,139 +111,75 @@ export function Feedback() {
               <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="hidden w-[100px] sm:table-cell">
-                          Name
-                        </TableHead>
-                        <TableHead>Message</TableHead>
-                        <TableHead className="hidden md:table-cell">
-                          Sent at
-                        </TableHead>
-                        <TableHead>
-                          Actions
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader> 
-                    <TableBody >
-                      {words.map(word => (
-                        <TableRow>
-                          <TableCell className="hidden sm:table-cell">
-                            Lemnuel Lumaban
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            please add new categories like numberes, thanks!
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            june 1 2027
-                          </TableCell>
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  aria-haspopup="true"
-                                  size="icon"
-                                  variant="ghost"
-                                >
-                                  <MoreHorizontal className="h-4 w-4" />
-                                  <span className="sr-only">Toggle menu</span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <Sheet>
-                                  <SheetTrigger asChild>
-                                    <Button onClick={() => handleEdit(word)} className="block py-2 px-4 rounded mb-1 w-32 h-10" variant="outline">Edit</Button>
-                                  </SheetTrigger>
-                                  <SheetContent>
-                                    <SheetHeader>
-                                      <SheetTitle>Edit Word</SheetTitle>
-                                      <SheetDescription>
-                                        Make changes to your Word here. Click Update when you're done.
-                                      </SheetDescription>
-                                    </SheetHeader>
-                                    <form onSubmit={(e) => updateWord(e, updateData.id, updateData)}>
-                                      <div className="grid gap-4">
-                                        <Label>Title</Label>
-                                        <Input
-                                          type='text'
-                                          placeholder='Enter Title...'
-                                          value={updateData.title}
-                                          onChange={(e) => setUpdateData({ ...updateData, title: e.target.value })}
-                                        />
-                                        <Label>Description</Label>
-                                        <Input
-                                          type='text'
-                                          placeholder='Enter Description...'
-                                          value={updateData.description}
-                                          onChange={(e) => setUpdateData({ ...updateData, description: e.target.value })}
-                                        />
-                                        <Label>Category</Label>
-                                        <select
-                                          name="category"
-                                          value={updateData.category}
-                                          onChange={(e) => setUpdateData({ ...updateData, category: e.target.value })}
-                                          required
-                                        >
-                                          <option value="" disabled>Select a category</option>
-                                          {categories.map((category) => (
-                                            <option key={category} value={category}>
-                                              {category}
-                                            </option>
-                                          ))}
-                                        </select>
-                                        <Label>Video</Label>
-                                        <Input
-                                          type='text'
-                                          placeholder='Enter Video...'
-                                          value={updateData.video}
-                                          onChange={(e) => setUpdateData({ ...updateData, video: e.target.value })}
-                                        />
-                                        <SheetFooter>
-                                          <SheetClose asChild>
-                                            <Button type="submit">
-                                              UPDATE
-                                            </Button>
-                                          </SheetClose>
-                                        </SheetFooter>
-                                      </div>
-                                    </form>
-                                  </SheetContent>
-                                </Sheet>
-                                
-                                <AlertDialog>
-                                  <AlertDialogTrigger asChild>
-                                    <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
-                                  </AlertDialogTrigger>
-                                  <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                      <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete {word.title}.
-                                      </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction onClick={() => deleteWord(word._id)}>Continue</AlertDialogAction>
-                                    </AlertDialogFooter>
-                                  </AlertDialogContent>
-                                </AlertDialog>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-        </main>
-      </div>
+        </div>
+      </header>
+      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+        <div className="mx-auto grid w-full max-w-6xl gap-2">
+          <h1 className="text-3xl font-semibold">Super Admin</h1>
+        </div>
+        <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
+          <nav
+            className="grid gap-4 text-sm text-muted-foreground" x-chunk="dashboard-04-chunk-0"
+          >
+            <Link href="#" className="font-semibold text-primary">
+              General
+            </Link>
+            <Link href="#">Security</Link>
+            <Link href="#">Integrations</Link>
+            <Link href="#">Support</Link>
+            <Link href="#">Organizations</Link>
+            <Link href="#">Advanced</Link>
+          </nav>
+          <div className="grid gap-6">
+            <Card x-chunk="dashboard-04-chunk-1">
+              <CardHeader>
+                <CardTitle>Store Name</CardTitle>
+                <CardDescription>
+                  Used to identify your store in the marketplace.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form>
+                  <Input placeholder="Store Name" />
+                </form>
+              </CardContent>
+              <CardFooter className="border-t px-6 py-4">
+                <Button>Save</Button>
+              </CardFooter>
+            </Card>
+            <Card x-chunk="dashboard-04-chunk-2">
+              <CardHeader>
+                <CardTitle>Plugins Directory</CardTitle>
+                <CardDescription>
+                  The directory within your project, in which your plugins are
+                  located.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form className="flex flex-col gap-4">
+                  <Input
+                    placeholder="Project Name"
+                    defaultValue="/content/plugins"
+                  />
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="include" defaultChecked />
+                    <label
+                      htmlFor="include"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Allow administrators to change the directory.
+                    </label>
+                  </div>
+                </form>
+              </CardContent>
+              <CardFooter className="border-t px-6 py-4">
+                <Button>Save</Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
+      </main>
     </div>
   )
 }
-export default Feedback;
-
+export default SaDashboard;
