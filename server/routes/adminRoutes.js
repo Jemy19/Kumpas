@@ -16,5 +16,5 @@ router.use(
 router.post('/admin', authMiddleware, requireRole('super_admin'), adminController.createAdmin);
 router.get('/admins', authMiddleware, requireRole('super_admin'), adminController.getAllAdmins);
 router.delete('/admin/:id', authMiddleware, requireRole('super_admin'), adminController.deleteAdmin);
-
+router.put('/admins/:id', authMiddleware, requireRole('super_admin'), adminController.updateAdmin);
 module.exports = router;

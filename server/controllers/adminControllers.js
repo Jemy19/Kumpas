@@ -1,14 +1,38 @@
 const User = require('../models/user');
-
+const { hashPassword, comparePassword} = require('../helpers/auth')
 // Controller to create a new admin
+
 exports.createAdmin = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const admin = new User({ username, password, role: 'admin' });
-    await admin.save();
-    res.status(201).send(admin);
+      const {name, email, password} = req.body;
+      if (!name){
+          return res.json({
+              error: 'name is requred'
+          })
+      }
+      if (!password || password.length < 6){
+          return res.json({
+              error: 'Password is require and should be 6 char long'
+          })
+      }
+      const exist = await User.findOne({email})
+      if(exist){
+          return res.json({
+              error: 'email is already taken'
+          })
+      }
+
+      const hashedPassword = await hashPassword(password)
+
+      const user  = await User.create ({
+          name, 
+          email, 
+          password: hashedPassword,
+          role: 'admin'
+      });
+      return res.json(user)
   } catch (error) {
-    res.status(400).send(error);
+      console.log(error)
   }
 };
 
@@ -27,10 +51,37 @@ exports.deleteAdmin = async (req, res) => {
   try {
     const admin = await User.findByIdAndDelete(req.params.id);
     if (!admin) {
-      return res.status(404).send('Admin not found');
+      return res.json({
+        error: 'Admin not found'
+    })
     }
     res.status(200).send(admin);
   } catch (error) {
     res.status(400).send(error);
+  }
+};
+
+exports.updateAdmin = async (req, res) => {
+  const { id } = req.params;
+  const { name, email } = req.body;
+  console.log('Received update request for id:', id); 
+  try {
+    const admin = await User.findById(id);
+    if (!admin) {
+      return res.status(404).json({
+        error: 'Word not found',
+      });
+    }
+
+    admin.name = name || admin.name;
+    admin.email = email || admin.email;
+
+    const updatedWord = await admin.save();
+    res.json(updatedWord);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: 'An error occurred while updating admin Account',
+    });
   }
 };

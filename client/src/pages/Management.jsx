@@ -129,7 +129,7 @@ export function Management() {
       video: '',
     })
     const vidUpRef = useRef(null);
-
+    // for creating new sign language
     const addWord = async (e) => {
       e.preventDefault();
       const { title, description, category } = data;

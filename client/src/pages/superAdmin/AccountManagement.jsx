@@ -73,14 +73,93 @@ import {
   } from "@/components/ui/sheet"
 import { Label } from "@/components/ui/label"
 import axios from 'axios'
+import {toast} from 'react-hot-toast'
 
 export function AccountManagement() {
   const { user, logout } = useContext(UserContext);
-
   const [admins, setAdmins] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
+  // create account
+  const [data, setData] = useState({
+    name: '',
+    email: '',
+    password: '',
+  })
+  const registerUser = async (e) => {
+    e.preventDefault()
+    const {name, email, password} = data
+    try {
+      const {data} = await axios.post ('/admin/admin', {
+        name, email, password
+      })
+      if(data.error){
+        toast.error(data.error)
+      } else {
+        setData({ name: '', email: '', password: ''});
+        toast.success('New User Created!')
+        setAdmins(prevAdmins => [...prevAdmins, data]);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // delete account
+  const deleteAcc = async (id) => {
+    try {
+      const response = await axios.delete(`/admin/admin/${id}`);
+      if (response.status === 200) {
+        console.log('Word deleted successfully:');
+        toast.success('account Deleted!')  
+        setAdmins(prevAdmins => prevAdmins.filter((admin) => admin._id !== id));
+      } 
+    } catch (error) {
+      console.error('An error occurred while deleting the account:', error);
+    }
+  };
+  // for updating account
+  const [updateData, setUpdateData] = useState({
+    id: null,
+    name: '',
+    email: '',
+  });
+
+  const updateWord = async (e, id, updatedData) => {
+    e.preventDefault();
+    const originalData = words.find((word) => word._id === id);
+    
+    console.log(originalData);
+    console.log(updateData);
+    try { 
+      if(originalData.name == updateData.name 
+        && originalData.email == updateData.email
+      )
+      {
+        toast.error('No changes detected. admins account not updated.');
+        return;
+      }
+      const response = await axios.put(`/updateWord/${id}`);
+      if (response.error) {
+        toast.error(response.error);
+      } else {
+        toast.success('Word Successfully Updated!');
+        setWords((prevAdmins) => prevAdmins.map((admin) =>
+          admin._id === id? response.data : admin
+        ));
+      }
+    } catch (error) {
+      console.error('An error occurred while updating the word:', error);
+    }
+  };
+  const handleEdit = (admins) => {
+    setUpdateData({
+      id: admins._id,
+      name: admins.name,
+      email: admins.email,
+    });
+  };
+
   useEffect(() => {
     axios.get('/admin/admins')
         .then(({ data }) => {
@@ -101,7 +180,7 @@ export function AccountManagement() {
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
+          <Link to="/SaDashboard" className="flex items-center gap-2 font-semibold">
               <Package2 className="h-6 w-6" />
               <span className="whitespace-nowrap">E-KUMPAS</span>
             </Link>
@@ -204,7 +283,27 @@ export function AccountManagement() {
                             </Button>
                             </DialogTrigger>
                             <DialogContent>
-                            {/* Add dialog content here if needed */}
+                              <form  onSubmit={registerUser}>
+                              <div className="grid gap-4">
+                                <div className="grid gap-4">
+                                  <div className="grid gap-2">
+                                    <Label htmlFor="first-name">First name</Label>
+                                    <Input type='text' placeholder='Enter Name...' value={data.name} onChange={(e) => setData({...data, name: e.target.value})} />
+                                  </div>
+                                </div>
+                                <div className="grid gap-2">
+                                  <Label htmlFor="email">Email</Label>
+                                  <Input type='email' placeholder='Enter Email...' value={data.email} onChange={(e) => setData({...data, email: e.target.value})}/>
+                                </div>
+                                <div className="grid gap-2">
+                                  <Label htmlFor="password">Password</Label>
+                                  <Input type='password' placeholder='Enter Password...' value={data.password} onChange={(e) => setData({...data, password: e.target.value})}/>
+                                </div>
+                                <Button type="submit" className="w-full">
+                                  Create an account
+                                </Button>
+                              </div>
+                              </form>
                             </DialogContent>
                         </Dialog>
                         </div>
@@ -214,12 +313,13 @@ export function AccountManagement() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="hidden w-[100px] sm:table-cell">
-                          name
+                        <TableHead className="hidden w-[300px] sm:table-cell">ID</TableHead>
+                        <TableHead className="hidden w-[200px] sm:table-cell">
+                          Username
                         </TableHead>
-                        <TableHead>email</TableHead>
-                        <TableHead>role</TableHead>
-                        <TableHead className="hidden md:table-cell">
+                        <TableHead className="hidden w-[200px] sm:table-cell">Email</TableHead>
+                        <TableHead className="hidden w-[200px] sm:table-cell">Role</TableHead>
+                        <TableHead className="hidden md:table-cell w-[300px]">
                           Updated at
                         </TableHead>
                         <TableHead className="hidden md:table-cell">
@@ -233,6 +333,9 @@ export function AccountManagement() {
                     <TableBody >
                       {paginatedAdmins.map((admin) => (
                         <TableRow>
+                          <TableCell className="hidden sm:table-cell">
+                            {admin._id}
+                          </TableCell>
                           <TableCell className="hidden sm:table-cell">
                             {admin.name}
                           </TableCell>
@@ -284,12 +387,13 @@ export function AccountManagement() {
                                     <AlertDialogHeader>
                                       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                       <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete.
+                                        This action cannot be undone. This will permanently 
+                                        delete the  <br />  Account: {admin.name}
                                       </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction >Continue</AlertDialogAction>
+                                      <AlertDialogAction onClick={() => deleteAcc(admin._id)}>Continue</AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>
