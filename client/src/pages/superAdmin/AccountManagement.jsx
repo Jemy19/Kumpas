@@ -125,7 +125,7 @@ export function AccountManagement() {
     email: '',
   });
 
-  const updateWord = async (e, id, updatedData) => {
+  const updateAcc = async (e, id, updatedData) => {
     e.preventDefault();
     const originalData = words.find((word) => word._id === id);
     
@@ -278,11 +278,15 @@ export function AccountManagement() {
                             <Button size="sm" className="h-8 gap-1">
                                 <PlusCircle className="h-3.5 w-3.5" />
                                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                Add New Account
+                                  Create New Account
                                 </span>
                             </Button>
                             </DialogTrigger>
+                            
                             <DialogContent>
+                            <DialogTitle>
+                              Create New Account
+                            </DialogTitle>
                               <form  onSubmit={registerUser}>
                               <div className="grid gap-4">
                                 <div className="grid gap-4">
@@ -367,16 +371,54 @@ export function AccountManagement() {
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                 <Sheet>
                                   <SheetTrigger asChild>
-                                    <Button onClick={() => handleEdit(word)} className="block py-2 px-4 rounded mb-1 w-32 h-10" variant="outline">Edit</Button>
+                                    <Button onClick={() => handleEdit(admin)} className="block py-2 px-4 rounded mb-1 w-32 h-10" variant="outline">Edit</Button>
                                   </SheetTrigger>
                                   <SheetContent>
                                     <SheetHeader>
-                                      <SheetTitle>Edit Word</SheetTitle>
+                                      <SheetTitle>Edit Account</SheetTitle>
                                       <SheetDescription>
-                                        Make changes to your Word here. Click Update when you're done.
+                                        Make changes to your Account here. Click Update when you're done.
                                       </SheetDescription>
                                     </SheetHeader>
-                                    
+                                    <form onSubmit={(e) => updateAcc(e, updateData.id, updateData)}>
+                                      <div className="grid gap-4">
+                                      <Label>Name</Label>
+                                      <Input
+                                          type='text'
+                                          placeholder='Enter Name...'
+                                          value={updateData.name}
+                                          onChange={(e) => setUpdateData({ ...updateData, name: e.target.value })}
+                                      />
+                                      <Label>email</Label>
+                                      <Input
+                                          type='text'
+                                          placeholder='Enter Email...'
+                                          value={updateData.email}
+                                          onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
+                                      />
+                                      <Label>New Password</Label>
+                                      <Input
+                                          type='text'
+                                          placeholder='Enter Password...'
+                                          value={updateData.Password}
+                                          onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
+                                      />
+                                      <Label>Confirm Password</Label>
+                                      <Input
+                                          type='text'
+                                          placeholder='Enter Password...'
+                                          value={updateData.Password}
+                                          onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
+                                      />
+                                      <SheetFooter>
+                                          <SheetClose asChild>
+                                          <Button type="submit">
+                                              UPDATE
+                                          </Button>
+                                          </SheetClose>
+                                      </SheetFooter>
+                                      </div>
+                                      </form>
                                   </SheetContent>
                                 </Sheet>  
                                 <AlertDialog>
