@@ -212,6 +212,7 @@ export function Management() {
       
       console.log(originalData);
       console.log(updateData);
+      console.log(updatedData);
       try {
         let videoUrl = await vidUpRef.current.uploadVideo();
         const urlString = videoUrl;

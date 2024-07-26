@@ -63,8 +63,8 @@ exports.deleteAdmin = async (req, res) => {
 
 exports.updateAdmin = async (req, res) => {
   const { id } = req.params;
-  const { name, email } = req.body;
-  console.log('Received update request for id:', id); 
+  const { name, email, password } = req.body;
+  console.log('Received update request for name:', name); 
   try {
     const admin = await User.findById(id);
     if (!admin) {
@@ -75,6 +75,17 @@ exports.updateAdmin = async (req, res) => {
 
     admin.name = name || admin.name;
     admin.email = email || admin.email;
+
+    if (password) {
+      const isSamePassword = await comparePassword(password, admin.password);
+      if (isSamePassword) {
+        return res.status(400).json({
+          error: 'New password cannot be the same as the current password',
+        });
+      }
+      const hashedPassword = await hashPassword(password);
+      admin.password = hashedPassword;
+    }
 
     const updatedWord = await admin.save();
     res.json(updatedWord);

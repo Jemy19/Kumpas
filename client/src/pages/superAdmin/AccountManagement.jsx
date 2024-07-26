@@ -81,6 +81,8 @@ export function AccountManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+
   // create account
   const [data, setData] = useState({
     name: '',
@@ -123,28 +125,35 @@ export function AccountManagement() {
     id: null,
     name: '',
     email: '',
+    password: "",
+    confirmPassword: "",
   });
 
-  const updateAcc = async (e, id, updatedData) => {
+  const updateAcc = async (e, id) => {
     e.preventDefault();
-    const originalData = words.find((word) => word._id === id);
+    const originalData = admins.find((admin) => admin._id === id);
     
     console.log(originalData);
     console.log(updateData);
     try { 
+      if (updateData.password !== updateData.confirmPassword) {
+        setErrorMessage('Passwords do not match.'); // Set error message
+        return;
+      }
+      setErrorMessage('');
       if(originalData.name == updateData.name 
-        && originalData.email == updateData.email
+        && originalData.email == updateData.email && updateData.password == null && updateData.confirmPassword == null
       )
       {
         toast.error('No changes detected. admins account not updated.');
         return;
       }
-      const response = await axios.put(`/updateWord/${id}`);
+      const response = await axios.put(`/admin/admins/${id}`, updateData);
       if (response.error) {
         toast.error(response.error);
       } else {
-        toast.success('Word Successfully Updated!');
-        setWords((prevAdmins) => prevAdmins.map((admin) =>
+        toast.success('Admin Account Successfully Updated!');
+        setAdmins((prevAdmins) => prevAdmins.map((admin) =>
           admin._id === id? response.data : admin
         ));
       }
@@ -157,6 +166,8 @@ export function AccountManagement() {
       id: admins._id,
       name: admins.name,
       email: admins.email,
+      password: null,
+      confirmPassword: null,
     });
   };
 
@@ -400,16 +411,17 @@ export function AccountManagement() {
                                       <Input
                                           type='text'
                                           placeholder='Enter Password...'
-                                          value={updateData.Password}
-                                          onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
+                                          onChange={(e) => setUpdateData({ ...updateData, Password: e.target.value })}
                                       />
                                       <Label>Confirm Password</Label>
                                       <Input
                                           type='text'
                                           placeholder='Enter Password...'
-                                          value={updateData.Password}
-                                          onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
+                                          onChange={(e) => setUpdateData({ ...updateData, confirmPassword: e.target.value })}
                                       />
+                                      {errorMessage && (
+                                        <p className="text-red-500 text-sm">{errorMessage}</p>
+                                      )}
                                       <SheetFooter>
                                           <SheetClose asChild>
                                           <Button type="submit">
