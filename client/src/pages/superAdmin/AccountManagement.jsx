@@ -141,17 +141,21 @@ export function AccountManagement() {
         return;
       }
       setErrorMessage('');
-      if(originalData.name == updateData.name 
-        && originalData.email == updateData.email && updateData.password == null && updateData.confirmPassword == null
+      if (
+        originalData.name === updateData.name &&
+        originalData.email === updateData.email &&
+        (updateData.password === null || updateData.password === "") &&
+        (updateData.confirmPassword === null || updateData.confirmPassword === "")
       )
       {
         toast.error('No changes detected. admins account not updated.');
         return;
       }
       const response = await axios.put(`/admin/admins/${id}`, updateData);
-      if (response.error) {
-        toast.error(response.error);
-      } else {
+      if (response.data.error) {
+        toast.error(response.data.error)
+      } 
+      else {
         toast.success('Admin Account Successfully Updated!');
         setAdmins((prevAdmins) => prevAdmins.map((admin) =>
           admin._id === id? response.data : admin
@@ -411,7 +415,7 @@ export function AccountManagement() {
                                       <Input
                                           type='text'
                                           placeholder='Enter Password...'
-                                          onChange={(e) => setUpdateData({ ...updateData, Password: e.target.value })}
+                                          onChange={(e) => setUpdateData({ ...updateData, password: e.target.value })}
                                       />
                                       <Label>Confirm Password</Label>
                                       <Input
@@ -423,14 +427,12 @@ export function AccountManagement() {
                                         <p className="text-red-500 text-sm">{errorMessage}</p>
                                       )}
                                       <SheetFooter>
-                                          <SheetClose asChild>
                                           <Button type="submit">
                                               UPDATE
                                           </Button>
-                                          </SheetClose>
                                       </SheetFooter>
                                       </div>
-                                      </form>
+                                    </form>
                                   </SheetContent>
                                 </Sheet>  
                                 <AlertDialog>

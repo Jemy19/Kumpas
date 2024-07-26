@@ -78,9 +78,10 @@ exports.updateAdmin = async (req, res) => {
 
     if (password) {
       const isSamePassword = await comparePassword(password, admin.password);
+      console.log(isSamePassword);
       if (isSamePassword) {
-        return res.status(400).json({
-          error: 'New password cannot be the same as the current password',
+        return res.json({
+          error: 'New password cannot be the same as the current password'
         });
       }
       const hashedPassword = await hashPassword(password);
