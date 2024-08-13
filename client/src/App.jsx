@@ -15,6 +15,7 @@ import Feedback from './pages/Feedback';
 import SaDashboard from './pages/superAdmin/saDashboard';
 import SuperAdminRoute from './components/SuperAdminRoute';
 import AccountManagement from './pages/superAdmin/AccountManagement';
+import UserManagement from './pages/UserManagement';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true
@@ -31,6 +32,7 @@ function App() {
         <Route path='/OldDashboard' element={<PrivateRoute><OldDashboard /></PrivateRoute>} />
         <Route path='/Management' element={<PrivateRoute><Management /></PrivateRoute>} />
         <Route path='/vid' element={<PrivateRoute><Vidtest /></PrivateRoute>} />
+        <Route path='/UserManagement' element={<PrivateRoute><UserManagement /></PrivateRoute>} />
         <Route path='/Feedback' element={<PrivateRoute><Feedback /></PrivateRoute>} />
         <Route path='/SaDashboard' element={<SuperAdminRoute><SaDashboard /></SuperAdminRoute>} />
         <Route path='/AccManagement' element={<SuperAdminRoute><AccountManagement /></SuperAdminRoute>} />

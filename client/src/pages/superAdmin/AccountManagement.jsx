@@ -141,6 +141,13 @@ export function AccountManagement() {
         return;
       }
       setErrorMessage('');
+      if ((updateData.name === null || updateData.name === "") ||
+        (updateData.email === null || updateData.email === "")
+      ) 
+      {
+        toast.error('Name or Email cannot be blank.');
+        return;
+      }
       if (
         originalData.name === updateData.name &&
         originalData.email === updateData.email &&
@@ -406,7 +413,7 @@ export function AccountManagement() {
                                       />
                                       <Label>email</Label>
                                       <Input
-                                          type='text'
+                                          type='email'
                                           placeholder='Enter Email...'
                                           value={updateData.email}
                                           onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
@@ -427,9 +434,11 @@ export function AccountManagement() {
                                         <p className="text-red-500 text-sm">{errorMessage}</p>
                                       )}
                                       <SheetFooter>
-                                          <Button type="submit">
-                                              UPDATE
-                                          </Button>
+                                          <SheetClose asChild>
+                                            <Button type="submit">
+                                                UPDATE
+                                            </Button>
+                                          </SheetClose>
                                       </SheetFooter>
                                       </div>
                                     </form>

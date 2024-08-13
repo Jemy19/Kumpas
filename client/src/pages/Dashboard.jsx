@@ -77,6 +77,13 @@ export function Dashboard() {
                 Sign Management{" "}
               </Link>
               <Link
+                to="/UserManagement"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
+              >
+                <Users className="h-4 w-4" />
+                User Management
+              </Link>
+              <Link
                 to="/Feedback"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
               >
@@ -122,6 +129,13 @@ export function Dashboard() {
                 >
                   <Package className="h-5 w-5" />
                   Sign Management
+                </Link>
+                <Link
+                  to="/UserManagement"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Users className="h-5 w-5" />
+                  UserManagement
                 </Link>
                 <Link
                   to="/FeedBack"
