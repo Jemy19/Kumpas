@@ -2,6 +2,7 @@ const User = require('../models/user')
 const Word = require('../models/signs')
 const { hashPassword, comparePassword} = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 const test = (req, res) => {
     res.json('test is working')
@@ -146,6 +147,15 @@ const updateWordDoc = async (req, res) => {
     }
   };
   
+  const getUsers = async (req, res) => {
+    try {
+        // Accessing the MongoDB collection directly
+        const users = await mongoose.connection.db.collection('mobileusers').find().toArray();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 module.exports =  {
     test,
     loginUser,
@@ -154,5 +164,6 @@ module.exports =  {
     addWord,
     getWords,
     deleteWordDoc,
-    updateWordDoc
+    updateWordDoc,
+    getUsers
 }
