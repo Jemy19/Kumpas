@@ -16,6 +16,7 @@ import SaDashboard from './pages/superAdmin/saDashboard';
 import SuperAdminRoute from './components/SuperAdminRoute';
 import AccountManagement from './pages/superAdmin/AccountManagement';
 import UserManagement from './pages/UserManagement';
+import AdminLogs from './pages/adminLogs';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true
@@ -34,6 +35,7 @@ function App() {
         <Route path='/vid' element={<PrivateRoute><Vidtest /></PrivateRoute>} />
         <Route path='/UserManagement' element={<PrivateRoute><UserManagement /></PrivateRoute>} />
         <Route path='/Feedback' element={<PrivateRoute><Feedback /></PrivateRoute>} />
+        <Route path='/AdminLogs' element={<PrivateRoute><AdminLogs /></PrivateRoute>} />
         <Route path='/SaDashboard' element={<SuperAdminRoute><SaDashboard /></SuperAdminRoute>} />
         <Route path='/AccManagement' element={<SuperAdminRoute><AccountManagement /></SuperAdminRoute>} />
       </Routes>

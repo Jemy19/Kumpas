@@ -75,7 +75,7 @@ import { Label } from "@/components/ui/label"
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
 
-export function UserManagement() {
+export function adminLogs() {
   const { user, logout } = useContext(UserContext);
   const [mobUsers, setmobUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -224,7 +224,7 @@ export function UserManagement() {
               </Link>
               <Link
                 to="/UserManagement"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground bg-muted text-primary transition-all hover:text-primary" 
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
               >
                 <Users className="h-4 w-4" />
                 User Management
@@ -235,6 +235,13 @@ export function UserManagement() {
               >
                 <Users className="h-4 w-4" />
                 Feedback
+              </Link>
+              <Link
+                to="/Feedback"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground bg-muted text-primary transition-all hover:text-primary" 
+              >
+                <Users className="h-4 w-4" />
+                Admin Logs
               </Link>
             </nav>
           </div>
@@ -538,4 +545,4 @@ export function UserManagement() {
     
   )
 }
-export default UserManagement;
+export default adminLogs;
