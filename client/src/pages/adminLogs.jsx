@@ -297,6 +297,13 @@ export function adminLogs() {
                   <Users className="h-5 w-5" />
                   Feedback
                 </Link>
+                <Link
+                  to="/AdminLogs"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Users className="h-5 w-5" />
+                  Adming Logs
+                </Link>
               </nav>
             </SheetContent>
           </Sheet>
@@ -336,7 +343,7 @@ export function adminLogs() {
                         <div>
                         <CardTitle>Account Management</CardTitle>
                         <CardDescription>
-                            View and Manage all Admin Accounts.
+                            View and Manage all User Accounts.
                         </CardDescription>
                         </div>
                         <div className="ml-auto flex items-center gap-2">

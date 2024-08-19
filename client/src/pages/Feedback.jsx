@@ -229,7 +229,7 @@ export function Feedback() {
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
               >
                 <Package className="h-4 w-4" />
-                Sign Management{" "}
+                Sign Management
               </Link>
               <Link
                 to="/UserManagement"
@@ -243,7 +243,14 @@ export function Feedback() {
                 className="flex items-center gap-3 rounded-lg px-3 py-2 bg-muted text-primary transition-all hover:text-primary" 
               >
                 <Users className="h-4 w-4" />
-                Feedback{" "}
+                Feedback
+              </Link>
+              <Link
+                to="/AdminLogs"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
+              >
+                <Users className="h-4 w-4" />
+                Admin Logs
               </Link>
             </nav>
           </div>
@@ -298,6 +305,13 @@ export function Feedback() {
                 >
                   <Users className="h-5 w-5" />
                   Feedback
+                </Link>
+                <Link
+                  to="/AdminLogs"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Users className="h-5 w-5" />
+                  Admin Logs
                 </Link>
               </nav>
             </SheetContent>
