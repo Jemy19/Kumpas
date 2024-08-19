@@ -54,28 +54,28 @@ export function SaDashboard() {
                 Admin Management
               </Link>
               <Link
-                to="/AccManagement"
+                to="/SAUserManagement"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
               >
                 <Package className="h-4 w-4" />
                 User Management
               </Link>
               <Link
-                to="/AccManagement"
+                to="/SASignManagement"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
               >
                 <Package className="h-4 w-4" />
                 Sign Management
               </Link>
               <Link
-                to="/AccManagement"
+                to="/SAFeedbacks"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
               >
                 <Package className="h-4 w-4" />
                 Feedbacks
               </Link>
               <Link
-                to="/AccManagement"
+                to="/SALogs"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
               >
                 <Package className="h-4 w-4" />

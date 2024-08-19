@@ -15,6 +15,12 @@ import Feedback from './pages/Feedback';
 import SaDashboard from './pages/superAdmin/saDashboard';
 import SuperAdminRoute from './components/SuperAdminRoute';
 import AccountManagement from './pages/superAdmin/AccountManagement';
+import SAUserManagement from './pages/superAdmin/saUserManagement';
+import SASignManagement from './pages/superAdmin/saSignManagement';
+import SAFeedbacks from './pages/superAdmin/saFeedback';
+import SALogs from './pages/superAdmin/saLogs';
+
+
 import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
 
@@ -38,6 +44,10 @@ function App() {
         <Route path='/AdminLogs' element={<PrivateRoute><AdminLogs /></PrivateRoute>} />
         <Route path='/SaDashboard' element={<SuperAdminRoute><SaDashboard /></SuperAdminRoute>} />
         <Route path='/AccManagement' element={<SuperAdminRoute><AccountManagement /></SuperAdminRoute>} />
+        <Route path='/SAUserManagement' element={<SuperAdminRoute><SAUserManagement /></SuperAdminRoute>} />
+        <Route path='/SASignManagement' element={<SuperAdminRoute><SASignManagement /></SuperAdminRoute>} />
+        <Route path='/SAFeedbacks' element={<SuperAdminRoute><SAFeedbacks /></SuperAdminRoute>} />
+        <Route path='/SALogs' element={<SuperAdminRoute><SALogs /></SuperAdminRoute>} />
       </Routes>
     </UserContextProvider>  
   )

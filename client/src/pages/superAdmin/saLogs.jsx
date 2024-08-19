@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../../../context/userContext';
 import { Link } from 'react-router-dom';
 
-import { CircleUser, Menu, Package2, Search, MoreHorizontal, PlusCircle, Home, Package} from "lucide-react"
+import { CircleUser, Menu, Package2, Search, MoreHorizontal, PlusCircle, Home, Package, Users} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -75,9 +75,9 @@ import { Label } from "@/components/ui/label"
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
 
-export function AccountManagement() {
+export function saLogs() {
   const { user, logout } = useContext(UserContext);
-  const [admins, setAdmins] = useState([]);
+  const [mobUsers, setmobUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
@@ -85,15 +85,13 @@ export function AccountManagement() {
 
   // create account
   const [data, setData] = useState({
-    name: '',
     email: '',
-    password: '',
   })
   const registerUser = async (e) => {
     e.preventDefault()
     const {name, email, password} = data
     try {
-      const {data} = await axios.post ('/admin/admin', {
+      const {data} = await axios.post ('/mobUsers/mobUsers', {
         name, email, password
       })
       if(data.error){
@@ -110,11 +108,11 @@ export function AccountManagement() {
   // delete account
   const deleteAcc = async (id) => {
     try {
-      const response = await axios.delete(`/admin/admin/${id}`);
+      const response = await axios.delete(`/mobUsers/mobUsers/${id}`);
       if (response.status === 200) {
         console.log('Word deleted successfully:');
         toast.success('account Deleted!')  
-        setAdmins(prevAdmins => prevAdmins.filter((admin) => admin._id !== id));
+        setAdmins(prevAdmins => prevAdmins.filter((mobUsers) => mobUsers._id !== id));
       } 
     } catch (error) {
       console.error('An error occurred while deleting the account:', error);
@@ -131,7 +129,7 @@ export function AccountManagement() {
 
   const updateAcc = async (e, id) => {
     e.preventDefault();
-    const originalData = admins.find((admin) => admin._id === id);
+    const originalData = mobUsers.find((mobUsers) => mobUsers._id === id);
     
     console.log(originalData);
     console.log(updateData);
@@ -155,37 +153,37 @@ export function AccountManagement() {
         (updateData.confirmPassword === null || updateData.confirmPassword === "")
       )
       {
-        toast.error('No changes detected. admins account not updated.');
+        toast.error('No changes detected. mobUsers account not updated.');
         return;
       }
-      const response = await axios.put(`/admin/admins/${id}`, updateData);
+      const response = await axios.put(`/mobUsers/mobUsers/${id}`, updateData);
       if (response.data.error) {
         toast.error(response.data.error)
       } 
       else {
         toast.success('Admin Account Successfully Updated!');
-        setAdmins((prevAdmins) => prevAdmins.map((admin) =>
-          admin._id === id? response.data : admin
+        setAdmins((prevAdmins) => prevAdmins.map((mobUsers) =>
+          mobUsers._id === id? response.data : mobUsers
         ));
       }
     } catch (error) {
       console.error('An error occurred while updating the word:', error);
     }
   };
-  const handleEdit = (admins) => {
+  const handleEdit = (mobUsers) => {
     setUpdateData({
-      id: admins._id,
-      name: admins.name,
-      email: admins.email,
+      id: mobUsers._id,
+      name: mobUsers.name,
+      email: mobUsers.email,
       password: null,
       confirmPassword: null,
     });
   };
-
+// fetch mobUsers
   useEffect(() => {
-    axios.get('/admin/admins')
+    axios.get('/getUsers')
         .then(({ data }) => {
-            setAdmins(data);
+            setmobUsers(data);
         })
         .catch((error) => {
             console.error('Error fetching words data:', error);
@@ -197,7 +195,7 @@ export function AccountManagement() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const paginatedAdmins = admins.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedUsers = mobUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -219,7 +217,7 @@ export function AccountManagement() {
               </Link>
               <Link
                 to="/AccManagement"
-                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary" 
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
               >
                 <Package className="h-4 w-4" />
                 Admin Management
@@ -247,7 +245,7 @@ export function AccountManagement() {
               </Link>
               <Link
                 to="/SALogs"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" 
+                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary" 
               >
                 <Package className="h-4 w-4" />
                 Security Logs
@@ -279,57 +277,60 @@ export function AccountManagement() {
                   <span className="sr-only">Acme Inc</span>
                 </Link>
                 <Link
-                  to="/SaDashboard"
+                  to="/Dashboard"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
                   <Home className="h-5 w-5" />
                   Dashboard
                 </Link>
                 <Link
-                  to="/AccManagement"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Package className="h-5 w-5" />
-                  Admin Management
-                </Link>
-                <Link
-                  to="/SAUserManagement"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Package className="h-5 w-5" />
-                  User Management
-                </Link>
-                <Link
-                  to="/SASignManagement"
+                  to="/Management"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
                   <Package className="h-5 w-5" />
                   Sign Management
                 </Link>
                 <Link
-                  to="/SAFeedbacks"
+                  to="/UserManagement"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Package className="h-5 w-5" />
-                  Feedbacks
+                  <Users className="h-5 w-5" />
+                  UserManagement
                 </Link>
                 <Link
-                  to="/SALogs"
+                  to="/FeedBack"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Package className="h-5 w-5" />
-                  Security Logs
+                  <Users className="h-5 w-5" />
+                  Feedback
+                </Link>
+                <Link
+                  to="/AdminLogs"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Users className="h-5 w-5" />
+                  Adming Logs
                 </Link>
               </nav>
             </SheetContent>
           </Sheet>
           <div className="w-full flex-1">
+            <form>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search Sign Languages..."
+                  className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
+                />
+              </div>
+            </form>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <CircleUser className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
+                <span className="sr-only">Toggle mobUsers menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -341,7 +342,7 @@ export function AccountManagement() {
               <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </header>
+      </header>
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
@@ -349,7 +350,7 @@ export function AccountManagement() {
                         <div>
                         <CardTitle>Account Management</CardTitle>
                         <CardDescription>
-                            View and Manage all Admin Accounts.
+                            View and Manage all User Accounts.
                         </CardDescription>
                         </div>
                         <div className="ml-auto flex items-center gap-2">
@@ -415,25 +416,25 @@ export function AccountManagement() {
                       </TableRow>
                     </TableHeader> 
                     <TableBody >
-                      {paginatedAdmins.map((admin) => (
+                      {paginatedUsers.map((mobUsers) => (
                         <TableRow>
                           <TableCell className="hidden sm:table-cell">
-                            {admin._id}
+                            {mobUsers._id}
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
-                            {admin.name}
+                            {}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {admin.email}
+                            {mobUsers.email}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {admin.role}
+                            {}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {admin.updatedAt}
+                            {}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {admin.createdAt}
+                            {}
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>
@@ -451,7 +452,7 @@ export function AccountManagement() {
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                 <Sheet>
                                   <SheetTrigger asChild>
-                                    <Button onClick={() => handleEdit(admin)} className="block py-2 px-4 rounded mb-1 w-32 h-10" variant="outline">Edit</Button>
+                                    <Button onClick={() => handleEdit(mobUsers)} className="block py-2 px-4 rounded mb-1 w-32 h-10" variant="outline">Edit</Button>
                                   </SheetTrigger>
                                   <SheetContent>
                                     <SheetHeader>
@@ -511,12 +512,12 @@ export function AccountManagement() {
                                       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                       <AlertDialogDescription>
                                         This action cannot be undone. This will permanently 
-                                        delete the  <br />  Account: {admin.name}
+                                        delete the  <br />  Account: {mobUsers.name}
                                       </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction onClick={() => deleteAcc(admin._id)}>Continue</AlertDialogAction>
+                                      <AlertDialogAction onClick={() => deleteAcc(mobUsers._id)}>Continue</AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>
@@ -536,14 +537,14 @@ export function AccountManagement() {
                         <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
                         </PaginationItem>
                         )}
-                        {Array(Math.ceil(admins.length / itemsPerPage)).fill(0).map((_, index) => (
+                        {Array(Math.ceil(mobUsers.length / itemsPerPage)).fill(0).map((_, index) => (
                         <PaginationItem key={index}>
                             <PaginationLink onClick={() => handlePageChange(index + 1)} isActive={index + 1 === currentPage}>
                             {index + 1}
                             </PaginationLink>
                         </PaginationItem>
                         ))}
-                        {currentPage < Math.ceil(admins.length / itemsPerPage) && (
+                        {currentPage < Math.ceil(mobUsers.length / itemsPerPage) && (
                         <PaginationItem>
                             <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
                         </PaginationItem>
@@ -552,9 +553,10 @@ export function AccountManagement() {
                 </Pagination>       
                 </CardFooter>
               </Card>
-      </main>
+        </main>
+      </div>
     </div>
-  </div>
+    
   )
 }
-export default AccountManagement;
+export default saLogs;
