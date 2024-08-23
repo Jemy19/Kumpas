@@ -1,5 +1,8 @@
 const User = require('../models/user');
 const { hashPassword, comparePassword} = require('../helpers/auth')
+const logger = require('../config/logger');
+const fs = require('fs');
+const path = require('path'); // Add this line
 // Controller to create a new admin
 
 exports.createAdmin = async (req, res) => {
@@ -30,8 +33,16 @@ exports.createAdmin = async (req, res) => {
           password: hashedPassword,
           role: 'admin'
       });
+      const adminId = req.user._id
+      const adminUsername = req.user.name
+
+      logger.info(`Admin[ID: ${adminId}, Username: ${adminUsername}] added a new Admin Account: ${user}`);
       return res.json(user)
   } catch (error) {
+      const adminId = req.user._id
+      const adminUsername = req.user.name
+
+      logger.error(`Admin[ID: ${adminId}, Username: ${adminUsername}] failed to add word: ${error.message}`);
       console.log(error)
   }
 };
@@ -96,4 +107,17 @@ exports.updateAdmin = async (req, res) => {
       error: 'An error occurred while updating admin Account',
     });
   }
+};
+
+exports.logs = (req, res) => {
+  const logFilePath = path.join(__dirname, '../logs/admin.log');
+  
+  fs.readFile(logFilePath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error reading log file' });
+    }
+
+    const logs = data.split('\n').reverse(); // Reverse for most recent logs first
+    res.json({ logs });
+  });
 };
