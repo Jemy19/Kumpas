@@ -1,10 +1,10 @@
 const User = require('../models/user');
+const Log = require('../models/log'); 
 const { hashPassword, comparePassword} = require('../helpers/auth')
 const logger = require('../config/logger');
-const fs = require('fs');
-const path = require('path'); // Add this line
-// Controller to create a new admin
 
+// Controller to create a new admin
+ 
 exports.createAdmin = async (req, res) => {
   try {
       const {name, email, password} = req.body;
@@ -24,29 +24,32 @@ exports.createAdmin = async (req, res) => {
               error: 'email is already taken'
           })
       }
-
+ 
       const hashedPassword = await hashPassword(password)
-
+ 
       const user  = await User.create ({
-          name, 
-          email, 
+          name,
+          email,
           password: hashedPassword,
           role: 'admin'
       });
-      const adminId = req.user._id
-      const adminUsername = req.user.name
 
-      logger.info(`Admin[ID: ${adminId}, Username: ${adminUsername}] added a new Admin Account: ${user}`);
+      await Log.create({
+        level: 'info',
+        message: `Added a new Admin Account: ${user.name}`,
+        adminId: req.user._id,
+        adminName: req.user.name
+      });
       return res.json(user)
   } catch (error) {
       const adminId = req.user._id
       const adminUsername = req.user.name
-
-      logger.error(`Admin[ID: ${adminId}, Username: ${adminUsername}] failed to add word: ${error.message}`);
+ 
+      logger.error(`Super Admin[ID: ${adminId}, Username: ${adminUsername}] Failed to Create new Admin: ${error.message}`);
       console.log(error)
   }
 };
-
+ 
 // Controller to get all admins
 exports.getAllAdmins = async (req, res) => {
   try {
@@ -56,7 +59,7 @@ exports.getAllAdmins = async (req, res) => {
     res.status(400).send(error);
   }
 };
-
+ 
 // Controller to delete an admin
 exports.deleteAdmin = async (req, res) => {
   try {
@@ -66,16 +69,22 @@ exports.deleteAdmin = async (req, res) => {
         error: 'Admin not found'
     })
     }
+    const adminId = req.user._id
+    const adminUsername = req.user.name
+    logger.info(`Super Admin[ID: ${adminId}, Username: ${adminUsername}] Admin Acccount Deleted: ${req.params.id}`);
     res.status(200).send(admin);
   } catch (error) {
+    const adminId = req.user._id
+    const adminUsername = req.user.name
+    logger.error(`Super Admin[ID: ${adminId}, Username: ${adminUsername}] Failed to Delete Admin Acccount Deleted: ${req.params.id}`);
     res.status(400).send(error);
   }
 };
-
+ 
 exports.updateAdmin = async (req, res) => {
   const { id } = req.params;
   const { name, email, password } = req.body;
-  console.log('Received update request for name:', name); 
+  console.log('Received update request for name:', name);
   try {
     const admin = await User.findById(id);
     if (!admin) {
@@ -83,10 +92,10 @@ exports.updateAdmin = async (req, res) => {
         error: 'Word not found',
       });
     }
-
+ 
     admin.name = name || admin.name;
     admin.email = email || admin.email;
-
+ 
     if (password) {
       const isSamePassword = await comparePassword(password, admin.password);
       console.log(isSamePassword);
@@ -98,26 +107,28 @@ exports.updateAdmin = async (req, res) => {
       const hashedPassword = await hashPassword(password);
       admin.password = hashedPassword;
     }
-
+ 
     const updatedWord = await admin.save();
+    const adminId = req.user._id
+    const adminUsername = req.user.name
+    logger.info(`Super Admin[ID: ${adminId}, Username: ${adminUsername}] Admin Acccount updated: ${req.params.id}`);
     res.json(updatedWord);
   } catch (error) {
     console.log(error);
+    const adminId = req.user._id
+    const adminUsername = req.user.name
+    logger.error(`Super Admin[ID: ${adminId}, Username: ${adminUsername}] Failed to update Admin Acccount: ${req.params.id}`);
     res.status(500).json({
       error: 'An error occurred while updating admin Account',
     });
   }
 };
-
-exports.logs = (req, res) => {
-  const logFilePath = path.join(__dirname, '../logs/admin.log');
-  
-  fs.readFile(logFilePath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error reading log file' });
-    }
-
-    const logs = data.split('\n').reverse(); // Reverse for most recent logs first
+ 
+exports.logs = async (req, res) => {
+  try {
+    const logs = await Log.find().sort({ timestamp: -1 }); // Get logs and sort by most recent
     res.json({ logs });
-  });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching logs' });
+  }
 };
