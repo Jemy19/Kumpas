@@ -7,7 +7,7 @@ const Salogs = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/admin/logs')
+      .get('admin/logs')
       .then((response) => {
         setLogs(response.data.logs);
       })

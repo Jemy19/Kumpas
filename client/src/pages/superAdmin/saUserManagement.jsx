@@ -75,7 +75,7 @@ import { Label } from "@/components/ui/label"
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
 
-export function saUserManagement() {
+export function SaUserManagement() {
   const { user, logout } = useContext(UserContext);
   const [mobUsers, setmobUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -85,7 +85,9 @@ export function saUserManagement() {
 
   // create account
   const [data, setData] = useState({
+    username: '',
     email: '',
+    password: '',
   })
   const registerUser = async (e) => {
     e.preventDefault()
@@ -355,7 +357,7 @@ export function saUserManagement() {
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <div>
-                        <CardTitle>Account Management</CardTitle>
+                        <CardTitle>User Management</CardTitle>
                         <CardDescription>
                             View and Manage all User Accounts.
                         </CardDescription>
@@ -429,19 +431,19 @@ export function saUserManagement() {
                             {mobUsers._id}
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
-                            {}
+                            {mobUsers.username}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                             {mobUsers.email}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {}
+                            {mobUsers.role}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {}
+                            {mobUsers.updatedAt}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {}
+                            {mobUsers.createdAt}
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>
@@ -566,4 +568,4 @@ export function saUserManagement() {
     
   )
 }
-export default saUserManagement;
+export default SaUserManagement;

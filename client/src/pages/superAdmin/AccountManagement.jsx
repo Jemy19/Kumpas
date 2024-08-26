@@ -347,7 +347,7 @@ export function AccountManagement() {
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <div>
-                        <CardTitle>Account Management</CardTitle>
+                        <CardTitle>Admin Management</CardTitle>
                         <CardDescription>
                             View and Manage all Admin Accounts.
                         </CardDescription>

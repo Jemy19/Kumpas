@@ -2,6 +2,8 @@ const User = require('../models/user');
 const Log = require('../models/log'); 
 const { hashPassword, comparePassword} = require('../helpers/auth')
 const logger = require('../config/logger');
+const mongoose = require('mongoose');
+
 
 // Controller to create a new admin
  
@@ -132,3 +134,14 @@ exports.logs = async (req, res) => {
     res.status(500).json({ message: 'Error fetching logs' });
   }
 };
+
+exports.getfeedback = async (req, res) => {
+  try {
+    // Accessing the MongoDB collection directly
+    const feedbacks = await mongoose.connection.db.collection('feedbacks').find().toArray();
+    res.json(feedbacks);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+

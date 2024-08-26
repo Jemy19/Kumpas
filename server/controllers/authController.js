@@ -145,17 +145,17 @@ const updateWordDoc = async (req, res) => {
         error: 'An error occurred while updating the word',
       });
     }
-  };
+};
   
-  const getUsers = async (req, res) => {
-    try {
-        // Accessing the MongoDB collection directly
-        const users = await mongoose.connection.db.collection('mobileusers').find().toArray();
-        res.json(users);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+const getUsers = async (req, res) => {
+try {
+    // Accessing the MongoDB collection directly
+    const users = await mongoose.connection.db.collection('mobileusers').find().toArray();
+    res.json(users);
+} catch (error) {
+    res.status(500).json({ message: error.message });
 }
+};
 module.exports =  {
     test,
     loginUser,
