@@ -47,7 +47,12 @@ exports.createAdmin = async (req, res) => {
       const adminId = req.user._id
       const adminUsername = req.user.name
  
-      logger.error(`Super Admin[ID: ${adminId}, Username: ${adminUsername}] Failed to Create new Admin: ${error.message}`);
+      await Log.create({
+        level: 'Error',
+        message: `Added a new Admin Account`,
+        adminId: req.user._id,
+        adminName: req.user.name
+      });
       console.log(error)
   }
 };
@@ -71,14 +76,20 @@ exports.deleteAdmin = async (req, res) => {
         error: 'Admin not found'
     })
     }
-    const adminId = req.user._id
-    const adminUsername = req.user.name
-    logger.info(`Super Admin[ID: ${adminId}, Username: ${adminUsername}] Admin Acccount Deleted: ${req.params.id}`);
+    await Log.create({
+      level: 'info',
+      message: `Delete Admin Account: ${admin.name}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
     res.status(200).send(admin);
   } catch (error) {
-    const adminId = req.user._id
-    const adminUsername = req.user.name
-    logger.error(`Super Admin[ID: ${adminId}, Username: ${adminUsername}] Failed to Delete Admin Acccount Deleted: ${req.params.id}`);
+    await Log.create({
+      level: 'info',
+      message: `Error Deleting Admin Account: ${admin.name}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
     res.status(400).send(error);
   }
 };
@@ -111,15 +122,21 @@ exports.updateAdmin = async (req, res) => {
     }
  
     const updatedWord = await admin.save();
-    const adminId = req.user._id
-    const adminUsername = req.user.name
-    logger.info(`Super Admin[ID: ${adminId}, Username: ${adminUsername}] Admin Acccount updated: ${req.params.id}`);
+    await Log.create({
+      level: 'info',
+      message: `Update new Admin Account: ${admin.name}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
     res.json(updatedWord);
   } catch (error) {
     console.log(error);
-    const adminId = req.user._id
-    const adminUsername = req.user.name
-    logger.error(`Super Admin[ID: ${adminId}, Username: ${adminUsername}] Failed to update Admin Acccount: ${req.params.id}`);
+    await Log.create({
+      level: 'info',
+      message: `Errpr Updating new Admin Account: ${admin.name}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
     res.status(500).json({
       error: 'An error occurred while updating admin Account',
     });
