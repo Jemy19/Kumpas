@@ -9,34 +9,50 @@ const test = (req, res) => {
 }
 
 //login  
-const loginUser = async(req, res) => {
- try {
-    const {email, password} = req.body;
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-    const user = await User.findOne({email});
-    if(!user) {
-        return res.json({
-            error: 'No user Found'
-        })
+    // Validate email and password input
+    if (!email || !password) {
+      return res.json({ error: 'Email and password are required' });
     }
 
-    const match = await comparePassword(password, user.password)
-    if(match && user.role === 'super_admin'|| user.role === 'admin') {
-        jwt.sign({email: user.email, id: user._id, name: user.name, role: user.role }, process.env.JWT_SECRET, {}, (err, token) => {
-            if(err) throw err;
-            res.cookie('token', token).json({ ...user.toObject(), token });
-            
-        })
-    } 
-    if(!match) {
-        res.json({
-            error: 'Password do not match'
-        })
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({ error: 'No user found with this email' });
     }
- } catch (error) {
-    console.log(error)
- }
-}
+
+    // Compare the provided password with the stored hashed password
+    const match = await comparePassword(password, user.password);
+    if (!match) {
+      return res.json({ error: 'Password does not match' });
+    }
+
+    // Check if the user has the right role (super_admin or admin)
+    if (user.role === 'super_admin' || user.role === 'admin') {
+      jwt.sign(
+        { email: user.email, id: user._id, name: user.name, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' },
+        (err, token) => {
+          if (err) {
+            console.error('JWT sign error:', err);
+            return res.status(500).json({ error: 'Token generation failed' });
+          }
+          res.cookie('token', token).json({ ...user.toObject(), token });
+        }
+      );
+    } else {
+      return res.json({ error: 'Unauthorized access' });
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    return res.json({ error: 'Internal server error' });
+  }
+};
+
 
 const getProfile = (req, res) => {
     const {token} = req.cookies

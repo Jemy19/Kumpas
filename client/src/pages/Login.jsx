@@ -11,7 +11,7 @@ import {toast} from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../../context/userContext';
 
-import Navbar from "@/components/Navbar";
+import NavbarLog from "@/components/NavbarLog";
 
 export function Login() {
   useEffect(() => {
@@ -32,6 +32,12 @@ export function Login() {
   const loginUser = async (e) => {
     e.preventDefault()
       const {email, password} = data
+
+      if (!email || !password) {                           // <-- Added client-side validation
+        toast.error('Email and password are required');
+        return;
+      }
+
       try {
         const {data} = await axios.post('/login', {
           email,
@@ -41,7 +47,7 @@ export function Login() {
           toast.error(data.error)
         } else {
           setUser(data);
-          setData({});
+          setData({ email: '', password: '' });   
           if (data.role === 'super_admin') {
             navigate('/SaDashboard');
           } else if (data.role === 'admin') {
@@ -49,13 +55,18 @@ export function Login() {
           } 
         }
       } catch (error) {
-        
+        if (error.response.status === 401) {
+          toast.error('Session expired, please login again');
+        }
+        else {
+        toast.error('Network error or server issue. Please try again.');
+        }
       }
   }
 
   return (
     <>
-    <Navbar />
+    <NavbarLog />
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center mt-20 lg:-mt-20 mb-20">
         <div className="mx-auto grid w-[350px] gap-6">
