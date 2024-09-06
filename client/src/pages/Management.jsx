@@ -122,7 +122,6 @@ import Header from '@/components/Header';
 export function Management() {
     // for creating new sign language
     const categories = ['Basic Greetings', 'Survival Signs', 'Common Words', 'Questions', 'Alphabet'];
-    const { user, logout } = useContext(UserContext);
     const [data, setData] = useState({
       title: '',
       description: '',
