@@ -172,6 +172,29 @@ try {
     res.status(500).json({ message: error.message });
 }
 };
+
+const getTotalCounts = async (req, res) => {
+  try {
+    // Count total users in 'mobileusers' collection
+    const totalUsers = await mongoose.connection.db.collection('mobileusers').countDocuments();
+
+    // Count total sign language words in 'signs' collection
+    const totalWords = await Word.countDocuments();
+
+    // Count total feedbacks in 'feedbacks' collection
+    const totalFeedbacks = await mongoose.connection.db.collection('feedbacks').countDocuments();
+
+    // Send the total counts in the response
+    res.json({
+      totalUsers,
+      totalWords,
+      totalFeedbacks
+    });
+  } catch (error) {
+    console.error('Error retrieving counts:', error);
+    res.status(500).json({ error: 'Error retrieving total counts' });
+  }
+};
 module.exports =  {
     test,
     loginUser,
@@ -181,5 +204,6 @@ module.exports =  {
     getWords,
     deleteWordDoc,
     updateWordDoc,
-    getUsers
+    getUsers,
+    getTotalCounts
 }

@@ -41,15 +41,39 @@ import {
     TableRow,
   } from "@/components/ui/table"
   
-  
-  
-import { UserContext } from '../../context/userContext';
+
 import React, { useContext, useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
+import axios from 'axios'
+import {toast} from 'react-hot-toast'
 
 export function Dashboard() {
     // for creating new sign language
+    const [totals, setTotals] = useState({
+      totalUsers: 0,
+      totalWords: 0,
+      totalFeedbacks: 0
+    });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      axios.get('/getTotalCounts')
+        .then(({ data }) => {
+          setTotals(data); // Assuming the backend returns the totals in { totalUsers, totalWords, totalFeedbacks }
+        })
+        .catch((error) => {
+          toast.error('Error fetching total counts');
+          console.error(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }, []);
+  
+    if (loading) {
+      return <div>Loading...</div>;
+    }
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -67,7 +91,7 @@ export function Dashboard() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+11</div>
+                <div className="text-2xl font-bold">{totals.totalUsers}</div>
                 <p className="text-xs text-muted-foreground">
                   ...
                 </p>
@@ -91,7 +115,7 @@ export function Dashboard() {
                 <FileText  ty className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">143</div>
+                <div className="text-2xl font-bold">{totals.totalWords}</div>
                 <p className="text-xs text-muted-foreground">
                   ...
                 </p>
@@ -103,7 +127,7 @@ export function Dashboard() {
                 <BookType className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">5</div>
+                <div className="text-2xl font-bold">{totals.totalFeedbacks}</div>
                 <p className="text-xs text-muted-foreground">
                   ...
                 </p>
