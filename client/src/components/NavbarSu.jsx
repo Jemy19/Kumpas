@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom'; // Import useLocation
-import { Package2, Home, Package, Users } from "lucide-react";
+import { Link, useLocation } from 'react-router-dom';
+import { Package2, Home, Package } from "lucide-react";
 
-const Navbar = () => {
-  const location = useLocation(); // Get current location
+const NavbarSu = () => {
+  const location = useLocation();
 
   // Function to determine if a link is active
   const isActive = (path) => {
@@ -17,45 +17,52 @@ const Navbar = () => {
       <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
         <Link to="/" className="flex items-center gap-2 font-semibold">
           <Package2 className="h-6 w-6" />
-          <span className="">E-Kumpas</span>
+          <span className="">Super Admin</span>
         </Link>
       </div>
       <div className="flex-1">
         <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
           <Link
-            to="/Dashboard"
-            className={isActive("/Dashboard")} // Dynamically apply class
+            to="/SaDashboard"
+            className={isActive("/SaDashboard")}
           >
             <Home className="h-4 w-4" />
             Dashboard
           </Link>
           <Link
-            to="/Management"
-            className={isActive("/Management")} // Dynamically apply class
+            to="/AccManagement"
+            className={isActive("/AccManagement")}
+          >
+            <Package className="h-4 w-4" />
+            Admin Management
+          </Link>
+          <Link
+            to="/SAUserManagement"
+            className={isActive("/SAUserManagement")}
+          >
+            <Package className="h-4 w-4" />
+            User Management
+          </Link>
+          <Link
+            to="/SASignManagement"
+            className={isActive("/SASignManagement")}
           >
             <Package className="h-4 w-4" />
             Sign Management
           </Link>
           <Link
-            to="/UserManagement"
-            className={isActive("/UserManagement")} // Dynamically apply class
+            to="/SAFeedbacks"
+            className={isActive("/SAFeedbacks")}
           >
-            <Users className="h-4 w-4" />
-            User Management
+            <Package className="h-4 w-4" />
+            Feedbacks
           </Link>
           <Link
-            to="/Feedback"
-            className={isActive("/Feedback")} // Dynamically apply class
+            to="/SALogs"
+            className={isActive("/SALogs")}
           >
-            <Users className="h-4 w-4" />
-            Feedback
-          </Link>
-          <Link
-            to="/AdminLogs"
-            className={isActive("/AdminLogs")} // Dynamically apply class
-          >
-            <Users className="h-4 w-4" />
-            Admin Logs
+            <Package className="h-4 w-4" />
+            Security Logs
           </Link>
         </nav>
       </div>
@@ -63,4 +70,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarSu;

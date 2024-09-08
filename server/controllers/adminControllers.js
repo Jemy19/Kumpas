@@ -1,7 +1,12 @@
 const User = require('../models/user');
+const Log = require('../models/log'); 
 const { hashPassword, comparePassword} = require('../helpers/auth')
-// Controller to create a new admin
+const logger = require('../config/logger');
+const mongoose = require('mongoose');
 
+
+// Controller to create a new admin
+ 
 exports.createAdmin = async (req, res) => {
   try {
       const {name, email, password} = req.body;
@@ -21,21 +26,37 @@ exports.createAdmin = async (req, res) => {
               error: 'email is already taken'
           })
       }
-
+ 
       const hashedPassword = await hashPassword(password)
-
+ 
       const user  = await User.create ({
-          name, 
-          email, 
+          name,
+          email,
           password: hashedPassword,
           role: 'admin'
       });
+
+      await Log.create({
+        level: 'info',
+        message: `Added a new Admin Account: ${user.name}`,
+        adminId: req.user._id,
+        adminName: req.user.name
+      });
       return res.json(user)
   } catch (error) {
+      const adminId = req.user._id
+      const adminUsername = req.user.name
+ 
+      await Log.create({
+        level: 'Error',
+        message: `Added a new Admin Account`,
+        adminId: req.user._id,
+        adminName: req.user.name
+      });
       console.log(error)
   }
 };
-
+ 
 // Controller to get all admins
 exports.getAllAdmins = async (req, res) => {
   try {
@@ -45,7 +66,7 @@ exports.getAllAdmins = async (req, res) => {
     res.status(400).send(error);
   }
 };
-
+ 
 // Controller to delete an admin
 exports.deleteAdmin = async (req, res) => {
   try {
@@ -55,16 +76,28 @@ exports.deleteAdmin = async (req, res) => {
         error: 'Admin not found'
     })
     }
+    await Log.create({
+      level: 'info',
+      message: `Delete Admin Account: ${admin.name}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
     res.status(200).send(admin);
   } catch (error) {
+    await Log.create({
+      level: 'info',
+      message: `Error Deleting Admin Account: ${admin.name}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
     res.status(400).send(error);
   }
 };
-
+ 
 exports.updateAdmin = async (req, res) => {
   const { id } = req.params;
   const { name, email, password } = req.body;
-  console.log('Received update request for name:', name); 
+  console.log('Received update request for name:', name);
   try {
     const admin = await User.findById(id);
     if (!admin) {
@@ -72,10 +105,10 @@ exports.updateAdmin = async (req, res) => {
         error: 'Word not found',
       });
     }
-
+ 
     admin.name = name || admin.name;
     admin.email = email || admin.email;
-
+ 
     if (password) {
       const isSamePassword = await comparePassword(password, admin.password);
       console.log(isSamePassword);
@@ -87,13 +120,45 @@ exports.updateAdmin = async (req, res) => {
       const hashedPassword = await hashPassword(password);
       admin.password = hashedPassword;
     }
-
+ 
     const updatedWord = await admin.save();
+    await Log.create({
+      level: 'info',
+      message: `Update new Admin Account: ${admin.name}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
     res.json(updatedWord);
   } catch (error) {
     console.log(error);
+    await Log.create({
+      level: 'info',
+      message: `Errpr Updating new Admin Account: ${admin.name}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
     res.status(500).json({
       error: 'An error occurred while updating admin Account',
     });
   }
 };
+ 
+exports.logs = async (req, res) => {
+  try {
+    const logs = await Log.find().sort({ timestamp: -1 }); // Get logs and sort by most recent
+    res.json({ logs });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching logs' });
+  }
+};
+
+exports.getfeedback = async (req, res) => {
+  try {
+    // Accessing the MongoDB collection directly
+    const feedbacks = await mongoose.connection.db.collection('feedbacks').find().toArray();
+    res.json(feedbacks);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
