@@ -207,7 +207,7 @@ export function SaUserManagement() {
       </div>
       <div className="flex flex-col">
         <HeaderSu />
-      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 mt-2">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                     <div className="flex items-center justify-between">

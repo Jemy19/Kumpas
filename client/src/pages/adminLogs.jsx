@@ -143,9 +143,7 @@ export function Adminlogs() {
       </div>
       <div className="flex flex-col">
         <Header />
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <Tabs defaultValue="all">
-            <TabsContent value="all">
+        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 mt-2">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <div className="flex items-center">
@@ -241,8 +239,6 @@ export function Adminlogs() {
                 </Pagination>       
                 </CardFooter>
               </Card>
-            </TabsContent> 
-          </Tabs>
         </main>
       </div>
     </div>
