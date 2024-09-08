@@ -53,9 +53,12 @@ export function Dashboard() {
     const [totals, setTotals] = useState({
       totalUsers: 0,
       totalWords: 0,
-      totalFeedbacks: 0
+      totalFeedbacks: 0,
+      totalFrequency: 0
     });
     const [loading, setLoading] = useState(true);
+    const [wordsAscending, setWordsAscending] = useState([]);
+    const [wordsDescending, setWordsDescending] = useState([]);
 
     useEffect(() => {
       axios.get('/getTotalCounts')
@@ -70,7 +73,24 @@ export function Dashboard() {
           setLoading(false);
         });
     }, []);
-  
+    useEffect(() => {
+    const fetchWordsByUsage = async () => {
+      try {
+        // Make API request to fetch both ascending and descending words
+        const response = await axios.get('/getWordsSortedByUsage'); // replace with your actual endpoint
+
+        // Set both ascending and descending words in state
+        setWordsAscending(response.data.wordsAscending);
+        setWordsDescending(response.data.wordsDescending);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch data');
+        setLoading(false);
+      }
+    };
+
+    fetchWordsByUsage();
+  }, []);
     if (loading) {
       return <div>Loading...</div>;
     }
@@ -103,7 +123,7 @@ export function Dashboard() {
                 <BookType className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+576</div>
+                <div className="text-2xl font-bold">{totals.totalFrequency}</div>
                 <p className="text-xs text-muted-foreground">
                   ...
                 </p>
@@ -164,171 +184,42 @@ export function Dashboard() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
+                  {wordsDescending.map((word, index) => (
                     <TableRow>
                       <TableCell>
-                        <div className="font-medium">Good Morning</div>
+                        <div className="font-medium">{word.title}</div>
                         <div className="hidden text-sm text-muted-foreground md:inline">
-                          Greetings
+                          {word.category}
                         </div>
                       </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        <Badge className="text-xs" variant="outline">
-                          Approved
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">123</TableCell>
+                      {/* Removed the unwanted TableCell */}
+                      <TableCell className="text-right" colSpan={2}>{word.frequency}</TableCell>
                     </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Hello</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          Greetings
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        Refund
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                        2023-06-24
-                      </TableCell>
-                      <TableCell className="text-right">102</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">What is your name?</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          Question
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        Subscription
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        <Badge className="text-xs" variant="outline">
-                          Approved
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                        2023-06-25
-                      </TableCell>
-                      <TableCell className="text-right">95</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Thank You</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          Greetings
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        <Badge className="text-xs" variant="outline">
-                          Approved
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                        2023-06-26
-                      </TableCell>
-                      <TableCell className="text-right">87</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Welcome</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          Greetings
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden xl:table-column">
-                        <Badge className="text-xs" variant="outline">
-                          Approved
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                        2023-06-27
-                      </TableCell>
-                      <TableCell className="text-right">75</TableCell>
-                    </TableRow>
+                  ))}
                   </TableBody>
                 </Table>
               </CardContent>
             </Card>
             <Card x-chunk="dashboard-01-chunk-5">
+              
               <CardHeader>
                 <CardTitle>Least Used Phrases</CardTitle>
               </CardHeader>
+              {wordsAscending.map((word, index) => (
               <CardContent className="grid gap-8">
                 <div className="flex items-center gap-4">
                   <div className="grid gap-1">
                     <p className="text-sm font-medium leading-none">
-                      How are you? 
+                      {word.title} 
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Questions 
+                      {word.category} 
                     </p>
                   </div>
-                  <div className="ml-auto font-medium">0</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                      Where? 
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Questions 
-                    </p>
-                  </div>
-                  <div className="ml-auto font-medium">0</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                      Play 
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Common Words 
-                    </p>
-                  </div>
-                  <div className="ml-auto font-medium">2</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                        Friend 
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Common Words 
-                    </p>
-                  </div>
-                  <div className="ml-auto font-medium">3</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                      Food 
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Common Words 
-                    </p>
-                  </div>
-                  <div className="ml-auto font-medium">5</div>
+                  <div className="ml-auto font-medium">{word.frequency}</div>
                 </div>
               </CardContent>
+              ))}
             </Card>
           </div>
         </main>

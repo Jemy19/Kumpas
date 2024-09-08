@@ -120,13 +120,15 @@ export function Adminlogs() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get('admin/logs')
+    axios.get('admin/logs')
       .then((response) => {
         setLogs(response.data.logs);
       })
       .catch((err) => {
         setError('Error fetching logs');
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 

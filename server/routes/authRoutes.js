@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors')
-const { test, loginUser, getProfile, logoutUser, addWord, getWords, deleteWordDoc, updateWordDoc, getUsers, getTotalCounts } = require('../controllers/authController')
+const { test, loginUser, getProfile, logoutUser, addWord, getWords, deleteWordDoc, updateWordDoc, getUsers, getTotalCounts, getWordsSortedByUsage } = require('../controllers/authController')
 const checkAdminOrSuperAdmin = require('../middleware/checkAdminSu'); 
 router.use(
     cors({
@@ -20,6 +20,7 @@ router.get('/getUsers', checkAdminOrSuperAdmin, getUsers)
 router.delete('/deleteWord/:id', checkAdminOrSuperAdmin, deleteWordDoc);
 router.put('/updateWord/:id', checkAdminOrSuperAdmin, updateWordDoc);
 router.get('/getTotalCounts', checkAdminOrSuperAdmin, getTotalCounts)
+router.get('/getWordsSortedByUsage', checkAdminOrSuperAdmin, getWordsSortedByUsage)
 
 
 module.exports = router

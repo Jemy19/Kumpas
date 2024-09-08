@@ -184,17 +184,48 @@ const getTotalCounts = async (req, res) => {
     // Count total feedbacks in 'feedbacks' collection
     const totalFeedbacks = await mongoose.connection.db.collection('feedbacks').countDocuments();
 
+    const totalFrequency = await Word.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalFrequency: { $sum: "$frequency" }
+        }
+      }
+    ]);
+
     // Send the total counts in the response
     res.json({
       totalUsers,
       totalWords,
-      totalFeedbacks
+      totalFeedbacks,
+      totalFrequency: totalFrequency[0]?.totalFrequency || 0
     });
   } catch (error) {
     console.error('Error retrieving counts:', error);
     res.status(500).json({ error: 'Error retrieving total counts' });
   }
 };
+
+const getWordsSortedByUsage = async (req, res) => {
+  try {
+    // Find all words sorted by frequency in descending order (most used first)
+    const wordsDescending = await Word.find().sort({ frequency: -1 });
+
+    // Find all words sorted by frequency in ascending order (least used first)
+    const wordsAscending = await Word.find().sort({ frequency: 1 });
+
+    // Send both lists in the response
+    res.json({
+      wordsDescending,
+      wordsAscending
+    });
+  } catch (error) {
+    console.error('Error retrieving words:', error);
+    res.status(500).json({ error: 'Error retrieving words' });
+  }
+};
+
+
 module.exports =  {
     test,
     loginUser,
@@ -205,5 +236,6 @@ module.exports =  {
     deleteWordDoc,
     updateWordDoc,
     getUsers,
-    getTotalCounts
+    getTotalCounts,
+    getWordsSortedByUsage
 }
