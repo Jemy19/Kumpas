@@ -1,23 +1,29 @@
 const mongoose = require('mongoose');
-const db = require('../config/db');
-const bcrypt = require("bcrypt");
-
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
-    email:{
+const mobuserSchema = new Schema({
+    role: { type: String, enum: ['user'], required: true },
+    email: {
         type: String,
-        required: true,
         unique: true,
+        required: true
     },
-
-    password:{
+    password: { type: String, required: true },
+    username: { 
         type: String,
-        required: true,
-    },
+        unique: true 
+    }
+}, { timestamps: true });
 
+// Pre-save hook to concatenate email into username if not provided
+mobuserSchema.pre('save', function(next) {
+    if (!this.username) {
+        this.username = this.email.split('@')[0]; // Default username from email
+    }
+    next();
 });
 
-const UserModel = db.model('MobileUser', userSchema);
+const MobUser = mongoose.model('MobUser', mobuserSchema, 'mobileusers');
 
-module.exports = UserModel;
+
+module.exports = MobUser;

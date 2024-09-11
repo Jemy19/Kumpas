@@ -75,7 +75,8 @@ import { Label } from "@/components/ui/label"
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
 import Navbar from '@/components/Navbar';
-import Header from '@/components/Header'
+import Header from '@/components/Header';
+
 export function UserManagement() {
   const [mobUsers, setmobUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -86,33 +87,37 @@ export function UserManagement() {
   // create account
   const [data, setData] = useState({
     email: '',
-  })
-  const registerUser = async (e) => {
-    e.preventDefault()
-    const {name, email, password} = data
+    password: '',
+  });
+
+  const registerMobUser = async (e) => {
+    e.preventDefault();
+    const { email, password } = data;
+    console.log(data)
     try {
-      const {data} = await axios.post ('/mobUsers/mobUsers', {
-        name, email, password
-      })
-      if(data.error){
-        toast.error(data.error)
+      const { data } = await axios.post('/createMobUser', {
+        email,
+        password,
+      });
+      if (data.error) {
+        toast.error(data.error);
       } else {
-        setData({ name: '', email: '', password: ''});
-        toast.success('New User Created!')
-        setAdmins(prevAdmins => [...prevAdmins, data]);
+        setData({ email: '', password: '' });
+        toast.success('New User Created!');
+        // Update mobUsers state NOT WORKING
       }
     } catch (error) {
-      console.log(error)
+      toast.success('Failed to Create new user!');
     }
-  }
+  };
   // delete account
   const deleteAcc = async (id) => {
     try {
-      const response = await axios.delete(`/mobUsers/mobUsers/${id}`);
+      const response = await axios.delete(`/deleteMobUser/${id}`);
       if (response.status === 200) {
-        console.log('Word deleted successfully:');
+        console.log('User deleted successfully:');
         toast.success('account Deleted!')  
-        setAdmins(prevAdmins => prevAdmins.filter((mobUsers) => mobUsers._id !== id));
+        
       } 
     } catch (error) {
       console.error('An error occurred while deleting the account:', error);
@@ -208,9 +213,9 @@ export function UserManagement() {
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <div>
-                        <CardTitle>Account Management</CardTitle>
+                        <CardTitle>User Management</CardTitle>
                         <CardDescription>
-                            View and Manage all Admin Accounts.
+                            View and Manage all User Accounts.
                         </CardDescription>
                         </div>
                         <div className="ml-auto flex items-center gap-2">
@@ -228,14 +233,8 @@ export function UserManagement() {
                             <DialogTitle>
                               Create New Account
                             </DialogTitle>
-                              <form  onSubmit={registerUser}>
+                              <form  onSubmit={registerMobUser}>
                               <div className="grid gap-4">
-                                <div className="grid gap-4">
-                                  <div className="grid gap-2">
-                                    <Label htmlFor="first-name">First name</Label>
-                                    <Input type='text' placeholder='Enter Name...' value={data.name} onChange={(e) => setData({...data, name: e.target.value})} />
-                                  </div>
-                                </div>
                                 <div className="grid gap-2">
                                   <Label htmlFor="email">Email</Label>
                                   <Input type='email' placeholder='Enter Email...' value={data.email} onChange={(e) => setData({...data, email: e.target.value})}/>
@@ -282,19 +281,19 @@ export function UserManagement() {
                             {mobUsers._id}
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
-                            {}
+                            {mobUsers.username}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                             {mobUsers.email}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {}
+                            {mobUsers.role}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {}
+                            {mobUsers.updatedAt}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {}
+                            {mobUsers.createdAt}
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>
