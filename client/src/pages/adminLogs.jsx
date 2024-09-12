@@ -120,7 +120,7 @@ export function Adminlogs() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('admin/logs')
+    axios.get('/adminLogs')
       .then((response) => {
         setLogs(response.data.logs);
       })
