@@ -104,6 +104,7 @@ export function UserManagement() {
       } else {
         setData({ email: '', password: '' });
         toast.success('New User Created!');
+        setmobUsers(prevmobUsers => [...prevmobUsers, data]);
         // Update mobUsers state NOT WORKING
       }
     } catch (error) {
@@ -114,15 +115,19 @@ export function UserManagement() {
   const deleteAcc = async (id) => {
     try {
       const response = await axios.delete(`/deleteMobUser/${id}`);
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.success) {
         console.log('User deleted successfully:');
-        toast.success('account Deleted!')  
-        
-      } 
+        toast.success('Account Deleted!');  
+        setmobUsers(prevmobUsers => prevmobUsers.filter((mobUsers) => mobUsers._id !== id));
+      } else if (response.data.error) {
+        console.error('Error from server:', response.data.error);
+        toast.error('Error deleting account.');
+      }
     } catch (error) {
       console.error('An error occurred while deleting the account:', error);
+      toast.error('An error occurred while deleting the account.');
     }
-  };
+  };  
   // for updating account
   const [updateData, setUpdateData] = useState({
     id: null,

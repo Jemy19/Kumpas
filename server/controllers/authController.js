@@ -287,26 +287,27 @@ const deleteMobUser = async (req, res) => {
     if (!MobileUser) {
       return res.json({
         error: 'User not found'
-    })
+      });
     }
     await Log.create({
       level: 'info',
-      message: `Delete Admin Account: ${MobileUser.username}`,
+      message: `Deleted Admin Account: ${MobileUser.username}`,
       adminId: req.user._id,
       adminName: req.user.name
     });
-    res.status(200).send(admin);
+    res.status(200).send({ success: true });
   } catch (error) {
     const userid = req.params.id;
     await Log.create({
       level: 'error',
-      message: `Error Deleting Admin Account: ${userid.name}`,
+      message: `Error Deleting Admin Account: ${userid}`,
       adminId: req.user._id,
       adminName: req.user.name
     });
-    res.status(400).send(error);
+    res.status(400).send({ error: error.message });
   }
 };
+
 module.exports =  {
     test,
     loginUser,
