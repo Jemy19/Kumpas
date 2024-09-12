@@ -308,6 +308,57 @@ const deleteMobUser = async (req, res) => {
   }
 };
 
+const updateMobUser = async (req, res) => {
+  const { id } = req.params;
+  const {email, password } = req.body;
+  console.log('Received update request for name:', email);
+  try {
+    const mobUser = await MobUser.findById(id); // Changed from User to MobUser
+    if (!mobUser) {
+      return res.status(404).json({
+        error: 'User not found',
+      });
+    }
+
+    // Update name and email if provided
+    mobUser.email = email || mobUser.email;
+
+    // Check and update password
+    if (password) {
+      const isSamePassword = await comparePassword(password, mobUser.password);
+      console.log(isSamePassword);
+      if (isSamePassword) {
+        return res.json({
+          error: 'New password cannot be the same as the current password'
+        });
+      }
+      const hashedPassword = await hashPassword(password);
+      mobUser.password = hashedPassword;
+    }
+
+    // Save updated user
+    const updatedMobUser = await mobUser.save();
+    await Log.create({
+      level: 'info',
+      message: `Updated MobUser Account: ${mobUser.username}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
+    res.json(updatedMobUser);
+  } catch (error) {
+    const userid = req.params.id;
+    await Log.create({
+      level: 'error',  // Fixed typo from 'info' to 'error'
+      message: `Error Updating MobUser Account: ${userid}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
+    res.status(500).json({
+      error: 'An error occurred while updating MobUser account',
+    });
+  }
+};
+
 module.exports =  {
     test,
     loginUser,
@@ -321,5 +372,6 @@ module.exports =  {
     getTotalCounts,
     getWordsSortedByUsage,
     createMobUser,
-    deleteMobUser
+    deleteMobUser,
+    updateMobUser
 }
