@@ -359,6 +359,36 @@ const updateMobUser = async (req, res) => {
   }
 };
 
+const adminLogs = async (req, res) => {
+  try {
+    // Fetch only logs related to the logged-in admin
+    const logs = await Log.find({ adminId: req.user._id }).sort({ timestamp: -1 });
+
+    if (logs.length === 0) {
+      return res.status(404).json({ message: 'No logs found for this admin.' });
+    }
+
+    res.json({ logs });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching logs' });
+  }
+};
+
+const getFeedbackForAdmin = async (req, res) => {
+  try {
+    // Accessing the MongoDB collection directly
+    const feedbacks = await mongoose.connection.db.collection('feedbacks').find().toArray();
+
+    // Remove email field to anonymize feedback
+    const anonymousFeedbacks = feedbacks.map(({ email, ...rest }) => rest);
+
+    res.json(anonymousFeedbacks);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 module.exports =  {
     test,
     loginUser,
@@ -373,5 +403,7 @@ module.exports =  {
     getWordsSortedByUsage,
     createMobUser,
     deleteMobUser,
-    updateMobUser
+    updateMobUser,
+    adminLogs,
+    getFeedbackForAdmin
 }

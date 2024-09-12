@@ -114,7 +114,6 @@ import NavbarSu from '@/components/NavbarSu';
 import HeaderSu from '@/components/HeaderSu';
 
 export function SaFeedback() {
-  const { user, logout } = useContext(UserContext);
   const [feedback, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors')
-const { test, loginUser, getProfile, logoutUser, addWord, getWords, deleteWordDoc, updateWordDoc, getUsers, getTotalCounts, getWordsSortedByUsage, createMobUser, deleteMobUser, updateMobUser } = require('../controllers/authController')
+const { test, loginUser, getProfile, logoutUser, addWord, getWords, deleteWordDoc, updateWordDoc, getUsers, getTotalCounts, getWordsSortedByUsage, createMobUser, deleteMobUser, updateMobUser, adminLogs, getFeedbackForAdmin } = require('../controllers/authController')
 const checkAdminOrSuperAdmin = require('../middleware/checkAdminSu'); 
 router.use(
     cors({
@@ -24,4 +24,7 @@ router.get('/getWordsSortedByUsage', checkAdminOrSuperAdmin, getWordsSortedByUsa
 router.post('/createMobUser', checkAdminOrSuperAdmin, createMobUser)
 router.delete('/deleteMobUser/:id', checkAdminOrSuperAdmin, deleteMobUser)
 router.put('/updateMobUser/:id', checkAdminOrSuperAdmin, updateMobUser);
+router.get('/adminLogs', checkAdminOrSuperAdmin, adminLogs)
+router.get('/getFeedbackForAdmin', checkAdminOrSuperAdmin, getFeedbackForAdmin)
+
 module.exports = router

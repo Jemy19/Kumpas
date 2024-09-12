@@ -119,7 +119,7 @@ export function Feedback() {
   const [itemsPerPage] = useState(8);
 
   useEffect(() => {
-    axios.get('/admin/getfeedback')
+    axios.get('/getFeedbackForAdmin')
       .then(({ data }) => {
         setFeedback(data);
       })
@@ -142,7 +142,9 @@ export function Feedback() {
       </div>
       <div className="flex flex-col">
         <Header />
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 mt-2">
+        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          <Tabs defaultValue="all">
+            <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <div className="flex items-center">
@@ -161,11 +163,14 @@ export function Feedback() {
                         <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuCheckboxItem checked>
-                          Active
+                          New Feature Requests
                         </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem>Bug reports</DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem>
-                          Archived
+                          Performance issues
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem>
+                          New FSL Suggestions
                         </DropdownMenuCheckboxItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -181,20 +186,16 @@ export function Feedback() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>
-                          Category
+                          ID
                         </TableHead>
-                        <TableHead>ID</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Feedback</TableHead>
+                        <TableHead>Category</TableHead>
                         <TableHead>
                           Rating
                         </TableHead>
                         <TableHead>
-                          Created at
+                          Sent At
                         </TableHead>
-                        <TableHead>
-                          Actions
-                        </TableHead>
+                        <TableHead>Feedback</TableHead>
                       </TableRow>
                     </TableHeader> 
                     <TableBody >
@@ -203,17 +204,35 @@ export function Feedback() {
                           <TableCell className="hidden sm:table-cell">
                             {feedback._id}
                           </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {feedback.email}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {feedback.feedback}
+                          <TableCell className="hidden sm:table-cell">
+                            {feedback.subject}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                             {feedback.rating}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                             {feedback.createdAt}
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell">
+                          <Dialog>
+                            <DialogTrigger>
+                            <Button size="sm" className="h-8 gap-1">
+                                <PlusCircle className="h-3.5 w-3.5" />
+                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                  Open Feedback
+                                </span>
+                            </Button>
+                            </DialogTrigger>
+                            <DialogContent className="w-1/3 h-80 max-w-full">
+                              <DialogHeader>
+                                <DialogTitle>{feedback.subject}</DialogTitle>
+                                <DialogDescription>
+                                  Feedback
+                                </DialogDescription>
+                              </DialogHeader>
+                              {feedback.feedback}
+                            </DialogContent>
+                          </Dialog>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -244,6 +263,8 @@ export function Feedback() {
                 </Pagination>       
                 </CardFooter>
               </Card>
+            </TabsContent> 
+          </Tabs>
         </main>
       </div>
     </div>
