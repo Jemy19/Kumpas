@@ -147,7 +147,7 @@ export function Adminlogs() {
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <div className="flex items-center">
-                  <CardTitle>Super Admin Logs</CardTitle>
+                  <CardTitle>Admin Logs</CardTitle>
                   <div className="ml-auto flex items-center gap-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -173,7 +173,7 @@ export function Adminlogs() {
                   </div>
                   </div>
                   <CardDescription>
-                    Veiw all Logs
+                    View all your logs
                   </CardDescription>
                   
                 </CardHeader>

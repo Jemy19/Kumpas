@@ -14,10 +14,10 @@ import {
   MoreHorizontal,
   PlusCircle,
   File,
-} from "lucide-react"
+} from "lucide-react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -25,7 +25,7 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,81 +34,41 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
-  import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-  } from "@/components/ui/tabs"
-  import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-  } from "@/components/ui/tooltip"
-  import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogClose,
-  } from "@/components/ui/dialog"
-
-  import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-  
-  import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-  } from "@/components/ui/alert-dialog"
-  import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-  } from "@/components/ui/pagination"
-import React, { useContext, useState, useEffect } from 'react';
-import {toast} from 'react-hot-toast'
-import axios from 'axios'
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-hot-toast';
+import axios from 'axios';
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 
@@ -117,13 +77,18 @@ export function Feedback() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search input
+  const [selectedCategories, setSelectedCategories] = useState([]); // State for selected categories
+
+  // Categories for filtering
+  const categories = ["New Feature Requests", "Bug reports", "Performance issues", "New FSL Suggestions"];
 
   useEffect(() => {
     axios.get('/getFeedbackForAdmin')
       .then(({ data }) => {
         setFeedback(data);
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error('Error fetching feedback data');
       })
       .finally(() => {
@@ -134,7 +99,28 @@ export function Feedback() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const paginatedWords = feedback.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  // Handle checkbox selection for categories
+  const handleCategoryChange = (category) => {
+    setSelectedCategories((prevCategories) =>
+      prevCategories.includes(category)
+        ? prevCategories.filter((c) => c !== category)
+        : [...prevCategories, category]
+    );
+  };
+
+  // Filter feedback based on search query and selected categories
+  const filteredFeedback = feedback.filter((item) => {
+    const matchesSearch = item.subject.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(item.subject);
+    return matchesSearch && matchesCategory;
+  });
+
+  const paginatedFeedback = filteredFeedback.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -144,99 +130,84 @@ export function Feedback() {
         <Header />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <Tabs defaultValue="all">
-          <TabsList>
-            <TabsTrigger value="account">Account</TabsTrigger>
-            <TabsTrigger value="password">Password</TabsTrigger>
-          </TabsList>
             <TabsContent value="all">
-              <Card x-chunk="dashboard-06-chunk-0">
+              <Card>
                 <CardHeader>
                   <div className="flex items-center">
-                  <CardTitle>Feedback</CardTitle>
-                  <div className="ml-auto flex items-center gap-2">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-8 gap-1">
-                          <ListFilter className="h-3.5 w-3.5" />
-                          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                            Filter
-                          </span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuCheckboxItem checked>
-                          New Feature Requests
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>Bug reports</DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>
-                          Performance issues
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>
-                          New FSL Suggestions
-                        </DropdownMenuCheckboxItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <CardTitle>Feedback</CardTitle>
+                    <div className="ml-auto flex items-center gap-2">
+                      {/* Search Input */}
+                      <Input
+                        type="text"
+                        placeholder="Search feedback..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-48"
+                      />
+                      {/* Filter Dropdown */}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="sm" className="h-8 gap-1">
+                            <ListFilter className="h-3.5 w-3.5" />
+                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                              Filter
+                            </span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Filter by Category</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          {categories.map((category) => (
+                            <DropdownMenuCheckboxItem
+                              key={category}
+                              checked={selectedCategories.includes(category)}
+                              onCheckedChange={() => handleCategoryChange(category)}
+                            >
+                              {category}
+                            </DropdownMenuCheckboxItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
-                  </div>
-                  <CardDescription>
-                    View user feedback.
-                  </CardDescription>
-                  
+                  <CardDescription>View user feedback.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>
-                          ID
-                        </TableHead>
+                        <TableHead>ID</TableHead>
                         <TableHead>Category</TableHead>
-                        <TableHead>
-                          Rating
-                        </TableHead>
-                        <TableHead>
-                          Sent At
-                        </TableHead>
+                        <TableHead>Rating</TableHead>
+                        <TableHead>Sent At</TableHead>
                         <TableHead>Feedback</TableHead>
                       </TableRow>
-                    </TableHeader> 
-                    <TableBody >
-                      {paginatedWords.map((feedback) => (
-                        <TableRow>
-                          <TableCell className="hidden sm:table-cell">
-                            {feedback._id}
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            {feedback.subject}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {feedback.rating}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {feedback.createdAt}
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                          <Dialog>
-                            <DialogTrigger>
-                            <Button size="sm" className="h-8 gap-1">
-                                <PlusCircle className="h-3.5 w-3.5" />
-                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                  Open Feedback
-                                </span>
-                            </Button>
-                            </DialogTrigger>
-                            <DialogContent className="w-1/3 h-80 max-w-full">
-                              <DialogHeader>
-                                <DialogTitle>{feedback.subject}</DialogTitle>
-                                <DialogDescription>
-                                  Feedback
-                                </DialogDescription>
-                              </DialogHeader>
-                              {feedback.feedback}
-                            </DialogContent>
-                          </Dialog>
+                    </TableHeader>
+                    <TableBody>
+                      {paginatedFeedback.map((item) => (
+                        <TableRow key={item._id}>
+                          <TableCell>{item._id}</TableCell>
+                          <TableCell>{item.subject}</TableCell>
+                          <TableCell>{item.rating}</TableCell>
+                          <TableCell>{item.createdAt}</TableCell>
+                          <TableCell>
+                            <Dialog>
+                              <DialogTrigger>
+                                <Button size="sm" className="h-8 gap-1">
+                                  <PlusCircle className="h-3.5 w-3.5" />
+                                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                    Open Feedback
+                                  </span>
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="w-1/3 h-80 max-w-full">
+                                <DialogHeader>
+                                  <DialogTitle>{item.subject}</DialogTitle>
+                                  <DialogDescription>Feedback</DialogDescription>
+                                </DialogHeader>
+                                {item.feedback}
+                              </DialogContent>
+                            </Dialog>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -244,35 +215,43 @@ export function Feedback() {
                   </Table>
                 </CardContent>
                 <CardFooter>
-                <Pagination>
+                  <Pagination>
                     <PaginationContent>
-                        {currentPage != 1 && (
+                      {currentPage !== 1 && (
                         <PaginationItem>
-                        <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                          <PaginationPrevious
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                          />
                         </PaginationItem>
-                        )}
-                        {Array(Math.ceil(feedback.length / itemsPerPage)).fill(0).map((_, index) => (
-                        <PaginationItem key={index}>
-                            <PaginationLink onClick={() => handlePageChange(index + 1)} isActive={index + 1 === currentPage}>
-                            {index + 1}
+                      )}
+                      {Array(Math.ceil(filteredFeedback.length / itemsPerPage))
+                        .fill(0)
+                        .map((_, index) => (
+                          <PaginationItem key={index}>
+                            <PaginationLink
+                              onClick={() => handlePageChange(index + 1)}
+                              isActive={index + 1 === currentPage}
+                            >
+                              {index + 1}
                             </PaginationLink>
-                        </PaginationItem>
+                          </PaginationItem>
                         ))}
-                        {currentPage < Math.ceil(feedback.length / itemsPerPage) && (
+                      {currentPage < Math.ceil(filteredFeedback.length / itemsPerPage) && (
                         <PaginationItem>
-                            <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+                          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
                         </PaginationItem>
-                        )}
+                      )}
                     </PaginationContent>
-                </Pagination>       
+                  </Pagination>
                 </CardFooter>
               </Card>
-            </TabsContent> 
+            </TabsContent>
           </Tabs>
         </main>
       </div>
     </div>
-  )
+  );
 }
-export default Feedback;
 
+export default Feedback;
