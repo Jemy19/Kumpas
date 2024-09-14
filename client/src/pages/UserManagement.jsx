@@ -75,7 +75,8 @@ import { Label } from "@/components/ui/label"
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
 import Navbar from '@/components/Navbar';
-import Header from '@/components/Header'
+import Header from '@/components/Header';
+
 export function UserManagement() {
   const [mobUsers, setmobUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -86,97 +87,107 @@ export function UserManagement() {
   // create account
   const [data, setData] = useState({
     email: '',
-  })
-  const registerUser = async (e) => {
-    e.preventDefault()
-    const {name, email, password} = data
+    password: '',
+  });
+
+  const registerMobUser = async (e) => {
+    e.preventDefault();
+    const { email, password } = data;
     try {
-      const {data} = await axios.post ('/mobUsers/mobUsers', {
-        name, email, password
-      })
-      if(data.error){
-        toast.error(data.error)
+      const { data } = await axios.post('/createMobUser', {
+        email,
+        password,
+      });
+      if (data.error) {
+        toast.error(data.error);
       } else {
-        setData({ name: '', email: '', password: ''});
-        toast.success('New User Created!')
-        setAdmins(prevAdmins => [...prevAdmins, data]);
+        setData({ email: '', password: '' });
+        toast.success('New User Created!');
+        setmobUsers(prevmobUsers => [...prevmobUsers, data]);
+        // Update mobUsers state NOT WORKING
       }
     } catch (error) {
-      console.log(error)
+      toast.success('Failed to Create new user!');
     }
-  }
+  };
   // delete account
   const deleteAcc = async (id) => {
     try {
-      const response = await axios.delete(`/mobUsers/mobUsers/${id}`);
-      if (response.status === 200) {
-        console.log('Word deleted successfully:');
-        toast.success('account Deleted!')  
-        setAdmins(prevAdmins => prevAdmins.filter((mobUsers) => mobUsers._id !== id));
-      } 
+      const response = await axios.delete(`/deleteMobUser/${id}`);
+      if (response.status === 200 && response.data.success) {
+        toast.success('Account Deleted!');  
+        setmobUsers(prevmobUsers => prevmobUsers.filter((mobUsers) => mobUsers._id !== id));
+      } else if (response.data.error) {
+        toast.error('Error deleting account.');
+      }
     } catch (error) {
-      console.error('An error occurred while deleting the account:', error);
+      toast.error('An error occurred while deleting the account.');
     }
-  };
+  };  
   // for updating account
   const [updateData, setUpdateData] = useState({
     id: null,
-    name: '',
     email: '',
-    password: "",
-    confirmPassword: "",
+    password: '',
+    confirmPassword: '',
   });
 
   const updateAcc = async (e, id) => {
     e.preventDefault();
-    const originalData = mobUsers.find((mobUsers) => mobUsers._id === id);
-    
-    console.log(originalData);
-    console.log(updateData);
-    try { 
+    const originalData = mobUsers.find((mobUser) => mobUser._id === id); // Find the original mob user
+    try {
+      // Check if passwords match
       if (updateData.password !== updateData.confirmPassword) {
-        setErrorMessage('Passwords do not match.'); // Set error message
+        setErrorMessage('Passwords do not match.');
         return;
       }
+
       setErrorMessage('');
-      if ((updateData.name === null || updateData.name === "") ||
-        (updateData.email === null || updateData.email === "")
-      ) 
-      {
-        toast.error('Name or Email cannot be blank.');
+
+      // Validate that email is not empty
+      if (!updateData.email) {
+        toast.error('Email cannot be blank.');
         return;
       }
+
+      // Check if no changes were made
       if (
-        originalData.name === updateData.name &&
         originalData.email === updateData.email &&
-        (updateData.password === null || updateData.password === "") &&
-        (updateData.confirmPassword === null || updateData.confirmPassword === "")
-      )
-      {
-        toast.error('No changes detected. mobUsers account not updated.');
+        !updateData.password && !updateData.confirmPassword
+      ) {
+        toast.error('No changes detected. MobUser account not updated.');
         return;
       }
-      const response = await axios.put(`/mobUsers/mobUsers/${id}`, updateData);
+
+      // Send PUT request to update the account
+      const response = await axios.put(`/updateMobUser/${id}`, updateData);
+
+      // Handle errors from the backend
       if (response.data.error) {
-        toast.error(response.data.error)
-      } 
-      else {
-        toast.success('Admin Account Successfully Updated!');
-        setAdmins((prevAdmins) => prevAdmins.map((mobUsers) =>
-          mobUsers._id === id? response.data : mobUsers
-        ));
+        toast.error(response.data.error);
+      } else {
+        // Success message
+        toast.success('MobUser Account Successfully Updated!');
+
+        // Update the state with the new data
+        setmobUsers((prevMobUsers) =>
+          prevMobUsers.map((mobUser) =>
+            mobUser._id === id ? response.data : mobUser
+          )
+        );
       }
     } catch (error) {
-      console.error('An error occurred while updating the word:', error);
+      console.error('An error occurred while updating the MobUser:', error);
     }
   };
-  const handleEdit = (mobUsers) => {
+
+  // Function to set update data when editing
+  const handleEdit = (mobUser) => {
     setUpdateData({
-      id: mobUsers._id,
-      name: mobUsers.name,
-      email: mobUsers.email,
-      password: null,
-      confirmPassword: null,
+      id: mobUser._id,
+      email: mobUser.email,
+      password: '',
+      confirmPassword: '',
     });
   };
 // fetch mobUsers
@@ -203,14 +214,14 @@ export function UserManagement() {
       </div>
       <div className="flex flex-col">
         <Header />
-      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 mt-2">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <div>
-                        <CardTitle>Account Management</CardTitle>
+                        <CardTitle>User Management</CardTitle>
                         <CardDescription>
-                            View and Manage all Admin Accounts.
+                            View and Manage all User Accounts.
                         </CardDescription>
                         </div>
                         <div className="ml-auto flex items-center gap-2">
@@ -228,14 +239,8 @@ export function UserManagement() {
                             <DialogTitle>
                               Create New Account
                             </DialogTitle>
-                              <form  onSubmit={registerUser}>
+                              <form  onSubmit={registerMobUser}>
                               <div className="grid gap-4">
-                                <div className="grid gap-4">
-                                  <div className="grid gap-2">
-                                    <Label htmlFor="first-name">First name</Label>
-                                    <Input type='text' placeholder='Enter Name...' value={data.name} onChange={(e) => setData({...data, name: e.target.value})} />
-                                  </div>
-                                </div>
                                 <div className="grid gap-2">
                                   <Label htmlFor="email">Email</Label>
                                   <Input type='email' placeholder='Enter Email...' value={data.email} onChange={(e) => setData({...data, email: e.target.value})}/>
@@ -282,19 +287,19 @@ export function UserManagement() {
                             {mobUsers._id}
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
-                            {}
+                            {mobUsers.username}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                             {mobUsers.email}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {}
+                            {mobUsers.role}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {}
+                            {mobUsers.updatedAt}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            {}
+                            {mobUsers.createdAt}
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>
@@ -323,13 +328,6 @@ export function UserManagement() {
                                     </SheetHeader>
                                     <form onSubmit={(e) => updateAcc(e, updateData.id, updateData)}>
                                       <div className="grid gap-4">
-                                      <Label>Name</Label>
-                                      <Input
-                                          type='text'
-                                          placeholder='Enter Name...'
-                                          value={updateData.name}
-                                          onChange={(e) => setUpdateData({ ...updateData, name: e.target.value })}
-                                      />
                                       <Label>email</Label>
                                       <Input
                                           type='email'

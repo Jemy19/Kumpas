@@ -1,8 +1,10 @@
 const User = require('../models/user')
 const Word = require('../models/signs')
+const MobUser = require('../models/mobusers')
 const { hashPassword, comparePassword} = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const Log = require('../models/log'); 
 
 const test = (req, res) => {
     res.json('test is working')
@@ -225,6 +227,167 @@ const getWordsSortedByUsage = async (req, res) => {
   }
 };
 
+const createMobUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validate email
+    if (!email) {
+      return res.json({ error: 'Email is required' });
+    }
+
+    // Validate password
+    if (!password || password.length < 6) {
+      return res.json({ error: 'Password is required and should be at least 6 characters long' });
+    }
+    console.log('Checking for existing user with email:', email);
+    const existingUser = await MobUser.findOne({ email });
+    console.log('Existing user found:', existingUser);
+    // Check if email is already taken
+    if (existingUser) {
+      return res.json({ error: 'Email is already taken' });
+    }
+    // Hash the password
+    const hashedPassword = await hashPassword(password);
+
+    // Create the new mobile user
+    const user = await MobUser.create({
+      email,
+      password: hashedPassword,
+      // Username will be generated automatically from email in the pre-save hook
+      role: 'user' // Role is fixed as 'user'
+    });
+
+    // Log the creation of the new user
+    await Log.create({
+      level: 'info',
+      message: `Added a new User Account: ${user.email}`,
+      adminId: req.user._id,  // Assuming this is a protected route and req.user contains the admin details
+      adminName: req.user.name
+    });
+
+    return res.json(user);
+  } catch (error) {
+    // Log the error
+    await Log.create({
+      level: 'error',
+      message: `Error adding a new User Account`,
+      adminId: req.user._id,  // Assuming this is a protected route and req.user contains the admin details
+      adminName: req.user.name
+    });
+
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
+
+const deleteMobUser = async (req, res) => {
+  try {
+    const MobileUser = await MobUser.findByIdAndDelete(req.params.id);
+    if (!MobileUser) {
+      return res.json({
+        error: 'User not found'
+      });
+    }
+    await Log.create({
+      level: 'info',
+      message: `Deleted Admin Account: ${MobileUser.username}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
+    res.status(200).send({ success: true });
+  } catch (error) {
+    const userid = req.params.id;
+    await Log.create({
+      level: 'error',
+      message: `Error Deleting Admin Account: ${userid}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
+    res.status(400).send({ error: error.message });
+  }
+};
+
+const updateMobUser = async (req, res) => {
+  const { id } = req.params;
+  const {email, password } = req.body;
+  console.log('Received update request for name:', email);
+  try {
+    const mobUser = await MobUser.findById(id); // Changed from User to MobUser
+    if (!mobUser) {
+      return res.status(404).json({
+        error: 'User not found',
+      });
+    }
+
+    // Update name and email if provided
+    mobUser.email = email || mobUser.email;
+
+    // Check and update password
+    if (password) {
+      const isSamePassword = await comparePassword(password, mobUser.password);
+      console.log(isSamePassword);
+      if (isSamePassword) {
+        return res.json({
+          error: 'New password cannot be the same as the current password'
+        });
+      }
+      const hashedPassword = await hashPassword(password);
+      mobUser.password = hashedPassword;
+    }
+
+    // Save updated user
+    const updatedMobUser = await mobUser.save();
+    await Log.create({
+      level: 'info',
+      message: `Updated MobUser Account: ${mobUser.username}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
+    res.json(updatedMobUser);
+  } catch (error) {
+    const userid = req.params.id;
+    await Log.create({
+      level: 'error',  // Fixed typo from 'info' to 'error'
+      message: `Error Updating MobUser Account: ${userid}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
+    res.status(500).json({
+      error: 'An error occurred while updating MobUser account',
+    });
+  }
+};
+
+const adminLogs = async (req, res) => {
+  try {
+    // Fetch only logs related to the logged-in admin
+    const logs = await Log.find({ adminId: req.user._id }).sort({ timestamp: -1 });
+
+    if (logs.length === 0) {
+      return res.status(404).json({ message: 'No logs found for this admin.' });
+    }
+
+    res.json({ logs });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching logs' });
+  }
+};
+
+const getFeedbackForAdmin = async (req, res) => {
+  try {
+    // Accessing the MongoDB collection directly
+    const feedbacks = await mongoose.connection.db.collection('feedbacks').find().toArray();
+
+    // Remove email field to anonymize feedback
+    const anonymousFeedbacks = feedbacks.map(({ email, ...rest }) => rest);
+
+    res.json(anonymousFeedbacks);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 module.exports =  {
     test,
@@ -237,5 +400,10 @@ module.exports =  {
     updateWordDoc,
     getUsers,
     getTotalCounts,
-    getWordsSortedByUsage
+    getWordsSortedByUsage,
+    createMobUser,
+    deleteMobUser,
+    updateMobUser,
+    adminLogs,
+    getFeedbackForAdmin
 }

@@ -106,7 +106,6 @@ import {
     PaginationNext,
     PaginationPrevious,
   } from "@/components/ui/pagination"
-import { UserContext } from '../../../context/userContext';
 import React, { useContext, useState, useEffect } from 'react';
 import {toast} from 'react-hot-toast'
 import axios from 'axios'
@@ -114,7 +113,6 @@ import NavbarSu from '@/components/NavbarSu';
 import HeaderSu from '@/components/HeaderSu';
 
 export function SaFeedback() {
-  const { user, logout } = useContext(UserContext);
   const [feedback, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -165,11 +163,14 @@ export function SaFeedback() {
                         <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuCheckboxItem checked>
-                          Active
+                          New Feature Requests
                         </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem>Bug reports</DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem>
-                          Archived
+                          Performance issues
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem>
+                          New FSL Suggestions
                         </DropdownMenuCheckboxItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -185,20 +186,17 @@ export function SaFeedback() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>
-                          Category
+                          ID
                         </TableHead>
-                        <TableHead>ID</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Feedback</TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Sender</TableHead>
                         <TableHead>
                           Rating
                         </TableHead>
                         <TableHead>
-                          Created at
+                          Sent At
                         </TableHead>
-                        <TableHead>
-                          Actions
-                        </TableHead>
+                        <TableHead>Feedback</TableHead>
                       </TableRow>
                     </TableHeader> 
                     <TableBody >
@@ -207,17 +205,38 @@ export function SaFeedback() {
                           <TableCell className="hidden sm:table-cell">
                             {feedback._id}
                           </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {feedback.email}
+                          <TableCell className="hidden sm:table-cell">
+                            {feedback.subject}
                           </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {feedback.feedback}
+                          <TableCell className="hidden sm:table-cell">
+                            {feedback.email}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                             {feedback.rating}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                             {feedback.createdAt}
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell">
+                          <Dialog>
+                            <DialogTrigger>
+                            <Button size="sm" className="h-8 gap-1">
+                                <PlusCircle className="h-3.5 w-3.5" />
+                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                  Open Feedback
+                                </span>
+                            </Button>
+                            </DialogTrigger>
+                            <DialogContent className="w-1/3 h-80 max-w-full">
+                              <DialogHeader>
+                                <DialogTitle>{feedback.email} - {feedback.subject}</DialogTitle>
+                                <DialogDescription>
+                                  Feedback
+                                </DialogDescription>
+                              </DialogHeader>
+                              {feedback.feedback}
+                            </DialogContent>
+                          </Dialog>
                           </TableCell>
                         </TableRow>
                       ))}
