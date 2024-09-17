@@ -1,5 +1,6 @@
 {
     "version": 2,
+    "buildCommand": "npm install --force",
     "builds": [
       { "src": "index.js", "use": "@vercel/node" }
     ],
