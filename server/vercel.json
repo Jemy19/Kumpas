@@ -14,5 +14,8 @@
       ],
       "routes": [
         { "src": "/(.*)", "dest": "/" }
-      ]
+    ],
+    "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+    "framework": null,
+    "public": true
   }
