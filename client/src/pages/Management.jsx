@@ -392,7 +392,7 @@ export function Management() {
                                       <DialogDescription>
                                       <div>
                                       <h2>Video Stream</h2>
-                                      <video controls width="400" src={`http://localhost:8000/videos/${word.video}`} type="video/mp4" />
+                                      <video controls width="400" src={`https://kumpas.onrender.com/videos/${word.video}`} type="video/mp4" />
                                       </div>
                                       </DialogDescription>
                                   </DialogHeader>
