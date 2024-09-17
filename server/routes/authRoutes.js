@@ -1,14 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors')
 const { test, loginUser, getProfile, logoutUser, addWord, getWords, deleteWordDoc, updateWordDoc, getUsers, getTotalCounts, getWordsSortedByUsage, createMobUser, deleteMobUser, updateMobUser, adminLogs, getFeedbackForAdmin } = require('../controllers/authController')
 const checkAdminOrSuperAdmin = require('../middleware/checkAdminSu'); 
-router.use(
-    cors({
-        credentials: true,
-        origin: 'http://localhost:5173'
-    })
-)
 
 router.get('/', test)
 router.post('/login', loginUser)

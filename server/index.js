@@ -6,8 +6,8 @@ const { GridFsStorage } = require("multer-gridfs-storage");
 const multer = require("multer");
 const { GridFSBucket } = require('mongodb');
 const cookieParser = require('cookie-parser');
-const User = require('./models/user'); 
-const { hashPassword } = require('./helpers/auth'); 
+const User = require('./models/user');
+const { hashPassword } = require('./helpers/auth');
 
 const app = express();
 
@@ -20,10 +20,10 @@ mongoose.connect(process.env.MONGO_URL)
     bucketName: "uploads"
   });
 
-  // Define routes
+  // Define middleware
   app.use(cors({
     credentials: true,
-    origin: 'http://localhost:5173'
+    origin: process.env.FRONTEND_URL
   }));
   app.use(express.json());
   app.use(cookieParser());
@@ -41,6 +41,7 @@ mongoose.connect(process.env.MONGO_URL)
 
   const upload = multer({ storage });
 
+  // Original route names
   app.post("/upload", upload.single("file"), async (req, res) => {
     try {
       const { filename } = req.file;
@@ -82,7 +83,7 @@ mongoose.connect(process.env.MONGO_URL)
     try {
       const filename = req.params.filename;
       const file = await gfs.find({ filename }).toArray();
-      console.log('Received delete request for vid file:', file); 
+      console.log('Received delete request for vid file:', file);
       if (!file || file.length === 0) {
         res.status(404).send(`File not found: ${filename}`);
         return;
@@ -95,11 +96,12 @@ mongoose.connect(process.env.MONGO_URL)
     }
   });
 
+  // Use routes
   app.use('/', require('./routes/authRoutes'));
   app.use('/admin', require('./routes/adminRoutes'));
 
-  const port = 8000;
-  app.listen(port, () => console.log(`Server is running on port ${port}`));
+  const serverless = require('serverless-http');
+  module.exports.handler = serverless(app);
 })
 .catch((err) => console.log('Database not Connected', err));
 
