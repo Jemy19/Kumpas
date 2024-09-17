@@ -42,7 +42,12 @@ const loginUser = async (req, res) => {
             console.error('JWT sign error:', err);
             return res.status(500).json({ error: 'Token generation failed' });
           }
-          res.cookie('token', token).json({ ...user.toObject(), token });
+          res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Enable in production (HTTPS)
+            sameSite: 'None', // Allows cross-domain cookies
+          });
+          ;
         }
       );
     } else {
