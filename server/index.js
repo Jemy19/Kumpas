@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGO_URL)
   // Define middleware
   app.use(cors({
     credentials: true,
-    origin: process.env.FRONTEND_URL
+    origin: ["https://kumpas-frontend.vercel.app"]
   }));
   app.use(express.json());
   app.use(cookieParser());
