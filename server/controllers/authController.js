@@ -37,7 +37,6 @@ const loginUser = async (req, res) => {
       jwt.sign(
         { email: user.email, id: user._id, name: user.name, role: user.role },
         process.env.JWT_SECRET,
-        { expiresIn: '1h' },
         (err, token) => {
           if (err) {
             console.error('JWT sign error:', err);

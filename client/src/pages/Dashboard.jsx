@@ -84,7 +84,7 @@ export function Dashboard() {
         setWordsDescending(response.data.wordsDescending);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch data');
+        toast.error('Error fetching word by usage');
         setLoading(false);
       }
     };
