@@ -47,9 +47,9 @@ const loginUser = async (req, res) => {
             secure: process.env.NODE_ENV === 'production', // Enable in production (HTTPS)
             sameSite: 'None', // Allows cross-domain cookies
           });
-          ;
+          res.json({ ...user.toObject(), token }); // Send response with user data and token
         }
-      );
+      );      
     } else {
       return res.json({ error: 'Unauthorized access' });
     }
