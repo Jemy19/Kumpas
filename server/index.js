@@ -99,9 +99,6 @@ mongoose.connect(process.env.MONGO_URL)
   // Use routes
   app.use('/', require('./routes/authRoutes'));
   app.use('/admin', require('./routes/adminRoutes'));
-
-  const serverless = require('serverless-http');
-  module.exports.handler = serverless(app);
 })
 .catch((err) => console.log('Database not Connected', err));
 
