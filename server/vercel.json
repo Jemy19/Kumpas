@@ -2,16 +2,6 @@
     "version": 2,
     "buildCommand": "npm run build",
     "installCommand": "npm install --force",
-    "builds": [
-        {
-          "src": "index.js",
-          "use": "@vercel/node"
-        },
-        {
-          "src": "src/**/*",
-          "use": "@vercel/static"
-        }
-    ],
     "rewrites": [{ "source": "/(.*)", "destination": "/" }],
     "framework": null,
     "public": true
