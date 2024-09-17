@@ -37,6 +37,7 @@ const loginUser = async (req, res) => {
       jwt.sign(
         { email: user.email, id: user._id, name: user.name, role: user.role },
         process.env.JWT_SECRET,
+        { expiresIn: '1h' },
         (err, token) => {
           if (err) {
             console.error('JWT sign error:', err);
@@ -45,6 +46,7 @@ const loginUser = async (req, res) => {
           res.cookie('token', token, {
             httpOnly: true,// Enable in production (HTTPS)
             sameSite: 'None', // Allows cross-domain cookies
+            secure: true 
           });
           res.json({ ...user.toObject(), token }); // Send response with user data and token
         }

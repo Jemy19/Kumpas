@@ -3,7 +3,7 @@ const User = require('../models/user'); // Adjust the path as necessary
 
 const authMiddleware = async (req, res, next) => {
   const token = req.cookies.token;
-
+  console.log('Token:', token);
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized, no token provided' });
   }
