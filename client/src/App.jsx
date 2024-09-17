@@ -24,7 +24,7 @@ import SALogs from './pages/superAdmin/saLogs';
 import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
 
-axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.baseURL = 'https://kumpas.vercel.app';
 axios.defaults.withCredentials = true
 
 function App() {
