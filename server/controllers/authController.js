@@ -43,8 +43,7 @@ const loginUser = async (req, res) => {
             return res.status(500).json({ error: 'Token generation failed' });
           }
           res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Enable in production (HTTPS)
+            httpOnly: true,// Enable in production (HTTPS)
             sameSite: 'None', // Allows cross-domain cookies
           });
           res.json({ ...user.toObject(), token }); // Send response with user data and token
