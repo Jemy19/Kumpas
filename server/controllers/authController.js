@@ -83,8 +83,16 @@ const getWords = async (req, res) => {
 }
 
 const logoutUser = (req, res) => {
-    res.cookie('token', '', { maxAge: 1 }).json('Logged out');
+  res.cookie('token', '', { 
+      maxAge: 1, 
+      httpOnly: true,  // Same as when the token was set
+      secure: true,    // Ensure this matches (for HTTPS)
+      sameSite: 'None', // Match sameSite policy
+      path: '/'        // Ensure the path is correct
+  });
+  res.json('Logged out');
 };
+
 
 const addWord = async (req, res) => {
     try {
