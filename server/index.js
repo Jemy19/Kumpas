@@ -11,107 +11,108 @@ const { hashPassword } = require('./helpers/auth');
 
 const app = express();
 
+// Middleware
+app.use(cors({
+  credentials: true,
+  origin: process.env.CORS_ORIGIN || '*',
+}));
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
+
+// Security headers
+app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  res.setHeader('Permissions-Policy', 'geolocation=()');
+  next();
+});
+
+// Routes
+app.use('/', require('./routes/authRoutes'));
+app.use('/admin', require('./routes/adminRoutes'));
+
+// Database and server setup
 mongoose.connect(process.env.MONGO_URL)
-.then(() => {
-  console.log('Database Connected');
-  seedSuperAdmin(); 
-  const conn = mongoose.connection;
-  const gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-    bucketName: "uploads"
-  });
+  .then(() => {
+    console.log('Database Connected');
+    seedSuperAdmin();
+    const conn = mongoose.connection;
+    const gfs = new mongoose.mongo.GridFSBucket(conn.db, {
+      bucketName: "uploads"
+    });
 
-  // Define middleware
-  app.use(cors({
-    credentials: true,
-    origin: process.env.CORS_ORIGIN || '*',
-  }));
-  app.use(express.json());
-  app.use(cookieParser());
-  app.use(express.urlencoded({ extended: false }));
-
-  app.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', "default-src 'self'");
-    res.setHeader('X-Frame-Options', 'DENY');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('Referrer-Policy', 'no-referrer');
-    res.setHeader('Permissions-Policy', 'geolocation=()');
-    next();
-  });
-
-  const storage = new GridFsStorage({
-    url: process.env.MONGO_URL,
-    file: (req, file) => {
-      return {
-        filename: file.originalname,
-        bucketName: 'uploads'
-      };
-    }
-  });
-
-  const upload = multer({ storage });
-
-  // Original route names
-  app.post("/upload", upload.single("file"), async (req, res) => {
-    try {
-      const { filename } = req.file;
-      res.status(201).send({ filename });
-    } catch (err) {
-      console.error("Error uploading video:", err);
-      res.status(500).send("Upload failed");
-    }
-  });
-
-  app.get("/videos", async (req, res) => {
-    try {
-      const files = await gfs.find().toArray();
-      const filenames = files.map(file => file.filename);
-      res.status(200).send(filenames);
-    } catch (err) {
-      console.error("Error getting video list:", err);
-      res.status(500).send("Error getting video list");
-    }
-  });
-
-  app.get("/videos/:filename", async (req, res) => {
-    try {
-      const filename = req.params.filename;
-      const videoStream = gfs.openDownloadStreamByName(filename);
-
-      // Set appropriate headers for video streaming
-      res.setHeader("Content-Type", "video/mp4"); // Adjust content type based on video format
-      res.setHeader("Accept-Ranges", "bytes"); // Allow for partial requests (optional)
-
-      videoStream.pipe(res);
-    } catch (err) {
-      console.error("Error streaming video:", err);
-      res.status(500).send("Error streaming video");
-    }
-  });
-
-  app.delete("/delvideo/:filename", async (req, res) => {
-    try {
-      const filename = req.params.filename;
-      const file = await gfs.find({ filename }).toArray();
-      console.log('Received delete request for vid file:', file);
-      if (!file || file.length === 0) {
-        res.status(404).send(`File not found: ${filename}`);
-        return;
+    const storage = new GridFsStorage({
+      url: process.env.MONGO_URL,
+      file: (req, file) => {
+        return {
+          filename: file.originalname,
+          bucketName: 'uploads'
+        };
       }
-      await gfs.delete(file[0]._id);
-      res.status(204).send(`File deleted: ${filename}`);
-    } catch (err) {
-      console.error("Error deleting file:", err);
-      res.status(500).send("Error deleting file");
-    }
-  });
+    });
 
-  // Use routes
-  app.use('/', require('./routes/authRoutes'));
-  app.use('/admin', require('./routes/adminRoutes'));
-  const port = 8000;
+    const upload = multer({ storage });
+
+    app.post("/upload", upload.single("file"), async (req, res) => {
+      try {
+        const { filename } = req.file;
+        res.status(201).send({ filename });
+      } catch (err) {
+        console.error("Error uploading video:", err);
+        res.status(500).send("Upload failed");
+      }
+    });
+
+    app.get("/videos", async (req, res) => {
+      try {
+        const files = await gfs.find().toArray();
+        const filenames = files.map(file => file.filename);
+        res.status(200).send(filenames);
+      } catch (err) {
+        console.error("Error getting video list:", err);
+        res.status(500).send("Error getting video list");
+      }
+    });
+
+    app.get("/videos/:filename", async (req, res) => {
+      try {
+        const filename = req.params.filename;
+        const videoStream = gfs.openDownloadStreamByName(filename);
+
+        res.setHeader("Content-Type", "video/mp4"); // Adjust content type based on video format
+        res.setHeader("Accept-Ranges", "bytes"); // Allow for partial requests (optional)
+
+        videoStream.pipe(res);
+      } catch (err) {
+        console.error("Error streaming video:", err);
+        res.status(500).send("Error streaming video");
+      }
+    });
+
+    app.delete("/delvideo/:filename", async (req, res) => {
+      try {
+        const filename = req.params.filename;
+        const file = await gfs.find({ filename }).toArray();
+        console.log('Received delete request for vid file:', file);
+        if (!file || file.length === 0) {
+          res.status(404).send(`File not found: ${filename}`);
+          return;
+        }
+        await gfs.delete(file[0]._id);
+        res.status(204).send(`File deleted: ${filename}`);
+      } catch (err) {
+        console.error("Error deleting file:", err);
+        res.status(500).send("Error deleting file");
+      }
+    });
+
+    const port = 8000;
     app.listen(port, () => console.log(`Server is running on port ${port}`));
-})
-.catch((err) => console.log('Database not Connected', err));
+  })
+  .catch((err) => console.log('Database not Connected', err));
 
 const seedSuperAdmin = async () => {
   try {
