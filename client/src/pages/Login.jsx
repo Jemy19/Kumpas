@@ -14,6 +14,14 @@ import { UserContext } from '../../context/userContext';
 import NavbarLog from "@/components/NavbarLog";
 
 export function Login() {
+  useEffect(() => {
+    // Set overflow-y to hidden on body when component mounts
+    document.body.style.overflowY = 'hidden';
+    // Reset overflow-y to auto when component unmounts
+    return () => {
+      document.body.style.overflowY = 'auto';
+    };
+  }, []);
 
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
