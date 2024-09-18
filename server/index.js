@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Security headers
 app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  res.setHeader('Content-Security-Policy', "default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://kumpas.onrender.com");
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'no-referrer');
