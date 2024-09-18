@@ -29,6 +29,15 @@ mongoose.connect(process.env.MONGO_URL)
   app.use(cookieParser());
   app.use(express.urlencoded({ extended: false }));
 
+  app.use((req, res, next) => {
+    res.setHeader('Content-Security-Policy', "default-src 'self'");
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'no-referrer');
+    res.setHeader('Permissions-Policy', 'geolocation=()');
+    next();
+  });
+
   const storage = new GridFsStorage({
     url: process.env.MONGO_URL,
     file: (req, file) => {
