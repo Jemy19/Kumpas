@@ -184,7 +184,7 @@ export function Management() {
         const response = await axios.delete(`/deleteWord/${id}`, {
           withCredentials: true, // if you need to send cookies with the request
         });
-        await axios.delete(`http://localhost:8000/delvideo/${videopath}`);
+        await axios.delete(`https://kumpas.onrender.com/delvideo/${videopath}`);
         if (response.status === 200) {
           console.log('Word deleted successfully:');
           toast.success('Word Deleted!')  
@@ -228,7 +228,7 @@ export function Management() {
           return;
         }
         if(vidname.endsWith('.mp4')) {
-          await axios.delete(`http://localhost:8000/delvideo/${updatedData.video}`);
+          await axios.delete(`https://kumpas.onrender.com/delvideo/${updatedData.video}`);
           updatedData.video = vidname;
         }
         

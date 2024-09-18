@@ -9,7 +9,7 @@ const VidUp = forwardRef((props, ref) => {
     uploadVideo: async () => {
       if (!file) return '';
       try {
-        const response = await axios.get('http://localhost:8000/videos');
+        const response = await axios.get('https://kumpas.onrender.com/videos');
         const filenames = response.data;
         if (filenames.includes(file.name)) {
           alert(`A file with the name ${file.name} already exists. Please rename the file and try again.`);
@@ -22,7 +22,7 @@ const VidUp = forwardRef((props, ref) => {
       formData.append("file", file);
 
       try {
-        const response = await axios.post("http://localhost:8000/upload", formData, {
+        const response = await axios.post("https://kumpas.onrender.com/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -33,7 +33,7 @@ const VidUp = forwardRef((props, ref) => {
         });
 
         const { filename } = response.data;
-        return `http://localhost:8000/videos/${filename}`;
+        return `https://kumpas.onrender.com/videos/${filename}`;
       } catch (error) {
         console.error("Error uploading video:", error);
         throw error;
