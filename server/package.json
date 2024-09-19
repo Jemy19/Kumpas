@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "npm install --force",
     "start": "nodemon index.js"
   },
   "author": "",
