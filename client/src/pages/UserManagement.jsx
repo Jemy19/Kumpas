@@ -83,6 +83,8 @@ export function UserManagement() {
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
 
   // create account
   const [data, setData] = useState({
@@ -207,6 +209,10 @@ export function UserManagement() {
     setCurrentPage(page);
   };
   const paginatedUsers = mobUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const filteredUsers = mobUsers.filter((mobUser) =>
+    mobUser.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -225,6 +231,20 @@ export function UserManagement() {
                         </CardDescription>
                         </div>
                         <div className="ml-auto flex items-center gap-2">
+                        <div className="w-full flex-1">
+                          <form>
+                            <div className="relative">
+                              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                type="text"
+                                placeholder="Search by email..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full appearance-none bg-background pl-8 shadow-none"
+                              />
+                            </div>
+                          </form>
+                        </div>
                         <Dialog>
                             <DialogTrigger>
                             <Button size="sm" className="h-8 gap-1">
@@ -280,9 +300,9 @@ export function UserManagement() {
                         </TableHead>
                       </TableRow>
                     </TableHeader> 
-                    <TableBody >
-                      {paginatedUsers.map((mobUsers) => (
-                        <TableRow>
+                    <TableBody>
+                      {filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((mobUsers) => (
+                        <TableRow key={mobUsers._id}>
                           <TableCell className="hidden sm:table-cell">
                             {mobUsers._id}
                           </TableCell>
