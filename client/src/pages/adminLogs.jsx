@@ -135,7 +135,28 @@ export function Adminlogs() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const paginatedWords = logs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Paginate the logs based on the current page
+  const paginatedWords = logs.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Calculate total pages for logs
+  const totalPages = Math.ceil(logs.length / itemsPerPage);
+  const maxPagesToShow = 5;
+
+  // Determine the range of pages to show
+  let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+  let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+  // Adjust start page if necessary
+  if (endPage - startPage + 1 < maxPagesToShow) {
+    startPage = Math.max(1, endPage - maxPagesToShow + 1);
+  }
+
+  // Show first and last pages
+  const showLastPage = totalPages > endPage;
+  const showFirstPage = startPage > 1;
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -216,27 +237,63 @@ export function Adminlogs() {
                   </Table>
                 </CardContent>
                 <CardFooter>
-                <Pagination>
+                  <Pagination>
                     <PaginationContent>
-                        {currentPage != 1 && (
+                      {currentPage !== 1 && (
                         <PaginationItem>
-                        <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                          <PaginationPrevious
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                          />
                         </PaginationItem>
-                        )}
-                        {Array(Math.ceil(logs.length / itemsPerPage)).fill(0).map((_, index) => (
-                        <PaginationItem key={index}>
-                            <PaginationLink onClick={() => handlePageChange(index + 1)} isActive={index + 1 === currentPage}>
-                            {index + 1}
-                            </PaginationLink>
-                        </PaginationItem>
-                        ))}
-                        {currentPage < Math.ceil(logs.length / itemsPerPage) && (
+                      )}
+
+                      {showFirstPage && (
                         <PaginationItem>
-                            <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+                          <PaginationLink onClick={() => handlePageChange(1)} isActive={currentPage === 1}>
+                            1
+                          </PaginationLink>
                         </PaginationItem>
-                        )}
+                      )}
+
+                      {showFirstPage && startPage > 2 && (
+                        <PaginationItem>
+                          <span>...</span>
+                        </PaginationItem>
+                      )}
+
+                      {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
+                        <PaginationItem key={startPage + index}>
+                          <PaginationLink
+                            onClick={() => handlePageChange(startPage + index)}
+                            isActive={startPage + index === currentPage}
+                          >
+                            {startPage + index}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+
+                      {showLastPage && endPage < totalPages - 1 && (
+                        <PaginationItem>
+                          <span>...</span>
+                        </PaginationItem>
+                      )}
+
+                      {showLastPage && (
+                        <PaginationItem>
+                          <PaginationLink onClick={() => handlePageChange(totalPages)} isActive={currentPage === totalPages}>
+                            {totalPages}
+                          </PaginationLink>
+                        </PaginationItem>
+                      )}
+
+                      {currentPage < totalPages && (
+                        <PaginationItem>
+                          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+                        </PaginationItem>
+                      )}
                     </PaginationContent>
-                </Pagination>       
+                  </Pagination>
                 </CardFooter>
               </Card>
         </main>

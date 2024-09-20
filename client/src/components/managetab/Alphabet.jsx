@@ -186,13 +186,32 @@ export function Alphabet() {
     });
   };
 
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-      };
-    
-    const paginatedWords = words.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-    const alphabetWords = words.filter((word) => word.category === 'Alphabet');
-    const paginatedAlphabetWords = alphabetWords.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  
+  // Filter words for 'Alphabet' category
+  const alphabetWords = words.filter((word) => word.category === 'Alphabet');
+  
+  // Paginate the alphabetWords based on the current page
+  const paginatedAlphabetWords = alphabetWords.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  
+  // Calculate total pages for alphabetWords
+  const totalPages = Math.ceil(alphabetWords.length / itemsPerPage);
+  const maxPagesToShow = 5;
+  
+  // Determine the range of pages to show
+  let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+  let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+  
+  // Adjust start page if necessary
+  if (endPage - startPage + 1 < maxPagesToShow) {
+    startPage = Math.max(1, endPage - maxPagesToShow + 1);
+  }
+  
+  // Show first and last pages
+  const showLastPage = totalPages > endPage;
+  const showFirstPage = startPage > 1;
   return (
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <Tabs defaultValue="all">
@@ -361,26 +380,56 @@ export function Alphabet() {
                 </CardContent>
                 <CardFooter>
                 <Pagination>
-                    <PaginationContent>
-                        {currentPage != 1 && (
-                        <PaginationItem>
+                  <PaginationContent>
+                    {currentPage !== 1 && (
+                      <PaginationItem>
                         <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-                        </PaginationItem>
-                        )}
-                        {Array(Math.ceil(alphabetWords.length / itemsPerPage)).fill(0).map((_, index) => (
-                        <PaginationItem key={index}>
-                            <PaginationLink onClick={() => handlePageChange(index + 1)} isActive={index + 1 === currentPage}>
-                            {index + 1}
-                            </PaginationLink>
-                        </PaginationItem>
-                        ))}
-                        {currentPage < Math.ceil(alphabetWords.length / itemsPerPage) && (
-                        <PaginationItem>
-                            <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-                        </PaginationItem>
-                        )}
-                    </PaginationContent>
-                </Pagination>       
+                      </PaginationItem>
+                    )}
+
+                    {showFirstPage && (
+                      <PaginationItem>
+                        <PaginationLink onClick={() => handlePageChange(1)} isActive={currentPage === 1}>
+                          1
+                        </PaginationLink>
+                      </PaginationItem>
+                    )}
+
+                    {showFirstPage && startPage > 2 && (
+                      <PaginationItem>
+                        <span>...</span>
+                      </PaginationItem>
+                    )}
+
+                    {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
+                      <PaginationItem key={startPage + index}>
+                        <PaginationLink onClick={() => handlePageChange(startPage + index)} isActive={startPage + index === currentPage}>
+                          {startPage + index}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    {showLastPage && endPage < totalPages - 1 && (
+                      <PaginationItem>
+                        <span>...</span>
+                      </PaginationItem>
+                    )}
+
+                    {showLastPage && (
+                      <PaginationItem>
+                        <PaginationLink onClick={() => handlePageChange(totalPages)} isActive={currentPage === totalPages}>
+                          {totalPages}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )}
+
+                    {currentPage < totalPages && (
+                      <PaginationItem>
+                        <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+                      </PaginationItem>
+                    )}
+                  </PaginationContent>
+                </Pagination>    
                 </CardFooter>
               </Card>
             </TabsContent>
