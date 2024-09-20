@@ -212,23 +212,26 @@ export function UserManagement() {
   const filteredUsers = mobUsers.filter((mobUser) =>
     mobUser.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
+  
   // Paginate the filtered users
-  const paginatedUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
+  const paginatedUsers = filteredUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  
   // Calculate total pages for filtered users
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const maxPagesToShow = 5;
-
+  
   // Determine the range of pages to show
   let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
   let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-
+  
   // Adjust start page if necessary
   if (endPage - startPage + 1 < maxPagesToShow) {
     startPage = Math.max(1, endPage - maxPagesToShow + 1);
   }
-
+  
   // Show first and last pages
   const showLastPage = totalPages > endPage;
   const showFirstPage = startPage > 1;
@@ -320,7 +323,7 @@ export function UserManagement() {
                       </TableRow>
                     </TableHeader> 
                     <TableBody>
-                      {filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((mobUsers) => (
+                      {paginatedUsers.map((mobUsers) => (
                         <TableRow key={mobUsers._id}>
                           <TableCell className="hidden sm:table-cell">
                             {mobUsers._id}
