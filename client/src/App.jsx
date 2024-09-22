@@ -19,7 +19,8 @@ import SAUserManagement from './pages/superAdmin/saUserManagement';
 import SASignManagement from './pages/superAdmin/saSignManagement';
 import SAFeedbacks from './pages/superAdmin/saFeedback';
 import SALogs from './pages/superAdmin/saLogs';
-
+import Notfound from './pages/404Notfound/404';
+import NotAuthorized from './pages/404Notfound/NotAuthorized';
 
 import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
@@ -32,7 +33,9 @@ function App() {
     <UserContextProvider>
       <Toaster position = 'top-center' toastOptions={{duration: 4000}}/>
       <Routes>
-        <Route path='/' element={<PublicRoute><Homepage /></PublicRoute>} />
+        <Route path='*' element={<Notfound />} />
+        <Route path='/not-authorized' element={<NotAuthorized />} />
+        <Route path='/' element={<Homepage />} />
         <Route path='/Login' element={<PublicRoute><Login /></PublicRoute>} />
         <Route path='/Register' element={<PublicRoute><Register /></PublicRoute>} />
         <Route path='/Dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />

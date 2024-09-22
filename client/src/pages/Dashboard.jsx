@@ -47,6 +47,7 @@ import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
+import SkeletonDashboard from './skeletons/dashskeleton'; // Adjust the path as neededs
 
 export function Dashboard() {
     // for creating new sign language
@@ -91,8 +92,9 @@ export function Dashboard() {
 
     fetchWordsByUsage();
   }, []);
+
     if (loading) {
-      return <div>Loading...</div>;
+      return <SkeletonDashboard />;
     }
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
