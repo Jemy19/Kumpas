@@ -93,9 +93,6 @@ export function Dashboard() {
     fetchWordsByUsage();
   }, []);
 
-    if (loading) {
-      return <SkeletonDashboard />;
-    }
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -104,6 +101,10 @@ export function Dashboard() {
       <div className="flex flex-col">
         <Header />
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+            {loading ? (
+            <SkeletonDashboard />
+            ) : (
+            <>
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
             <Card x-chunk="dashboard-01-chunk-1">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -224,6 +225,8 @@ export function Dashboard() {
               ))}
             </Card>
           </div>
+          </>
+         )}
         </main>
       </div>
     </div>
