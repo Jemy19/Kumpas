@@ -17,6 +17,11 @@ const wordSchema = new Schema({
     video: {
         type: String,
         required: true
+    },
+    frequency: {
+        type: Number,   // Add frequency with Number (integer type)
+        required: true,
+        default: 0      // Optionally, you can set a default value
     }
 }, {timestamps: true});
 
