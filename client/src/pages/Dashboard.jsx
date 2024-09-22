@@ -47,7 +47,7 @@ import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
-import SkeletonDashboard from './skeletons/dashskeleton'; // Adjust the path as neededs
+import SkeletonDashboard from '../skeletons/dashskeleton'; // Adjust the path as neededs
 
 export function Dashboard() {
     // for creating new sign language
