@@ -20,7 +20,6 @@ import SASignManagement from './pages/superAdmin/saSignManagement';
 import SAFeedbacks from './pages/superAdmin/saFeedback';
 import SALogs from './pages/superAdmin/saLogs';
 import Notfound from './pages/404NotFound/404';
-import NotAuthorized from './pages/404NotFound/NotAuthorized';
 
 import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
@@ -34,7 +33,6 @@ function App() {
       <Toaster position = 'top-center' toastOptions={{duration: 4000}}/>
       <Routes>
         <Route path='*' element={<Notfound />} />
-        <Route path='/not-authorized' element={<NotAuthorized />} />
         <Route path='/' element={<Homepage />} />
         <Route path='/Login' element={<PublicRoute><Login /></PublicRoute>} />
         <Route path='/Register' element={<PublicRoute><Register /></PublicRoute>} />
