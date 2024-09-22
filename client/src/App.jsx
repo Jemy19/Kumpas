@@ -19,8 +19,8 @@ import SAUserManagement from './pages/superAdmin/saUserManagement';
 import SASignManagement from './pages/superAdmin/saSignManagement';
 import SAFeedbacks from './pages/superAdmin/saFeedback';
 import SALogs from './pages/superAdmin/saLogs';
-import Notfound from './pages/404Notfound/404';
-import NotAuthorized from './pages/404Notfound/NotAuthorized';
+import Notfound from './pages/404NotFound/404';
+import NotAuthorized from './pages/404NotFound/NotAuthorized';
 
 import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
