@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function SkeletonDashboard() {
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+      <>
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
         {[...Array(4)].map((_, index) => (
           <div key={index} className="bg-gray-200 rounded-lg p-4">
@@ -34,7 +34,7 @@ export function SkeletonDashboard() {
           ))}
         </div>
       </div>
-    </main>
+    </>
   );
 }
 
