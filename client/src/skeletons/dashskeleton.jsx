@@ -37,3 +37,5 @@ export function SkeletonDashboard() {
     </main>
   );
 }
+
+export default SkeletonDashboard; // Ensure this line is included
