@@ -158,72 +158,67 @@ export function Dashboard() {
             </Card>
           </div>
           <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-            <Card
-              className="xl:col-span-2" x-chunk="dashboard-01-chunk-4"
-            >
-              <CardHeader className="flex flex-row items-center">
-                <div className="grid gap-2">
-                  <CardTitle>Most Used Phrases</CardTitle>
-                  <CardDescription>
-                    Most Used Sign Language Phrases
-                  </CardDescription>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead className="hidden xl:table-column">
-                        Type
-                      </TableHead>
-                      <TableHead className="hidden xl:table-column">
-                        Status
-                      </TableHead>
-                      <TableHead className="hidden xl:table-column">
-                        Date
-                      </TableHead>
-                      <TableHead className="text-right">Number Of Times Used</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                  {wordsDescending.map((word, index) => (
-                    <TableRow>
+          <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+            <CardHeader className="flex flex-row items-center">
+              <div className="grid gap-2">
+                <CardTitle>Most Used Phrases</CardTitle>
+                <CardDescription>Most Used Sign Language Phrases</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="max-h-[450px]"> {/* Fixed height */}
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Title</TableHead>
+                    <TableHead className="hidden xl:table-column">Type</TableHead>
+                    <TableHead className="text-right">Number Of Times Used</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {wordsDescending.slice(0, 5).map((word, index) => (
+                    <TableRow key={index}>
                       <TableCell>
                         <div className="font-medium">{word.title}</div>
                         <div className="hidden text-sm text-muted-foreground md:inline">
                           {word.category}
                         </div>
                       </TableCell>
-                      {/* Removed the unwanted TableCell */}
                       <TableCell className="text-right" colSpan={2}>{word.frequency}</TableCell>
                     </TableRow>
                   ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-            <Card x-chunk="dashboard-01-chunk-5">
-              
-              <CardHeader>
-                <CardTitle>Least Used Phrases</CardTitle>
-              </CardHeader>
-              {wordsAscending.map((word, index) => (
-              <CardContent className="grid gap-8">
-                <div className="flex items-center gap-4">
-                  <div className="grid gap-1">
-                    <p className="text-sm font-medium leading-none">
-                      {word.title} 
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {word.category} 
-                    </p>
-                  </div>
-                  <div className="ml-auto font-medium">{word.frequency}</div>
-                </div>
-              </CardContent>
-              ))}
-            </Card>
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+          <Card x-chunk="dashboard-01-chunk-5">
+            <CardHeader>
+              <CardTitle>Least Used Phrases</CardTitle>
+            </CardHeader>
+            <CardContent className="max-h-[450px]"> {/* Fixed height */}
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Title</TableHead>
+                    <TableHead className="hidden xl:table-column">Type</TableHead>
+                    <TableHead className="text-right">Number Of Times Used</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {wordsAscending.slice(0, 5).map((word, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <div className="font-medium">{word.title}</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">
+                          {word.category}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right" colSpan={2}>{word.frequency}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
           </div>
           </>
          )}
