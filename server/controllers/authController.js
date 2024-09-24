@@ -62,16 +62,19 @@ const loginUser = async (req, res) => {
 
 
 const getProfile = (req, res) => {
-    const {token} = req.cookies
-    if(token) {
-        jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-            if(err) throw err;
-            res.json(user)
-        })
-    } else {
-        res.json(null)
-    }
-}
+  const { token } = req.cookies;
+  if (token) {
+      jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+          if (err) {
+              return res.status(401).json({ error: 'Session expired, please log in again' });
+          }
+          res.json(user);
+      });
+  } else {
+      res.status(401).json({ error: 'No token provided, please log in' });
+  }
+};
+
 
 const getWords = async (req, res) => {
     try {

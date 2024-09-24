@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createContext, useState, useEffect } from 'react';
 import Spinner from './spinner'; // Import the spinner component
+import toast from 'react-hot-toast';
 
 export const UserContext = createContext({})
 
@@ -11,15 +12,21 @@ export function UserContextProvider({children}) {
     useEffect(() => {
         axios.get('/profile', { withCredentials: true })
             .then(({ data }) => {
-                setUser(data);
+                if (!data) {
+                    // If no user data is returned, it may indicate session expiry
+                    toast.error('Session expired, please login again');
+                } else {
+                    setUser(data);
+                }
             })
             .catch((error) => {
                 console.error("Error fetching profile data:", error);
+                toast.error('Session expired, please login again');
             })
             .finally(() => {
                 setLoading(false); // Set loading to false when request completes
             });
-    }, []);
+    }, []);    
 
     const logout = () => {
         axios.post('/logout').then(() => {
