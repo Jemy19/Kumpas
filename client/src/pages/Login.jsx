@@ -1,23 +1,20 @@
-import MyImage from "../assets/lmao.jpg"
+import MyImage from "../assets/lmao.jpg";
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react'; // Import useEffect
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-
-import { useState, useContext } from 'react'
-import axios from 'axios'
-import {toast} from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState, useContext } from 'react';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
-
 import NavbarLog from "@/components/NavbarLog";
+import LoadingOverlay from "@/components/LoadingOverlay"; // Import LoadingOverlay
 
 export function Login() {
   useEffect(() => {
-    // Set overflow-y to hidden on body when component mounts
     document.body.style.overflowY = 'hidden';
-    // Reset overflow-y to auto when component unmounts
     return () => {
       document.body.style.overflowY = 'auto';
     };
@@ -25,11 +22,9 @@ export function Login() {
 
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
-  const [data, setData] = useState({
-    email: '',
-    password: '',
-  });
-  const [showPassword, setShowPassword] = useState(false); // <-- Add state for showing/hiding password
+  const [data, setData] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
 
   const loginUser = async (e) => {
     e.preventDefault();
@@ -40,11 +35,12 @@ export function Login() {
       return;
     }
 
+    setLoading(true); // Show loading overlay
+
     try {
-      const { data } = await axios.post('/login', {
-        email,
-        password
-      });
+      const response = await axios.post('/login', { email, password });
+      const { data } = response;
+
       if (data.error) {
         toast.error(data.error);
       } else {
@@ -62,11 +58,14 @@ export function Login() {
       } else {
         toast.error('Network error or server issue. Please try again.');
       }
+    } finally {
+      setLoading(false); // Hide loading overlay
     }
   };
 
   return (
     <>
+      {loading && <LoadingOverlay />} {/* Show loading overlay if loading */}
       <NavbarLog />
       <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
         <div className="flex items-center justify-center mt-20 lg:-mt-20 mb-20">
@@ -94,13 +93,13 @@ export function Login() {
                     <Button
                       type="button"
                       variant="link"
-                      onClick={() => setShowPassword(!showPassword)} // <-- Toggle show/hide password
+                      onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? 'Hide' : 'Show'} Password
                     </Button>
                   </div>
                   <Input
-                    type={showPassword ? 'text' : 'password'} // <-- Change input type based on state
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Enter Password..."
                     value={data.password}
                     onChange={(e) => setData({ ...data, password: e.target.value })}
