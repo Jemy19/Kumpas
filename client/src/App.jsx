@@ -27,33 +27,24 @@ import AdminLogs from './pages/adminLogs';
 axios.defaults.baseURL = 'https://kumpas.onrender.com';
 axios.defaults.withCredentials = true;
 
-// Spinner favicon handling
-const favicon = document.getElementById("favicon");
-const loadingSpinner = "./assets/logospin.svg";
-const defaultIcon = favicon.href;
-
-function switchToSpinner() {
-  favicon.href = loadingSpinner;
-}
-
-function restoreFavicon() {
-  favicon.href = defaultIcon;
-}
+// Default favicon and loading spinner paths
+const defaultFavicon = '/src/assets/Logo.svg'; // Original logo
+const loadingSpinner = '/src/assets/logospin.svg'; // Path to your spinner SVG
 
 // Add Axios interceptors for request and response
 axios.interceptors.request.use((config) => {
-  switchToSpinner(); // Show spinner on API request
+  document.getElementById('favicon').href = loadingSpinner; // Change to spinner favicon
   return config;
 }, (error) => {
-  restoreFavicon(); // Restore favicon on request error
+  document.getElementById('favicon').href = defaultFavicon; // Revert on error
   return Promise.reject(error);
 });
 
 axios.interceptors.response.use((response) => {
-  restoreFavicon(); // Restore favicon on successful response
+  document.getElementById('favicon').href = defaultFavicon; // Revert on success
   return response;
 }, (error) => {
-  restoreFavicon(); // Restore favicon on response error
+  document.getElementById('favicon').href = defaultFavicon; // Revert on error
   return Promise.reject(error);
 });
 
