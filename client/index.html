@@ -5,24 +5,58 @@
     <link id="favicon" rel="icon" type="image/svg+xml" href="/src/assets/Logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>E-Kumpas</title>
-    
+
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         const favicon = document.getElementById("favicon");
+        
+        // Spinner and default icon URLs
+        const loadingSpinner = "/src/assets/loading-spinner.gif";
+        const defaultIcon = favicon.href;
 
-        // Path to your loading spinner
-        const loadingSpinner = "/src/assets/logospin.svg";
-        const defaultIcon = favicon.href; // Save the default favicon URL
-
-        // Change favicon to spinner when loading starts
-        window.addEventListener('beforeunload', function () {
+        // Function to switch favicon
+        function switchToSpinner() {
           favicon.href = loadingSpinner;
-        });
+        }
 
-        // Restore favicon once the page is fully loaded
-        window.addEventListener('load', function () {
+        // Function to switch back to default
+        function restoreFavicon() {
           favicon.href = defaultIcon;
-        });
+        }
+
+        // Trigger spinner on page unload (refresh, navigate away)
+        window.addEventListener('beforeunload', switchToSpinner);
+
+        // Restore original favicon once page fully loads
+        window.addEventListener('load', restoreFavicon);
+
+        // API request interception for fetch (native browser API)
+        const originalFetch = window.fetch;
+        window.fetch = async (...args) => {
+          switchToSpinner(); // Set spinner before API request starts
+          try {
+            const response = await originalFetch(...args);
+            return response;
+          } finally {
+            restoreFavicon(); // Restore favicon once request completes
+          }
+        };
+
+        // If using Axios, you can intercept requests and responses similarly
+        if (window.axios) {
+          window.axios.interceptors.request.use(function (config) {
+            switchToSpinner(); // Set spinner before request starts
+            return config;
+          });
+
+          window.axios.interceptors.response.use(function (response) {
+            restoreFavicon(); // Restore favicon after response is received
+            return response;
+          }, function (error) {
+            restoreFavicon(); // Restore favicon even if an error occurs
+            return Promise.reject(error);
+          });
+        }
       });
     </script>
   </head>
