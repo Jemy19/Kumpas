@@ -2,9 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/src/assets/Logo.svg" />
+    <link id="favicon" rel="icon" type="image/svg+xml" href="/src/assets/Logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>E-Kumpas</title>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const favicon = document.getElementById("favicon");
+
+        // Path to your loading spinner
+        const loadingSpinner = "/src/assets/logospin.svg";
+        const defaultIcon = favicon.href; // Save the default favicon URL
+
+        // Change favicon to spinner when loading starts
+        window.addEventListener('beforeunload', function () {
+          favicon.href = loadingSpinner;
+        });
+
+        // Restore favicon once the page is fully loaded
+        window.addEventListener('load', function () {
+          favicon.href = defaultIcon;
+        });
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>
