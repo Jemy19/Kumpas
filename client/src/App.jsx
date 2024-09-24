@@ -1,13 +1,13 @@
-import {Routes, Route} from 'react-router-dom'
-import Homepage from './pages/Home'
-import Register from './pages/Register'
+import { Routes, Route } from 'react-router-dom';
+import Homepage from './pages/Home';
+import Register from './pages/Register';
 import axios from 'axios';
-import {Toaster} from 'react-hot-toast'
-import { UserContextProvider } from '../context/userContext'
-import Dashboard from './pages/Dashboard'
-import PrivateRoute from './components/PrivateRoute'
-import Login from './pages/Login'
-import OldDashboard from './pages/Oldashboard'
+import { Toaster } from 'react-hot-toast';
+import { UserContextProvider } from '../context/userContext';
+import Dashboard from './pages/Dashboard';
+import PrivateRoute from './components/PrivateRoute';
+import Login from './pages/Login';
+import OldDashboard from './pages/Oldashboard';
 import Management from './pages/Management';
 import PublicRoute from './components/PublicRoute';
 import Vidtest from './pages/vidtest';
@@ -20,17 +20,47 @@ import SASignManagement from './pages/superAdmin/saSignManagement';
 import SAFeedbacks from './pages/superAdmin/saFeedback';
 import SALogs from './pages/superAdmin/saLogs';
 import Notfound from './pages/404NotFound/404';
-
 import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
 
+// Set the base URL and credentials for Axios
 axios.defaults.baseURL = 'https://kumpas.onrender.com';
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true;
+
+// Spinner favicon handling
+const favicon = document.getElementById("favicon");
+const loadingSpinner = "./assets/logospin.svg";
+const defaultIcon = favicon.href;
+
+function switchToSpinner() {
+  favicon.href = loadingSpinner;
+}
+
+function restoreFavicon() {
+  favicon.href = defaultIcon;
+}
+
+// Add Axios interceptors for request and response
+axios.interceptors.request.use((config) => {
+  switchToSpinner(); // Show spinner on API request
+  return config;
+}, (error) => {
+  restoreFavicon(); // Restore favicon on request error
+  return Promise.reject(error);
+});
+
+axios.interceptors.response.use((response) => {
+  restoreFavicon(); // Restore favicon on successful response
+  return response;
+}, (error) => {
+  restoreFavicon(); // Restore favicon on response error
+  return Promise.reject(error);
+});
 
 function App() {
   return (
     <UserContextProvider>
-      <Toaster position = 'top-center' toastOptions={{duration: 4000}}/>
+      <Toaster position='top-center' toastOptions={{ duration: 4000 }} />
       <Routes>
         <Route path='*' element={<Notfound />} />
         <Route path='/' element={<Homepage />} />
@@ -50,8 +80,8 @@ function App() {
         <Route path='/SAFeedbacks' element={<SuperAdminRoute><SAFeedbacks /></SuperAdminRoute>} />
         <Route path='/SALogs' element={<SuperAdminRoute><SALogs /></SuperAdminRoute>} />
       </Routes>
-    </UserContextProvider>  
-  )
+    </UserContextProvider>
+  );
 }
 
-export default App
+export default App;
