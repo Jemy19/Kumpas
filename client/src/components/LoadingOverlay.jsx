@@ -1,10 +1,10 @@
 // LoadingOverlay.js
 import React from 'react';
-
+import Spinner from '../../context/spinner';
 const LoadingOverlay = () => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="loader">Loading...</div> {/* You can replace this with a spinner */}
+      <Spinner />
       <style jsx>{`
         .loader {
           border: 8px solid rgba(255, 255, 255, 0.3);
