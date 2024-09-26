@@ -119,6 +119,7 @@ export function Salogs() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const [logs, setLogs] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -135,7 +136,19 @@ export function Salogs() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const paginatedWords = logs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to the first page when search changes
+  };
+
+  // Filter logs based on the search query
+  const filteredLogs = logs.filter(log =>
+    log.adminName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const paginatedLogs = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -146,11 +159,11 @@ export function Salogs() {
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <Tabs defaultValue="all">
             <TabsContent value="all">
-              <Card x-chunk="dashboard-06-chunk-0">
+              <Card>
                 <CardHeader>
                   <div className="flex items-center">
-                  <CardTitle>Super Admin Logs</CardTitle>
-                  <div className="ml-auto flex items-center gap-2">
+                    <CardTitle>Super Admin Logs</CardTitle>
+                    <div className="ml-auto flex items-center gap-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline" size="sm" className="h-8 gap-1">
@@ -172,81 +185,74 @@ export function Salogs() {
                         </DropdownMenuCheckboxItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </div>
+                    </div>
                   </div>
                   <CardDescription>
-                    Veiw all Logs
+                    View all Logs
                   </CardDescription>
-                  
                 </CardHeader>
                 <CardContent>
+                  <div className="flex items-center mb-4">
+                    <Input
+                      type="text"
+                      placeholder="Search by Admin Name..."
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                    />
+                  </div>
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>
-                          ID
-                        </TableHead>
+                        <TableHead>ID</TableHead>
                         <TableHead>Admin</TableHead>
-                        <TableHead>timeStamp</TableHead>
+                        <TableHead>TimeStamp</TableHead>
                         <TableHead>Message</TableHead>
-                        <TableHead>
-                          Level
-                        </TableHead>
+                        <TableHead>Level</TableHead>
                       </TableRow>
-                    </TableHeader> 
-                    <TableBody >
-                      {paginatedWords.map((log) => (
-                        <TableRow>
-                          <TableCell className="hidden sm:table-cell">
-                            {log._id}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {log.adminName}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {log.timestamp}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {log.message}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {log.level}
-                          </TableCell>
+                    </TableHeader>
+                    <TableBody>
+                      {paginatedLogs.map((log) => (
+                        <TableRow key={log._id}>
+                          <TableCell className="hidden sm:table-cell">{log._id}</TableCell>
+                          <TableCell className="hidden md:table-cell">{log.adminName}</TableCell>
+                          <TableCell className="hidden md:table-cell">{log.timestamp}</TableCell>
+                          <TableCell className="hidden md:table-cell">{log.message}</TableCell>
+                          <TableCell className="hidden md:table-cell">{log.level}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </CardContent>
                 <CardFooter>
-                <Pagination>
+                  <Pagination>
                     <PaginationContent>
-                        {currentPage != 1 && (
+                      {currentPage !== 1 && (
                         <PaginationItem>
-                        <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                          <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
                         </PaginationItem>
-                        )}
-                        {Array(Math.ceil(logs.length / itemsPerPage)).fill(0).map((_, index) => (
+                      )}
+                      {Array(Math.ceil(filteredLogs.length / itemsPerPage)).fill(0).map((_, index) => (
                         <PaginationItem key={index}>
-                            <PaginationLink onClick={() => handlePageChange(index + 1)} isActive={index + 1 === currentPage}>
+                          <PaginationLink onClick={() => handlePageChange(index + 1)} isActive={index + 1 === currentPage}>
                             {index + 1}
-                            </PaginationLink>
+                          </PaginationLink>
                         </PaginationItem>
-                        ))}
-                        {currentPage < Math.ceil(logs.length / itemsPerPage) && (
+                      ))}
+                      {currentPage < Math.ceil(filteredLogs.length / itemsPerPage) && (
                         <PaginationItem>
-                            <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+                          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
                         </PaginationItem>
-                        )}
+                      )}
                     </PaginationContent>
-                </Pagination>       
+                  </Pagination>
                 </CardFooter>
               </Card>
-            </TabsContent> 
+            </TabsContent>
           </Tabs>
         </main>
       </div>
     </div>
-  )
+  );
 }
 export default Salogs;
 
