@@ -142,11 +142,14 @@ export function Salogs() {
     setCurrentPage(1); // Reset to the first page when search changes
   };
 
+  
+
   // Filter logs based on the search query
   const filteredLogs = logs.filter(log =>
     log.adminName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
   const paginatedLogs = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
@@ -164,6 +167,20 @@ export function Salogs() {
                   <div className="flex items-center">
                     <CardTitle>Super Admin Logs</CardTitle>
                     <div className="ml-auto flex items-center gap-2">
+                      <div className="w-full flex-1">
+                        <form>
+                          <div className="relative">
+                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                type="text"
+                                placeholder="Search by Admin Name..."
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                className="w-full appearance-none bg-background pl-8 shadow-none"
+                              />
+                          </div>
+                        </form>
+                      </div>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline" size="sm" className="h-8 gap-1">
@@ -192,14 +209,6 @@ export function Salogs() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center mb-4">
-                    <Input
-                      type="text"
-                      placeholder="Search by Admin Name..."
-                      value={searchQuery}
-                      onChange={handleSearchChange}
-                    />
-                  </div>
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -224,28 +233,83 @@ export function Salogs() {
                   </Table>
                 </CardContent>
                 <CardFooter>
-                  <Pagination>
-                    <PaginationContent>
-                      {currentPage !== 1 && (
-                        <PaginationItem>
-                          <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-                        </PaginationItem>
-                      )}
-                      {Array(Math.ceil(filteredLogs.length / itemsPerPage)).fill(0).map((_, index) => (
-                        <PaginationItem key={index}>
-                          <PaginationLink onClick={() => handlePageChange(index + 1)} isActive={index + 1 === currentPage}>
-                            {index + 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-                      {currentPage < Math.ceil(filteredLogs.length / itemsPerPage) && (
-                        <PaginationItem>
-                          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-                        </PaginationItem>
-                      )}
-                    </PaginationContent>
-                  </Pagination>
-                </CardFooter>
+                  {/* Previous Button */}
+                {currentPage !== 1 && (
+                  <div>
+                    <PaginationPrevious
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    />
+                  </div>
+                )}
+  <Pagination>
+    <PaginationContent>
+      
+
+      {/* First Page */}
+      {currentPage > 3 && (
+        <PaginationItem>
+          <PaginationLink onClick={() => handlePageChange(1)}>
+            1
+          </PaginationLink>
+        </PaginationItem>
+      )}
+
+      {/* Ellipsis before current page */}
+      {currentPage > 4 && (
+        <PaginationItem>
+          <PaginationEllipsis />
+        </PaginationItem>
+      )}
+
+      {/* Pages around the current page */}
+      {Array.from({ length: totalPages }, (_, i) => i + 1)
+        .filter(
+          (page) =>
+            page === currentPage || // Current page
+            (page >= currentPage - 2 && page <= currentPage + 2) // Pages around current
+        )
+        .map((page) => (
+          <PaginationItem key={page}>
+            <PaginationLink
+              onClick={() => handlePageChange(page)}
+              isActive={page === currentPage}
+            >
+              {page}
+            </PaginationLink>
+          </PaginationItem>
+        ))}
+
+      {/* Ellipsis after current page */}
+      {currentPage < totalPages - 3 && (
+        <PaginationItem>
+          <PaginationEllipsis />
+        </PaginationItem>
+      )}
+
+      {/* Last Page */}
+      {currentPage < totalPages - 2 && (
+        <PaginationItem>
+          <PaginationLink onClick={() => handlePageChange(totalPages)}>
+            {totalPages}
+          </PaginationLink>
+        </PaginationItem>
+      )}
+
+      
+    </PaginationContent>
+  </Pagination>
+  {/* Next Button */}
+  {currentPage < totalPages && (
+        <div>
+          <PaginationNext
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          />
+        </div>
+      )}
+</CardFooter>
+
               </Card>
             </TabsContent>
           </Tabs>

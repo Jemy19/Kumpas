@@ -283,7 +283,12 @@ export function Management() {
     const filteredWords = words.filter(word => 
       word.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    
+
+    const handleSearchChange = (e) => {
+      setSearchTerm(e.target.value);
+      setCurrentPage(1); // Reset to the first page when search changes
+    };
+
     const paginatedWords = filteredWords.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);    
 
   return (
@@ -315,7 +320,7 @@ export function Management() {
                         type="text"
                         placeholder="Search by Title..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={handleSearchChange}
                         className="w-full appearance-none bg-background pl-8 shadow-none"
                       />
                     </div>
@@ -548,56 +553,26 @@ export function Management() {
                 </CardContent>
                 <CardFooter>
                 <Pagination>
-                  <PaginationContent>
-                    {currentPage !== 1 && (
-                      <PaginationItem>
-                        <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-                      </PaginationItem>
-                    )}
-
-                    {showFirstPage && (
-                      <PaginationItem>
-                        <PaginationLink onClick={() => handlePageChange(1)} isActive={currentPage === 1}>
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                    )}
-
-                    {showFirstPage && startPage > 2 && (
-                      <PaginationItem>
-                        <span>...</span>
-                      </PaginationItem>
-                    )}
-
-                    {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
-                      <PaginationItem key={startPage + index}>
-                        <PaginationLink onClick={() => handlePageChange(startPage + index)} isActive={startPage + index === currentPage}>
-                          {startPage + index}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-
-                    {showLastPage && endPage < totalPages - 1 && (
-                      <PaginationItem>
-                        <span>...</span>
-                      </PaginationItem>
-                    )}
-
-                    {showLastPage && (
-                      <PaginationItem>
-                        <PaginationLink onClick={() => handlePageChange(totalPages)} isActive={currentPage === totalPages}>
-                          {totalPages}
-                        </PaginationLink>
-                      </PaginationItem>
-                    )}
-
-                    {currentPage < totalPages && (
-                      <PaginationItem>
-                        <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-                      </PaginationItem>
-                    )}
-                  </PaginationContent>
-                </Pagination>
+                    <PaginationContent>
+                      {currentPage !== 1 && (
+                        <PaginationItem>
+                          <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                        </PaginationItem>
+                      )}
+                      {Array(Math.ceil(filteredWords.length / itemsPerPage)).fill(0).map((_, index) => (
+                        <PaginationItem key={index}>
+                          <PaginationLink onClick={() => handlePageChange(index + 1)} isActive={index + 1 === currentPage}>
+                            {index + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      {currentPage < Math.ceil(filteredWords.length / itemsPerPage) && (
+                        <PaginationItem>
+                          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+                        </PaginationItem>
+                      )}
+                    </PaginationContent>
+                  </Pagination> 
                 </CardFooter>
               </Card>
             </TabsContent>
