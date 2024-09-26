@@ -165,6 +165,8 @@ export function Management() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(8);
+    const [searchTerm, setSearchTerm] = useState('');
+
 
     useEffect(() => {
         axios.get('/signWords')
@@ -278,8 +280,11 @@ export function Management() {
     const handlePageChange = (page) => {
       setCurrentPage(page);
     };
-    const paginatedWords = words.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
+    const filteredWords = words.filter(word => 
+      word.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+    const paginatedWords = filteredWords.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);    
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -302,6 +307,20 @@ export function Management() {
                 <TabsTrigger value="Survival Signs">Survival Signs</TabsTrigger>
               </TabsList>
               <div className="ml-auto flex items-center gap-2">
+                <div className="w-full flex-1">
+                  <form>
+                    <div className="relative">
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="text"
+                        placeholder="Search by Title..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full appearance-none bg-background pl-8 shadow-none"
+                      />
+                    </div>
+                  </form>
+                </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm" className="h-8 gap-1">
