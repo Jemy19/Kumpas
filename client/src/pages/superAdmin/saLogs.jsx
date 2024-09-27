@@ -97,22 +97,14 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-  import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-  } from "@/components/ui/pagination"
 import { UserContext } from '../../../context/userContext';
 import React, { useContext, useState, useEffect } from 'react';
 import {toast} from 'react-hot-toast'
 import axios from 'axios'
 import NavbarSu from '@/components/NavbarSu';
 import HeaderSu from '@/components/HeaderSu';
-
+import SimplePagination from '@/components/simplepagination';
+import SearchInput from '@/components/searchinput';
 export function Salogs() {
   const { user, logout } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
@@ -168,18 +160,11 @@ export function Salogs() {
                     <CardTitle>Super Admin Logs</CardTitle>
                     <div className="ml-auto flex items-center gap-2">
                       <div className="w-full flex-1">
-                        <form>
-                          <div className="relative">
-                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                type="text"
-                                placeholder="Search by Admin Name..."
-                                value={searchQuery}
-                                onChange={handleSearchChange}
-                                className="w-full appearance-none bg-background pl-8 shadow-none"
-                              />
-                          </div>
-                        </form>
+                        <SearchInput 
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                          placeholder="Search by Admin Name..."
+                        />
                       </div>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -232,88 +217,19 @@ export function Salogs() {
                     </TableBody>
                   </Table>
                 </CardContent>
-                <CardFooter>
-                  {/* Previous Button */}
-                {currentPage !== 1 && (
-                  <div>
-                    <PaginationPrevious
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                    />
-                  </div>
-                )}
-  <Pagination>
-    <PaginationContent>
-      
-
-      {/* First Page */}
-      {currentPage > 3 && (
-        <PaginationItem>
-          <PaginationLink onClick={() => handlePageChange(1)}>
-            1
-          </PaginationLink>
-        </PaginationItem>
-      )}
-
-      {/* Ellipsis before current page */}
-      {currentPage > 4 && (
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-      )}
-
-      {/* Pages around the current page */}
-      {Array.from({ length: totalPages }, (_, i) => i + 1)
-        .filter(
-          (page) =>
-            page === currentPage || // Current page
-            (page >= currentPage - 2 && page <= currentPage + 2) // Pages around current
-        )
-        .map((page) => (
-          <PaginationItem key={page}>
-            <PaginationLink
-              onClick={() => handlePageChange(page)}
-              isActive={page === currentPage}
-            >
-              {page}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
-
-      {/* Ellipsis after current page */}
-      {currentPage < totalPages - 3 && (
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-      )}
-
-      {/* Last Page */}
-      {currentPage < totalPages - 2 && (
-        <PaginationItem>
-          <PaginationLink onClick={() => handlePageChange(totalPages)}>
-            {totalPages}
-          </PaginationLink>
-        </PaginationItem>
-      )}
-
-      
-    </PaginationContent>
-  </Pagination>
-  {/* Next Button */}
-  {currentPage < totalPages && (
-        <div>
-          <PaginationNext
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          />
-        </div>
-      )}
-</CardFooter>
-
+                <CardFooter className="flex justify-center p-4">
+                  {/* Pagination Component at the bottom */}
+                  <SimplePagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage} // Pass the state setter function
+                  />
+                </CardFooter>
               </Card>
             </TabsContent>
           </Tabs>
         </main>
+        
       </div>
     </div>
   );
