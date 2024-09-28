@@ -105,14 +105,18 @@ import NavbarSu from '@/components/NavbarSu';
 import HeaderSu from '@/components/HeaderSu';
 import SimplePagination from '@/components/simplepagination';
 import SearchInput from '@/components/searchinput';
+import Filter from '@/components/filter';
+
 export function Salogs() {
   const { user, logout } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const [logs, setLogs] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const categories = ["info", "error", "warn", "debug"];
 
   useEffect(() => {
     axios
@@ -125,21 +129,32 @@ export function Salogs() {
       });
   }, []);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  //filter
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategories((prevCategories) => {
+      const updatedCategories = prevCategories.includes(category)
+        ? prevCategories.filter((c) => c !== category)
+        : [...prevCategories, category];
+      setCurrentPage(1); // Reset to the first page when category changes
+      return updatedCategories;
+    });
   };
+  
+  
+
+  const filteredLogs = logs.filter((log) => {
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(log.level);
+    const matchesSearch = log.adminName.toLowerCase().includes(searchQuery.toLowerCase());
+    const result = matchesSearch && matchesCategory;
+    return result;
+  });
+  
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1); // Reset to the first page when search changes
   };
-
-  
-
-  // Filter logs based on the search query
-  const filteredLogs = logs.filter(log =>
-    log.adminName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
   const paginatedLogs = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -166,27 +181,14 @@ export function Salogs() {
                           placeholder="Search by Admin Name..."
                         />
                       </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-8 gap-1">
-                          <ListFilter className="h-3.5 w-3.5" />
-                          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                            Filter
-                          </span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuCheckboxItem checked>
-                          Active
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>
-                          Archived
-                        </DropdownMenuCheckboxItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                      <div className="flex items-center">
+                        <Filter
+                          selectedCategories={selectedCategories}
+                          handleCategoryChange={handleCategoryChange}
+                          categories={categories}
+                          titlelabel="Filter by Level"
+                        />
+                      </div>
                     </div>
                   </div>
                   <CardDescription>
@@ -205,15 +207,23 @@ export function Salogs() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {paginatedLogs.map((log) => (
-                        <TableRow key={log._id}>
-                          <TableCell className="hidden sm:table-cell">{log._id}</TableCell>
-                          <TableCell className="hidden md:table-cell">{log.adminName}</TableCell>
-                          <TableCell className="hidden md:table-cell">{log.timestamp}</TableCell>
-                          <TableCell className="hidden md:table-cell">{log.message}</TableCell>
-                          <TableCell className="hidden md:table-cell">{log.level}</TableCell>
+                      {paginatedLogs.length > 0 ? (
+                        paginatedLogs.map((log) => (
+                          <TableRow key={log._id}>
+                            <TableCell className="hidden sm:table-cell">{log._id}</TableCell>
+                            <TableCell className="hidden md:table-cell">{log.adminName}</TableCell>
+                            <TableCell className="hidden md:table-cell">{log.timestamp}</TableCell>
+                            <TableCell className="hidden md:table-cell">{log.message}</TableCell>
+                            <TableCell className="hidden md:table-cell">{log.level}</TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={5} className="text-center">
+                            No logs found
+                          </TableCell>
                         </TableRow>
-                      ))}
+                      )}
                     </TableBody>
                   </Table>
                 </CardContent>
