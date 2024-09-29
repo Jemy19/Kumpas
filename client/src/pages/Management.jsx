@@ -118,6 +118,9 @@ import {toast} from 'react-hot-toast'
 import axios from 'axios'
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
+import SimplePagination from '@/components/simplepagination';
+import SearchInput from '@/components/searchinput';
+import Filter from '@/components/filter';
 
 export function Management() {
     // for creating new sign language
@@ -165,7 +168,8 @@ export function Management() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(8);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategories, setSelectedCategories] = useState([]);
 
 
     useEffect(() => {
@@ -260,36 +264,31 @@ export function Management() {
       });
     };
     
-    const totalPages = Math.ceil(words.length / itemsPerPage);
-    const maxPagesToShow = 5;
-  
-    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-  
-    // Adjust start page if there are not enough pages to show
-    if (endPage - startPage + 1 < maxPagesToShow) {
-      startPage = Math.max(1, endPage - maxPagesToShow + 1);
-    }
-  
-    // Ensure the last page is always visible
-    const showLastPage = totalPages > endPage;
-    
-    // Adjust the start page so the first page is always visible and the middle range is limited
-    const showFirstPage = startPage > 1;
-  
-    const handlePageChange = (page) => {
-      setCurrentPage(page);
+    const handleCategoryChange = (category) => {
+      setSelectedCategories((prevCategories) => {
+        const updatedCategories = prevCategories.includes(category)
+          ? prevCategories.filter((c) => c !== category)
+          : [...prevCategories, category];
+        setCurrentPage(1); // Reset to the first page when category changes
+        return updatedCategories;
+      });
     };
-    const filteredWords = words.filter(word => 
-      word.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
+  
+    const filteredLogs = words.filter((word) => {
+      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(word.category);
+      const matchesSearch = word.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const result = matchesSearch && matchesCategory;
+      return result;
+    });
+    
+  
     const handleSearchChange = (e) => {
-      setSearchTerm(e.target.value);
+      setSearchQuery(e.target.value);
       setCurrentPage(1); // Reset to the first page when search changes
     };
-
-    const paginatedWords = filteredWords.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);    
+  
+    const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
+    const paginatedWords = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -300,53 +299,31 @@ export function Management() {
         <Header />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <Tabs defaultValue="all">
-            <div className="flex items-center mt-5">
-              <TabsList>
-                <TabsTrigger value="all">Recently Added</TabsTrigger>
-                <TabsTrigger value="Alphabet">Alphabet</TabsTrigger>
-                <TabsTrigger value="Basic Greetings">Basic Greetings</TabsTrigger>
-                <TabsTrigger value="Common Words" className="hidden sm:flex">
-                  Common Words
-                </TabsTrigger>
-                <TabsTrigger value="Questions">Questions</TabsTrigger>
-                <TabsTrigger value="Survival Signs">Survival Signs</TabsTrigger>
-              </TabsList>
-              <div className="ml-auto flex items-center gap-2">
-                <div className="w-full flex-1">
-                  <form>
-                    <div className="relative">
-                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        type="text"
-                        placeholder="Search by Title..."
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                        className="w-full appearance-none bg-background pl-8 shadow-none"
+            <TabsContent value="all">
+              <Card x-chunk="dashboard-06-chunk-0">
+                <CardHeader>
+                <div className="flex items-center mt-5">
+                  <CardTitle>Recently Added</CardTitle>   
+                <div className="ml-auto flex items-center gap-2">
+                  <div className="flex items-center">
+                    <div className="ml-auto flex items-center gap-2">
+                      <div className="w-full flex-1">
+                      <SearchInput 
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                          placeholder="Search by Title..."
                       />
+                      </div>
+                      <div className="flex items-center">
+                        <Filter
+                            selectedCategories={selectedCategories}
+                            handleCategoryChange={handleCategoryChange}
+                            categories={categories}
+                            titlelabel="Filter by Category"
+                        />
+                      </div>
                     </div>
-                  </form>
-                </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="h-8 gap-1">
-                      <ListFilter className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                        Filter
-                      </span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuCheckboxItem checked>
-                      Active
-                    </DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>
-                      Archived
-                    </DropdownMenuCheckboxItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  </div>
                 <Dialog>
                   <DialogTrigger>
                     <Button size="sm" className="h-8 gap-1">
@@ -389,10 +366,6 @@ export function Management() {
 
               </div>
             </div>
-            <TabsContent value="all">
-              <Card x-chunk="dashboard-06-chunk-0">
-                <CardHeader>
-                  <CardTitle>Recently Added</CardTitle>
                   <CardDescription>
                     View the latest sign language phrases, words, and alphabet signs added to our library.
                   </CardDescription>
@@ -419,7 +392,8 @@ export function Management() {
                       </TableRow>
                     </TableHeader> 
                     <TableBody >
-                      {paginatedWords.map((word) => (
+                    {paginatedWords.length > 0 ? (
+                      paginatedWords.map((word) => (
                         <TableRow>
                           <TableCell className="hidden sm:table-cell">
                               <Dialog>
@@ -547,49 +521,26 @@ export function Management() {
                             </DropdownMenu>
                           </TableCell>
                         </TableRow>
-                      ))}
+                      ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={5} className="text-center">
+                            Nothing Found
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </CardContent>
-                <CardFooter>
-                <Pagination>
-                    <PaginationContent>
-                      {currentPage !== 1 && (
-                        <PaginationItem>
-                          <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-                        </PaginationItem>
-                      )}
-                      {Array(Math.ceil(filteredWords.length / itemsPerPage)).fill(0).map((_, index) => (
-                        <PaginationItem key={index}>
-                          <PaginationLink onClick={() => handlePageChange(index + 1)} isActive={index + 1 === currentPage}>
-                            {index + 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-                      {currentPage < Math.ceil(filteredWords.length / itemsPerPage) && (
-                        <PaginationItem>
-                          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-                        </PaginationItem>
-                      )}
-                    </PaginationContent>
-                  </Pagination> 
+                <CardFooter className="flex justify-center p-4">
+                  {/* Pagination Component at the bottom */}
+                  <SimplePagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={setCurrentPage} // Pass the state setter function
+                  />
                 </CardFooter>
               </Card>
-            </TabsContent>
-            <TabsContent value="Alphabet">
-              <Alphabet/>
-            </TabsContent>
-            <TabsContent value="Basic Greetings">
-              <BasicGreetings/>
-            </TabsContent>
-            <TabsContent value="Common Words">
-              <CommonWords/>
-            </TabsContent>
-            <TabsContent value="Questions">
-              < Questions/>
-            </TabsContent>
-            <TabsContent value="Survival Signs">
-              <SurvivalSigns/>
             </TabsContent>
           </Tabs>
         </main>

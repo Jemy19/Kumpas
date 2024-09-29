@@ -76,6 +76,8 @@ import axios from 'axios'
 import {toast} from 'react-hot-toast'
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
+import SimplePagination from '@/components/simplepagination';
+import SearchInput from '@/components/searchinput';
 
 export function UserManagement() {
   const [mobUsers, setmobUsers] = useState([]);
@@ -206,37 +208,18 @@ export function UserManagement() {
         });
     }, []);
   
-    const filteredUsers = mobUsers.filter((mobUser) =>
-      mobUser.email.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredUsers = mobUsers.filter((mobUsers) => {
+      const matchesSearch = mobUsers.email.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesSearch;
+    });
     
-    // Calculate total pages based on filtered users
-    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-    const maxPagesToShow = 5;
-    
-    // Determine start and end pages
-    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-    
-    // Adjust start page if not enough pages to show
-    if (endPage - startPage + 1 < maxPagesToShow) {
-      startPage = Math.max(1, endPage - maxPagesToShow + 1);
-    }
-    
-    // Ensure the last page is always visible
-    const showLastPage = totalPages > endPage;
-    
-    // Adjust to ensure first page is visible
-    const showFirstPage = startPage > 1;
-    
-    // Handle page change function
-    const handlePageChange = (page) => {
-      if (page >= 1 && page <= totalPages) {
-        setCurrentPage(page);
-      }
+  
+    const handleSearchChange = (e) => {
+      setSearchQuery(e.target.value);
+      setCurrentPage(1); // Reset to the first page when search changes
     };
-    
-    // Paginate the filtered users
+  
+    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
     const paginatedUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
     
   return (
@@ -258,18 +241,13 @@ export function UserManagement() {
                         </div>
                         <div className="ml-auto flex items-center gap-2">
                         <div className="w-full flex-1">
-                          <form>
-                            <div className="relative">
-                              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                type="text"
-                                placeholder="Search by email..."
+                          <div className="w-full flex-1">
+                            <SearchInput 
                                 value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full appearance-none bg-background pl-8 shadow-none"
-                              />
-                            </div>
-                          </form>
+                                onChange={handleSearchChange}
+                                placeholder="Search by Admin Name..."
+                            />
+                          </div>
                         </div>
                         <Dialog>
                             <DialogTrigger>
@@ -327,7 +305,8 @@ export function UserManagement() {
                       </TableRow>
                     </TableHeader> 
                     <TableBody>
-                      {paginatedUsers.map((mobUsers) => (
+                    {paginatedUsers.length > 0 ? (
+                      paginatedUsers.map((mobUsers) => (
                         <TableRow key={mobUsers._id}>
                           <TableCell className="hidden sm:table-cell">
                             {mobUsers._id}
@@ -429,63 +408,24 @@ export function UserManagement() {
                             </DropdownMenu>
                           </TableCell>
                         </TableRow>
-                      ))}
+                      ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={5} className="text-center">
+                            Nothing Found
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </CardContent>
-                <CardFooter>
-                <Pagination>
-  <PaginationContent>
-    {currentPage !== 1 && (
-      <PaginationItem>
-        <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-      </PaginationItem>
-    )}
-
-    {showFirstPage && (
-      <PaginationItem>
-        <PaginationLink onClick={() => handlePageChange(1)} isActive={currentPage === 1}>
-          1
-        </PaginationLink>
-      </PaginationItem>
-    )}
-
-    {showFirstPage && startPage > 2 && (
-      <PaginationItem>
-        <span>...</span>
-      </PaginationItem>
-    )}
-
-    {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
-      <PaginationItem key={startPage + index}>
-        <PaginationLink onClick={() => handlePageChange(startPage + index)} isActive={startPage + index === currentPage}>
-          {startPage + index}
-        </PaginationLink>
-      </PaginationItem>
-    ))}
-
-    {showLastPage && endPage < totalPages - 1 && (
-      <PaginationItem>
-        <span>...</span>
-      </PaginationItem>
-    )}
-
-    {showLastPage && (
-      <PaginationItem>
-        <PaginationLink onClick={() => handlePageChange(totalPages)} isActive={currentPage === totalPages}>
-          {totalPages}
-        </PaginationLink>
-      </PaginationItem>
-    )}
-
-    {currentPage < totalPages && (
-      <PaginationItem>
-        <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-      </PaginationItem>
-    )}
-  </PaginationContent>
-</Pagination>
-
+                <CardFooter className="flex justify-center p-4">
+                  {/* Pagination Component at the bottom */}
+                  <SimplePagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={setCurrentPage} // Pass the state setter function
+                  />
                 </CardFooter>
               </Card>
         </main>

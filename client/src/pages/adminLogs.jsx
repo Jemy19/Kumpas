@@ -111,6 +111,10 @@ import {toast} from 'react-hot-toast'
 import axios from 'axios'
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
+import SimplePagination from '@/components/simplepagination';
+import SearchInput from '@/components/searchinput';
+import Filter from '@/components/filter';
+
 
 export function Adminlogs() {
   const [loading, setLoading] = useState(true);
@@ -118,6 +122,9 @@ export function Adminlogs() {
   const [itemsPerPage] = useState(8);
   const [logs, setLogs] = useState([]);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const categories = ["info", "error", "warn", "debug"];
 
   useEffect(() => {
     axios.get('/adminLogs')
@@ -132,31 +139,27 @@ export function Adminlogs() {
       });
   }, []);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handleCategoryChange = (category) => {
+    setSelectedCategories((prevCategories) => {
+      const updatedCategories = prevCategories.includes(category)
+        ? prevCategories.filter((c) => c !== category)
+        : [...prevCategories, category];
+      setCurrentPage(1); // Reset to the first page when category changes
+      return updatedCategories;
+    });
   };
-  // Paginate the logs based on the current page
-  const paginatedWords = logs.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  
 
-  // Calculate total pages for logs
-  const totalPages = Math.ceil(logs.length / itemsPerPage);
-  const maxPagesToShow = 5;
+  const filteredLogs = logs.filter((log) => {
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(log.level);
+    const matchesSearch = log.adminName.toLowerCase().includes(searchQuery.toLowerCase());
+    const result = matchesSearch && matchesCategory;
+    return result;
+  });
 
-  // Determine the range of pages to show
-  let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-  let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+  const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
+  const paginatedLogs = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  // Adjust start page if necessary
-  if (endPage - startPage + 1 < maxPagesToShow) {
-    startPage = Math.max(1, endPage - maxPagesToShow + 1);
-  }
-
-  // Show first and last pages
-  const showLastPage = totalPages > endPage;
-  const showFirstPage = startPage > 1;
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -167,37 +170,23 @@ export function Adminlogs() {
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 mt-2">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
-                  <div className="flex items-center">
-                  <CardTitle>Admin Logs</CardTitle>
-                  <div className="ml-auto flex items-center gap-2">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-8 gap-1">
-                          <ListFilter className="h-3.5 w-3.5" />
-                          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                            Filter
-                          </span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuCheckboxItem checked>
-                          Active
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>Draft</DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>
-                          Archived
-                        </DropdownMenuCheckboxItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                  </div>
-                  <CardDescription>
-                    View all your logs
-                  </CardDescription>
-                  
-                </CardHeader>
+                    <div className="flex items-center">
+                      <CardTitle>Super Admin Logs</CardTitle>
+                      <div className="ml-auto flex items-center gap-2">
+                        <div className="flex items-center">
+                          <Filter
+                            selectedCategories={selectedCategories}
+                            handleCategoryChange={handleCategoryChange}
+                            categories={categories}
+                            titlelabel="Filter by Level"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <CardDescription>
+                      View all Logs
+                    </CardDescription>
+                  </CardHeader>
                 <CardContent>
                   <Table>
                     <TableHeader>
@@ -214,7 +203,8 @@ export function Adminlogs() {
                       </TableRow>
                     </TableHeader> 
                     <TableBody >
-                      {paginatedWords.map((log) => (
+                    {paginatedLogs.length > 0 ? (
+                      paginatedLogs.map((log) => (
                         <TableRow>
                           <TableCell className="hidden sm:table-cell">
                             {log._id}
@@ -232,68 +222,24 @@ export function Adminlogs() {
                             {log.level}
                           </TableCell>
                         </TableRow>
-                      ))}
+                      ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={5} className="text-center">
+                            No logs found
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </CardContent>
-                <CardFooter>
-                  <Pagination>
-                    <PaginationContent>
-                      {currentPage !== 1 && (
-                        <PaginationItem>
-                          <PaginationPrevious
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            disabled={currentPage === 1}
-                          />
-                        </PaginationItem>
-                      )}
-
-                      {showFirstPage && (
-                        <PaginationItem>
-                          <PaginationLink onClick={() => handlePageChange(1)} isActive={currentPage === 1}>
-                            1
-                          </PaginationLink>
-                        </PaginationItem>
-                      )}
-
-                      {showFirstPage && startPage > 2 && (
-                        <PaginationItem>
-                          <span>...</span>
-                        </PaginationItem>
-                      )}
-
-                      {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
-                        <PaginationItem key={startPage + index}>
-                          <PaginationLink
-                            onClick={() => handlePageChange(startPage + index)}
-                            isActive={startPage + index === currentPage}
-                          >
-                            {startPage + index}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-
-                      {showLastPage && endPage < totalPages - 1 && (
-                        <PaginationItem>
-                          <span>...</span>
-                        </PaginationItem>
-                      )}
-
-                      {showLastPage && (
-                        <PaginationItem>
-                          <PaginationLink onClick={() => handlePageChange(totalPages)} isActive={currentPage === totalPages}>
-                            {totalPages}
-                          </PaginationLink>
-                        </PaginationItem>
-                      )}
-
-                      {currentPage < totalPages && (
-                        <PaginationItem>
-                          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-                        </PaginationItem>
-                      )}
-                    </PaginationContent>
-                  </Pagination>
+                <CardFooter className="flex justify-center p-4">
+                  {/* Pagination Component at the bottom */}
+                  <SimplePagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage} // Pass the state setter function
+                  />
                 </CardFooter>
               </Card>
         </main>

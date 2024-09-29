@@ -71,13 +71,15 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
+import SimplePagination from '@/components/simplepagination';
+import SearchInput from '@/components/searchinput';
+import Filter from '@/components/filter';
 
 export function Feedback() {
   const [feedback, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
-  const [searchQuery, setSearchQuery] = useState(""); // State for search input
   const [selectedCategories, setSelectedCategories] = useState([]); // State for selected categories
 
   // Categories for filtering
@@ -96,47 +98,26 @@ export function Feedback() {
       });
   }, []);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  // Handle checkbox selection for categories
   const handleCategoryChange = (category) => {
-    setSelectedCategories((prevCategories) =>
-      prevCategories.includes(category)
+    setSelectedCategories((prevCategories) => {
+      const updatedCategories = prevCategories.includes(category)
         ? prevCategories.filter((c) => c !== category)
-        : [...prevCategories, category]
-    );
+        : [...prevCategories, category];
+      setCurrentPage(1); // Reset to the first page when category changes
+      return updatedCategories;
+    });
   };
+  
+  
 
-  // Filter feedback based on search query and selected categories
-  const filteredFeedback = feedback.filter((item) => {
-    const matchesSearch = item.subject.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(item.subject);
-    return matchesSearch && matchesCategory;
+  const filteredLogs = feedback.filter((feedback) => {
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(feedback.subject);
+    return matchesCategory;
   });
+  
 
-  const paginatedFeedback = filteredFeedback.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-  
-  // Calculate total pages for filtered feedback
-  const totalPages = Math.ceil(filteredFeedback.length / itemsPerPage);
-  const maxPagesToShow = 5;
-  
-  // Determine the range of pages to show
-  let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-  let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-  
-  // Adjust start page if necessary
-  if (endPage - startPage + 1 < maxPagesToShow) {
-    startPage = Math.max(1, endPage - maxPagesToShow + 1);
-  }
-  
-  // Show first and last pages
-  const showLastPage = totalPages > endPage;
-  const showFirstPage = startPage > 1;
+  const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
+  const paginatedFeedback = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -151,43 +132,21 @@ export function Feedback() {
               <Card>
                 <CardHeader>
                   <div className="flex items-center">
-                    <CardTitle>Feedback</CardTitle>
+                    <CardTitle>Super Admin Logs</CardTitle>
                     <div className="ml-auto flex items-center gap-2">
-                      {/* Search Input */}
-                      <Input
-                        type="text"
-                        placeholder="Search feedback..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-48"
-                      />
-                      {/* Filter Dropdown */}
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="h-8 gap-1">
-                            <ListFilter className="h-3.5 w-3.5" />
-                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                              Filter
-                            </span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Filter by Category</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          {categories.map((category) => (
-                            <DropdownMenuCheckboxItem
-                              key={category}
-                              checked={selectedCategories.includes(category)}
-                              onCheckedChange={() => handleCategoryChange(category)}
-                            >
-                              {category}
-                            </DropdownMenuCheckboxItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <div className="flex items-center">
+                        <Filter
+                          selectedCategories={selectedCategories}
+                          handleCategoryChange={handleCategoryChange}
+                          categories={categories}
+                          titlelabel="Filter by Subject"
+                        />
+                      </div>
                     </div>
                   </div>
-                  <CardDescription>View user feedback.</CardDescription>
+                  <CardDescription>
+                    View user feedback.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Table>
@@ -201,7 +160,8 @@ export function Feedback() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {paginatedFeedback.map((item) => (
+                    {paginatedFeedback.length > 0 ? (
+                      paginatedFeedback.map((item) => (
                         <TableRow key={item._id}>
                           <TableCell>{item._id}</TableCell>
                           <TableCell>{item.subject}</TableCell>
@@ -227,68 +187,24 @@ export function Feedback() {
                             </Dialog>
                           </TableCell>
                         </TableRow>
-                      ))}
+                      ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={5} className="text-center">
+                            Nothing Found
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </CardContent>
-                <CardFooter>
-                <Pagination>
-                  <PaginationContent>
-                    {currentPage !== 1 && (
-                      <PaginationItem>
-                        <PaginationPrevious
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
-                        />
-                      </PaginationItem>
-                    )}
-
-                    {showFirstPage && (
-                      <PaginationItem>
-                        <PaginationLink onClick={() => handlePageChange(1)} isActive={currentPage === 1}>
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                    )}
-
-                    {showFirstPage && startPage > 2 && (
-                      <PaginationItem>
-                        <span>...</span>
-                      </PaginationItem>
-                    )}
-
-                    {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
-                      <PaginationItem key={startPage + index}>
-                        <PaginationLink
-                          onClick={() => handlePageChange(startPage + index)}
-                          isActive={startPage + index === currentPage}
-                        >
-                          {startPage + index}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-
-                    {showLastPage && endPage < totalPages - 1 && (
-                      <PaginationItem>
-                        <span>...</span>
-                      </PaginationItem>
-                    )}
-
-                    {showLastPage && (
-                      <PaginationItem>
-                        <PaginationLink onClick={() => handlePageChange(totalPages)} isActive={currentPage === totalPages}>
-                          {totalPages}
-                        </PaginationLink>
-                      </PaginationItem>
-                    )}
-
-                    {currentPage < totalPages && (
-                      <PaginationItem>
-                        <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-                      </PaginationItem>
-                    )}
-                  </PaginationContent>
-                </Pagination>
+                <CardFooter className="flex justify-center p-4">
+                  {/* Pagination Component at the bottom */}
+                  <SimplePagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage} // Pass the state setter function
+                  />
                 </CardFooter>
               </Card>
             </TabsContent>
