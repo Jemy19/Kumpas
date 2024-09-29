@@ -35,7 +35,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://ekumpas.vercel.app/ https://kumpas.onrender.com; connect-src 'self' https://kumpas.onrender.com; img-src 'self' https://kumpas.onrender.com; style-src 'self' 'unsafe-inline' https://ekumpas.vercel.app/; frame-src 'self' https://kumpas.onrender.com; media-src 'self' https://kumpas.onrender.com; object-src 'none'; base-uri 'self';"
+          "value": "default-src 'self'; script-src 'self' https://ekumpas.vercel.app https://kumpas.onrender.com; connect-src 'self' https://kumpas.onrender.com; img-src 'self' https://kumpas.onrender.com; style-src 'self' 'unsafe-inline' https://ekumpas.vercel.app; frame-src 'self' https://kumpas.onrender.com; media-src 'self' https://kumpas.onrender.com; object-src 'none'; base-uri 'self';"
         }
       ]
     },
