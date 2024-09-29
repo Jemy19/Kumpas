@@ -76,6 +76,8 @@ import axios from 'axios'
 import {toast} from 'react-hot-toast'
 import NavbarSu from '@/components/NavbarSu';
 import HeaderSu from '@/components/HeaderSu';
+import SimplePagination from '@/components/simplepagination';
+import SearchInput from '@/components/searchinput';
 
 export function AccountManagement() {
   const { user, logout } = useContext(UserContext);
@@ -84,6 +86,7 @@ export function AccountManagement() {
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
 
   // create account
   const [data, setData] = useState({
@@ -196,10 +199,21 @@ export function AccountManagement() {
             setLoading(false);
         });
     }, []);
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+
+
+  const filteredAdmins = admins.filter((admins) => {
+    const matchesSearch = admins.email.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
+  });
+  
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to the first page when search changes
   };
-  const paginatedAdmins = admins.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const totalPages = Math.ceil(filteredAdmins.length / itemsPerPage);
+  const paginatedAdmins = filteredAdmins.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -218,6 +232,13 @@ export function AccountManagement() {
                         </CardDescription>
                         </div>
                         <div className="ml-auto flex items-center gap-2">
+                          <div className="w-full flex-1">
+                            <SearchInput 
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                placeholder="Search by Admin email..."
+                            />
+                          </div>
                         <Dialog>
                             <DialogTrigger>
                             <Button size="sm" className="h-8 gap-1">
@@ -280,7 +301,8 @@ export function AccountManagement() {
                       </TableRow>
                     </TableHeader> 
                     <TableBody >
-                      {paginatedAdmins.map((admin) => (
+                    {paginatedAdmins.length > 0 ? (
+                      paginatedAdmins.map((admin) => (
                         <TableRow>
                           <TableCell className="hidden sm:table-cell">
                             {admin._id}
@@ -389,33 +411,24 @@ export function AccountManagement() {
                             </DropdownMenu>
                           </TableCell>
                         </TableRow>
-                      ))}
+                      ))) : (
+                        <TableRow>
+                          <TableCell colSpan={5} className="text-center">
+                            Nothing Found
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </TableBody>
                   </Table>
                 </CardContent>
-                <CardFooter>
-                <Pagination>
-                    <PaginationContent>
-                        {currentPage != 1 && (
-                        <PaginationItem>
-                        <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-                        </PaginationItem>
-                        )}
-                        {Array(Math.ceil(admins.length / itemsPerPage)).fill(0).map((_, index) => (
-                        <PaginationItem key={index}>
-                            <PaginationLink onClick={() => handlePageChange(index + 1)} isActive={index + 1 === currentPage}>
-                            {index + 1}
-                            </PaginationLink>
-                        </PaginationItem>
-                        ))}
-                        {currentPage < Math.ceil(admins.length / itemsPerPage) && (
-                        <PaginationItem>
-                            <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-                        </PaginationItem>
-                        )}
-                    </PaginationContent>
-                </Pagination>       
-                </CardFooter>
+                <CardFooter className="flex justify-center p-4">
+                  {/* Pagination Component at the bottom */}
+                  <SimplePagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={setCurrentPage} // Pass the state setter function
+                  />
+              </CardFooter>
               </Card>
       </main>
     </div>
