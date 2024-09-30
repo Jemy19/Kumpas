@@ -78,15 +78,38 @@ import NavbarSu from '@/components/NavbarSu';
 import HeaderSu from '@/components/HeaderSu';
 import SimplePagination from '@/components/simplepagination';
 import SearchInput from '@/components/searchinput';
+import UserSkeleton from '../../skeletons/userskeleton';
 
 export function AccountManagement() {
-  const { user, logout } = useContext(UserContext);
   const [admins, setAdmins] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
+
+
+  //responsive
+
+  const updateItemsPerPage = () => {
+    if (window.innerHeight <= 800) {
+      setItemsPerPage(6); // Set to your desired number
+    } else {
+      setItemsPerPage(8); // Reset to the default
+    }
+  };
+
+  useEffect(() => {
+    // Set initial items per page
+    updateItemsPerPage();
+
+    // Add event listener
+    window.addEventListener('resize', updateItemsPerPage);
+    return () => {
+      // Cleanup listener
+      window.removeEventListener('resize', updateItemsPerPage);
+    };
+  }, []);
 
   // create account
   const [data, setData] = useState({
@@ -222,6 +245,10 @@ export function AccountManagement() {
       <div className="flex flex-col">
         <HeaderSu />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 mt-2">
+          {loading ? (
+            <UserSkeleton />
+            ) : (
+            <>
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                     <div className="flex items-center justify-between">
@@ -295,123 +322,114 @@ export function AccountManagement() {
                         <TableHead className="hidden md:table-cell">
                           Created at
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="hidden md:table-cell">
                           Actions
+                        </TableHead>
+                        <TableHead className="block md:hidden">
+                          Details
                         </TableHead>
                       </TableRow>
                     </TableHeader> 
-                    <TableBody >
-                    {paginatedAdmins.length > 0 ? (
-                      paginatedAdmins.map((admin) => (
-                        <TableRow>
-                          <TableCell className="hidden sm:table-cell">
-                            {admin._id}
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            {admin.name}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {admin.email}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {admin.role}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {admin.updatedAt}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                            {admin.createdAt}
-                          </TableCell>
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  aria-haspopup="true"
-                                  size="icon"
-                                  variant="ghost"
-                                >
-                                  <MoreHorizontal className="h-4 w-4" />
-                                  <span className="sr-only">Toggle menu</span>
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <Sheet>
-                                  <SheetTrigger asChild>
-                                    <Button onClick={() => handleEdit(admin)} className="block py-2 px-4 rounded mb-1 w-32 h-10" variant="outline">Edit</Button>
-                                  </SheetTrigger>
-                                  <SheetContent>
-                                    <SheetHeader>
-                                      <SheetTitle>Edit Account</SheetTitle>
-                                      <SheetDescription>
-                                        Make changes to your Account here. Click Update when you're done.
-                                      </SheetDescription>
-                                    </SheetHeader>
-                                    <form onSubmit={(e) => updateAcc(e, updateData.id, updateData)}>
-                                      <div className="grid gap-4">
-                                      <Label>Name</Label>
-                                      <Input
-                                          type='text'
-                                          placeholder='Enter Name...'
-                                          value={updateData.name}
-                                          onChange={(e) => setUpdateData({ ...updateData, name: e.target.value })}
-                                      />
-                                      <Label>email</Label>
-                                      <Input
-                                          type='email'
-                                          placeholder='Enter Email...'
-                                          value={updateData.email}
-                                          onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
-                                      />
-                                      <Label>New Password</Label>
-                                      <Input
-                                          type='text'
-                                          placeholder='Enter Password...'
-                                          onChange={(e) => setUpdateData({ ...updateData, password: e.target.value })}
-                                      />
-                                      <Label>Confirm Password</Label>
-                                      <Input
-                                          type='text'
-                                          placeholder='Enter Password...'
-                                          onChange={(e) => setUpdateData({ ...updateData, confirmPassword: e.target.value })}
-                                      />
-                                      {errorMessage && (
-                                        <p className="text-red-500 text-sm">{errorMessage}</p>
-                                      )}
-                                      <SheetFooter>
-                                          <SheetClose asChild>
-                                            <Button type="submit">
-                                                UPDATE
-                                            </Button>
-                                          </SheetClose>
-                                      </SheetFooter>
-                                      </div>
-                                    </form>
-                                  </SheetContent>
-                                </Sheet>  
-                                <AlertDialog>
-                                  <AlertDialogTrigger asChild>
-                                    <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
-                                  </AlertDialogTrigger>
-                                  <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                      <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently 
-                                        delete the  <br />  Account: {admin.name}
-                                      </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction onClick={() => deleteAcc(admin._id)}>Continue</AlertDialogAction>
-                                    </AlertDialogFooter>
-                                  </AlertDialogContent>
-                                </AlertDialog>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      ))) : (
+                    <TableBody>
+                      {paginatedAdmins.length > 0 ? (
+                        paginatedAdmins.map((admin) => (
+                          <TableRow key={admin._id}>
+                            <TableCell className="hidden md:table-cell">{admin._id}</TableCell>
+                            <TableCell className="hidden md:table-cell">{admin.name}</TableCell>
+                            <TableCell className="hidden md:table-cell">{admin.email}</TableCell>
+                            <TableCell className="hidden md:table-cell">{admin.role}</TableCell>
+                            <TableCell className="hidden md:table-cell">{admin.updatedAt}</TableCell>
+                            <TableCell className="hidden md:table-cell">{admin.createdAt}</TableCell>
+                            <TableCell className="flex flex-col sm:items-start md:items-center">
+                              <span className="block md:hidden"><strong>ID:</strong> {admin._id}</span>
+                              <span className="block md:hidden"><strong>Name:</strong> {admin.name}</span>
+                              <span className="block md:hidden"><strong>Email:</strong> {admin.email}</span>
+                              <span className="block md:hidden"><strong>Role:</strong> {admin.role}</span>
+                              <span className="block md:hidden"><strong>Updated:</strong> {admin.updatedAt}</span>
+                              <span className="block md:hidden"><strong>Created:</strong> {admin.createdAt}</span>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button aria-haspopup="true" size="icon" variant="ghost">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                    <span className="sr-only">Toggle menu</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                  <Sheet>
+                                    <SheetTrigger asChild>
+                                      <Button onClick={() => handleEdit(admin)} className="block py-2 px-4 rounded mb-1 w-32 h-10" variant="outline">Edit</Button>
+                                    </SheetTrigger>
+                                    <SheetContent>
+                                      <SheetHeader>
+                                        <SheetTitle>Edit Account</SheetTitle>
+                                        <SheetDescription>
+                                          Make changes to your Account here. Click Update when you're done.
+                                        </SheetDescription>
+                                      </SheetHeader>
+                                      <form onSubmit={(e) => updateAcc(e, updateData.id)}>
+                                        <div className="grid gap-4">
+                                          <Label>Name</Label>
+                                          <Input
+                                            type='text'
+                                            placeholder='Enter Name...'
+                                            value={updateData.name}
+                                            onChange={(e) => setUpdateData({ ...updateData, name: e.target.value })}
+                                          />
+                                          <Label>Email</Label>
+                                          <Input
+                                            type='email'
+                                            placeholder='Enter Email...'
+                                            value={updateData.email}
+                                            onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
+                                          />
+                                          <Label>New Password</Label>
+                                          <Input
+                                            type='password'
+                                            placeholder='Enter Password...'
+                                            onChange={(e) => setUpdateData({ ...updateData, password: e.target.value })}
+                                          />
+                                          <Label>Confirm Password</Label>
+                                          <Input
+                                            type='password'
+                                            placeholder='Confirm Password...'
+                                            onChange={(e) => setUpdateData({ ...updateData, confirmPassword: e.target.value })}
+                                          />
+                                          {errorMessage && (
+                                            <p className="text-red-500 text-sm">{errorMessage}</p>
+                                          )}
+                                          <SheetFooter>
+                                            <SheetClose asChild>
+                                              <Button type="submit">UPDATE</Button>
+                                            </SheetClose>
+                                          </SheetFooter>
+                                        </div>
+                                      </form>
+                                    </SheetContent>
+                                  </Sheet>
+                                  <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                      <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                          This action cannot be undone. This will permanently delete the Account: {admin.name}
+                                        </AlertDialogDescription>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction onClick={() => deleteAcc(admin._id)}>Continue</AlertDialogAction>
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
                         <TableRow>
                           <TableCell colSpan={5} className="text-center">
                             Nothing Found
@@ -424,15 +442,18 @@ export function AccountManagement() {
                 <CardFooter className="flex justify-center p-4">
                   {/* Pagination Component at the bottom */}
                   <SimplePagination
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      onPageChange={setCurrentPage} // Pass the state setter function
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage} // Pass the state setter function
                   />
-              </CardFooter>
+                </CardFooter>
               </Card>
+            </>
+         )}
       </main>
     </div>
   </div>
-  )
+)
+
 }
 export default AccountManagement;

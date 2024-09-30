@@ -120,7 +120,7 @@ import HeaderSu from '@/components/HeaderSu';
 import SimplePagination from '@/components/simplepagination';
 import SearchInput from '@/components/searchinput';
 import Filter from '@/components/filter';
-
+import UserSkeleton from '../../skeletons/userskeleton';
 
 export function SaSignManagement() {
     // for creating new sign language
@@ -132,6 +132,7 @@ export function SaSignManagement() {
       video: '',
     })
     const vidUpRef = useRef(null);
+  
     // for creating new sign language
     const addWord = async (e) => {
       e.preventDefault();
@@ -171,6 +172,27 @@ export function SaSignManagement() {
     const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
     const [selectedCategories, setSelectedCategories] = useState([]);
 
+
+    const updateItemsPerPage = () => {
+      if (window.innerHeight <= 800) {
+        setItemsPerPage(6); // Set to your desired number
+      } else {
+        setItemsPerPage(8); // Reset to the default
+      }
+    };
+  
+    useEffect(() => {
+      // Set initial items per page
+      updateItemsPerPage();
+  
+      // Add event listener
+      window.addEventListener('resize', updateItemsPerPage);
+      return () => {
+        // Cleanup listener
+        window.removeEventListener('resize', updateItemsPerPage);
+      };
+    }, []);
+    
     useEffect(() => {
         axios.get('/signWords')
             .then(({ data }) => {
@@ -297,6 +319,10 @@ export function SaSignManagement() {
       <div className="flex flex-col">
         <HeaderSu />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          {loading ? (
+            <UserSkeleton />
+            ) : (
+            <>        
           <Tabs defaultValue="all">
             <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
@@ -374,20 +400,23 @@ export function SaSignManagement() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="hidden w-[100px] sm:table-cell">
+                        <TableHead className="hidden md:table-cell">
                           VideoPath
                         </TableHead>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Category</TableHead>
+                        <TableHead className="hidden md:table-cell">Title</TableHead>
+                        <TableHead className="hidden md:table-cell">Description</TableHead>
+                        <TableHead className="hidden md:table-cell">Category</TableHead>
                         <TableHead className="hidden md:table-cell">
                           Updated at
                         </TableHead>
                         <TableHead className="hidden md:table-cell">
                           Created at
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="hidden md:table-cell">
                           Actions
+                        </TableHead>
+                        <TableHead className="block md:hidden">
+                          Details
                         </TableHead>
                       </TableRow>
                     </TableHeader> 
@@ -395,7 +424,7 @@ export function SaSignManagement() {
                     {paginatedWords.length > 0 ? (
                       paginatedWords.map((word) => (
                         <TableRow>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="hidden md:table-cell">
                               <Dialog>
                                   <DialogTrigger>
                                   <Button>
@@ -415,7 +444,7 @@ export function SaSignManagement() {
                                   </DialogContent>
                                 </Dialog>
                           </TableCell>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="hidden md:table-cell">
                             {word.title}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
@@ -430,7 +459,32 @@ export function SaSignManagement() {
                           <TableCell className="hidden md:table-cell">
                             {word.createdAt}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="flex flex-col sm:items-start md:items-center">
+                              <span className="block md:hidden"><strong>Video:</strong>
+                                <Dialog>
+                                    <DialogTrigger>
+                                    <Button>
+                                      Play Video
+                                    </Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                        <DialogTitle>{word.video}</DialogTitle>
+                                        <DialogDescription>
+                                        <div>
+                                        <h2>Video Stream</h2>
+                                        <video controls width="400" src={`https://kumpas.onrender.com/videos/${word.video}`} type="video/mp4" />
+                                        </div>
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    </DialogContent>
+                                </Dialog>
+                              </span>
+                              <span className="block md:hidden"><strong>title:</strong> {word.title}</span>
+                              <span className="block md:hidden"><strong>description:</strong> {word.description}</span>
+                              <span className="block md:hidden"><strong>category:</strong> {word.category}</span>
+                              <span className="block md:hidden"><strong>Updated:</strong> {word.updatedAt}</span>
+                              <span className="block md:hidden"><strong>Created:</strong> {word.createdAt}</span>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button
@@ -543,6 +597,8 @@ export function SaSignManagement() {
               </Card>
             </TabsContent>
           </Tabs>
+          </>
+         )}
         </main>
       </div>
     </div>

@@ -76,6 +76,7 @@ import NavbarSu from '@/components/NavbarSu';
 import HeaderSu from '@/components/HeaderSu';
 import SimplePagination from '@/components/simplepagination';
 import SearchInput from '@/components/searchinput';
+import UserSkeleton from '../../skeletons/userskeleton';
 
 export function SaUserManagement() {
   const [mobUsers, setmobUsers] = useState([]);
@@ -84,6 +85,28 @@ export function SaUserManagement() {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
+
+    //responsive
+
+    const updateItemsPerPage = () => {
+      if (window.innerHeight <= 800) {
+        setItemsPerPage(6); // Set to your desired number
+      } else {
+        setItemsPerPage(8); // Reset to the default
+      }
+    };
+  
+    useEffect(() => {
+      // Set initial items per page
+      updateItemsPerPage();
+  
+      // Add event listener
+      window.addEventListener('resize', updateItemsPerPage);
+      return () => {
+        // Cleanup listener
+        window.removeEventListener('resize', updateItemsPerPage);
+      };
+    }, []);
 
   // create account
   const [data, setData] = useState({
@@ -226,6 +249,10 @@ export function SaUserManagement() {
       <div className="flex flex-col">
         <HeaderSu />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 mt-2">
+          {loading ? (
+            <UserSkeleton />
+            ) : (
+            <>
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                     <div className="flex items-center justify-between">
@@ -293,19 +320,22 @@ export function SaUserManagement() {
                         <TableHead className="hidden md:table-cell">
                           Created at
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="hidden md:table-cell">
                           Actions
+                        </TableHead>
+                        <TableHead className="block md:hidden">
+                          Details
                         </TableHead>
                       </TableRow>
                     </TableHeader> 
                     <TableBody >
                     {paginatedUsers.length > 0 ? (
                       paginatedUsers.map((mobUsers) => (
-                        <TableRow>
-                          <TableCell className="hidden sm:table-cell">
+                        <TableRow key={mobUsers._id}>
+                          <TableCell className="hidden md:table-cell">
                             {mobUsers._id}
                           </TableCell>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="hidden md:table-cell">
                             {mobUsers.username}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
@@ -320,7 +350,13 @@ export function SaUserManagement() {
                           <TableCell className="hidden md:table-cell">
                             {mobUsers.createdAt}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="flex flex-col sm:items-start md:items-center">
+                              <span className="block md:hidden"><strong>ID:</strong> {mobUsers._id}</span>
+                              <span className="block md:hidden"><strong>Name:</strong> {mobUsers.username}</span>
+                              <span className="block md:hidden"><strong>Email:</strong> {mobUsers.email}</span>
+                              <span className="block md:hidden"><strong>Role:</strong> {mobUsers.role}</span>
+                              <span className="block md:hidden"><strong>Updated:</strong> {mobUsers.updatedAt}</span>
+                              <span className="block md:hidden"><strong>Created:</strong> {mobUsers.createdAt}</span>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button
@@ -422,6 +458,8 @@ export function SaUserManagement() {
                   />
               </CardFooter>
               </Card>
+              </>
+         )}
         </main>
       </div>
     </div>

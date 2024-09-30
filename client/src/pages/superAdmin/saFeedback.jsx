@@ -114,15 +114,36 @@ import HeaderSu from '@/components/HeaderSu';
 import SimplePagination from '@/components/simplepagination';
 import SearchInput from '@/components/searchinput';
 import Filter from '@/components/filter';
+import UserSkeleton from '../../skeletons/userskeleton';
 
 export function SaFeedback() {
   const [feedback, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
   const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
   const [selectedCategories, setSelectedCategories] = useState([]);
   const categories = ["New Feature Requests", "Bug reports", "Performance issues", "New FSL Suggestions"];
+
+  const updateItemsPerPage = () => {
+    if (window.innerHeight <= 800) {
+      setItemsPerPage(6); // Set to your desired number
+    } else {
+      setItemsPerPage(8); // Reset to the default
+    }
+  };
+
+  useEffect(() => {
+    // Set initial items per page
+    updateItemsPerPage();
+
+    // Add event listener
+    window.addEventListener('resize', updateItemsPerPage);
+    return () => {
+      // Cleanup listener
+      window.removeEventListener('resize', updateItemsPerPage);
+    };
+  }, []);
 
   useEffect(() => {
     axios.get('/admin/getfeedback')
@@ -163,7 +184,7 @@ export function SaFeedback() {
   };
 
   const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
-  const paginatedWords = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedFeedback = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -172,6 +193,10 @@ export function SaFeedback() {
       <div className="flex flex-col">
         <HeaderSu />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+        {loading ? (
+          <UserSkeleton />
+          ) : (
+          <>
           <Tabs defaultValue="all">
             <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
@@ -204,31 +229,37 @@ export function SaFeedback() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>
+                        <TableHead className="hidden md:table-cell">
                           ID
                         </TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Sender</TableHead>
-                        <TableHead>
+                        <TableHead className="hidden md:table-cell">Category</TableHead>
+                        <TableHead className="hidden md:table-cell">Sender</TableHead>
+                        <TableHead className="hidden md:table-cell">
                           Rating
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="hidden md:table-cell">
                           Sent At
                         </TableHead>
-                        <TableHead>Feedback</TableHead>
+                        <TableHead className="hidden md:table-cell">Feedback</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Actions
+                        </TableHead>
+                        <TableHead className="block md:hidden">
+                          Details
+                        </TableHead>
                       </TableRow>
                     </TableHeader> 
                     <TableBody >
-                    {paginatedWords.length > 0 ? (
-                      paginatedWords.map((feedback) => (
+                    {paginatedFeedback.length > 0 ? (
+                      paginatedFeedback.map((feedback) => (
                         <TableRow>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="hidden md:table-cell">
                             {feedback._id}
                           </TableCell>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="hidden md:table-cell">
                             {feedback.subject}
                           </TableCell>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="hidden md:table-cell">
                             {feedback.email}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
@@ -237,7 +268,13 @@ export function SaFeedback() {
                           <TableCell className="hidden md:table-cell">
                             {feedback.createdAt}
                           </TableCell>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="flex flex-col sm:items-start md:items-center">
+                              <span className="block md:hidden"><strong>ID:</strong> {feedback._id}</span>
+                              <span className="block md:hidden"><strong>Name:</strong> {feedback.subject}</span>
+                              <span className="block md:hidden"><strong>Email:</strong> {feedback.email}</span>
+                              <span className="block md:hidden"><strong>Role:</strong> {feedback.rating}</span>
+                              <span className="block md:hidden"><strong>Updated:</strong> {feedback.updatedAt}</span>
+                              <span className="block md:hidden"><strong>Created:</strong> {feedback.createdAt}</span>
                           <Dialog>
                             <DialogTrigger>
                             <Button size="sm" className="h-8 gap-1">
@@ -281,6 +318,8 @@ export function SaFeedback() {
               </Card>
             </TabsContent> 
           </Tabs>
+          </>
+         )}
         </main>
       </div>
     </div>

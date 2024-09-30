@@ -106,17 +106,39 @@ import HeaderSu from '@/components/HeaderSu';
 import SimplePagination from '@/components/simplepagination';
 import SearchInput from '@/components/searchinput';
 import Filter from '@/components/filter';
+import UserSkeleton from '../../skeletons/userskeleton';
 
 export function Salogs() {
   const { user, logout } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
   const [logs, setLogs] = useState([]);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
   const [selectedCategories, setSelectedCategories] = useState([]);
   const categories = ["info", "error", "warn", "debug"];
+
+  const updateItemsPerPage = () => {
+    if (window.innerHeight <= 800) {
+      setItemsPerPage(6); // Set to your desired number
+    } else {
+      setItemsPerPage(8); // Reset to the default
+    }
+  };
+
+  useEffect(() => {
+    // Set initial items per page
+    updateItemsPerPage();
+
+    // Add event listener
+    window.addEventListener('resize', updateItemsPerPage);
+    return () => {
+      // Cleanup listener
+      window.removeEventListener('resize', updateItemsPerPage);
+    };
+  }, []);
+
 
   useEffect(() => {
     axios
@@ -126,6 +148,9 @@ export function Salogs() {
       })
       .catch((err) => {
         setError('Error fetching logs');
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -167,6 +192,10 @@ export function Salogs() {
       <div className="flex flex-col">
         <HeaderSu />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+        {loading ? (
+            <UserSkeleton />
+            ) : (
+            <>
           <Tabs defaultValue="all">
             <TabsContent value="all">
               <Card>
@@ -199,22 +228,32 @@ export function Salogs() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>ID</TableHead>
-                        <TableHead>Admin</TableHead>
-                        <TableHead>TimeStamp</TableHead>
-                        <TableHead>Message</TableHead>
-                        <TableHead>Level</TableHead>
+                        <TableHead className="hidden md:table-cell">ID</TableHead>
+                        <TableHead className="hidden md:table-cell">Admin</TableHead>
+                        <TableHead className="hidden md:table-cell">TimeStamp</TableHead>
+                        <TableHead className="hidden md:table-cell">Message</TableHead>
+                        <TableHead className="hidden md:table-cell">Level</TableHead>
+                        <TableHead className="block md:hidden">
+                          Details
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {paginatedLogs.length > 0 ? (
                         paginatedLogs.map((log) => (
                           <TableRow key={log._id}>
-                            <TableCell className="hidden sm:table-cell">{log._id}</TableCell>
+                            <TableCell className="hidden md:table-cell">{log._id}</TableCell>
                             <TableCell className="hidden md:table-cell">{log.adminName}</TableCell>
                             <TableCell className="hidden md:table-cell">{log.timestamp}</TableCell>
                             <TableCell className="hidden md:table-cell">{log.message}</TableCell>
                             <TableCell className="hidden md:table-cell">{log.level}</TableCell>
+                            <TableCell className="flex flex-col sm:items-start md:items-center">
+                              <span className="block md:hidden"><strong>ID:</strong> {log._id}</span>
+                              <span className="block md:hidden"><strong>Name:</strong> {log.adminName}</span>
+                              <span className="block md:hidden"><strong>Email:</strong> {log.timestamp}</span>
+                              <span className="block md:hidden"><strong>Role:</strong> {log.message}</span>
+                              <span className="block md:hidden"><strong>Updated:</strong> {log.level}</span>
+                            </TableCell>
                           </TableRow>
                         ))
                       ) : (
@@ -238,6 +277,8 @@ export function Salogs() {
               </Card>
             </TabsContent>
           </Tabs>
+            </>
+          )}
         </main>
         
       </div>
