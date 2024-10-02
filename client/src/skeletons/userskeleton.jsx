@@ -16,17 +16,11 @@ export function SkeletonAdminManagement() {
   </div>
 </div>
         {/* Table section */}
-        <div className="mt-8 space-y-6"> 
-          <div className="grid gap-6">
+        <div className="mt-20 space-y-6"> 
+          <div className="grid gap-1">
             {[...Array(8)].map((_, index) => (
-              <div key={index} className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-7 gap-4 items-center">
-                <Skeleton className="h-8 w-full sm:h-10 lg:h-12" /> {/* ID */}
-                <Skeleton className="h-8 w-full sm:h-10 lg:h-12" /> {/* Username */}
-                <Skeleton className="h-8 w-full sm:h-10 lg:h-12" /> {/* Email */}
-                <Skeleton className="h-8 w-full sm:h-10 lg:h-12" /> {/* Role */}
-                <Skeleton className="h-8 w-full sm:h-10 lg:h-12 hidden sm:block" /> {/* Updated At */}
-                <Skeleton className="h-8 w-full sm:h-10 lg:h-12 hidden lg:block" /> {/* Created At */}
-                <Skeleton className="h-8 w-24 sm:h-10 lg:h-12" /> {/* Actions */}
+              <div key={index} className=" items-center">
+                <Skeleton className="h-12 w-full sm:h-20 lg:h-16" />
               </div>
             ))}
           </div>
