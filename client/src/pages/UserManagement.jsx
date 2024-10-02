@@ -1,6 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { UserContext } from '../../context/userContext';
-import { Link } from 'react-router-dom';
 
 import { CircleUser, Menu, Package2, Search, MoreHorizontal, PlusCircle, Home, Package, Users} from "lucide-react"
 
@@ -78,6 +76,7 @@ import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import SimplePagination from '@/components/simplepagination';
 import SearchInput from '@/components/searchinput';
+import UserSkeleton from '../skeletons/userskeleton';
 
 export function UserManagement() {
   const [mobUsers, setmobUsers] = useState([]);
@@ -85,8 +84,29 @@ export function UserManagement() {
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
 
+    //responsive
+
+    const updateItemsPerPage = () => {
+      if (window.innerHeight <= 800) {
+        setItemsPerPage(6); // Set to your desired number
+      } else {
+        setItemsPerPage(8); // Reset to the default
+      }
+    };
+  
+    useEffect(() => {
+      // Set initial items per page
+      updateItemsPerPage();
+  
+      // Add event listener
+      window.addEventListener('resize', updateItemsPerPage);
+      return () => {
+        // Cleanup listener
+        window.removeEventListener('resize', updateItemsPerPage);
+      };
+    }, []);
 
   // create account
   const [data, setData] = useState({
@@ -207,7 +227,7 @@ export function UserManagement() {
             setLoading(false);
         });
     }, []);
-  
+
     const filteredUsers = mobUsers.filter((mobUsers) => {
       const matchesSearch = mobUsers.email.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesSearch;
@@ -221,7 +241,6 @@ export function UserManagement() {
   
     const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
     const paginatedUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-    
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -230,6 +249,10 @@ export function UserManagement() {
       <div className="flex flex-col">
         <Header />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 mt-2">
+          {loading ? (
+            <UserSkeleton />
+            ) : (
+            <>
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                     <div className="flex items-center justify-between">
@@ -240,7 +263,6 @@ export function UserManagement() {
                         </CardDescription>
                         </div>
                         <div className="ml-auto flex items-center gap-2">
-                        <div className="w-full flex-1">
                           <div className="w-full flex-1">
                             <SearchInput 
                                 value={searchQuery}
@@ -248,7 +270,6 @@ export function UserManagement() {
                                 placeholder="Search by Admin Name..."
                             />
                           </div>
-                        </div>
                         <Dialog>
                             <DialogTrigger>
                             <Button size="sm" className="h-8 gap-1">
@@ -299,19 +320,22 @@ export function UserManagement() {
                         <TableHead className="hidden md:table-cell">
                           Created at
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="hidden md:table-cell">
                           Actions
+                        </TableHead>
+                        <TableHead className="block md:hidden">
+                          Details
                         </TableHead>
                       </TableRow>
                     </TableHeader> 
-                    <TableBody>
+                    <TableBody >
                     {paginatedUsers.length > 0 ? (
                       paginatedUsers.map((mobUsers) => (
                         <TableRow key={mobUsers._id}>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="hidden md:table-cell">
                             {mobUsers._id}
                           </TableCell>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="hidden md:table-cell">
                             {mobUsers.username}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
@@ -326,7 +350,13 @@ export function UserManagement() {
                           <TableCell className="hidden md:table-cell">
                             {mobUsers.createdAt}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="flex flex-col sm:items-start md:items-center">
+                              <span className="block md:hidden"><strong>ID:</strong> {mobUsers._id}</span>
+                              <span className="block md:hidden"><strong>Name:</strong> {mobUsers.username}</span>
+                              <span className="block md:hidden"><strong>Email:</strong> {mobUsers.email}</span>
+                              <span className="block md:hidden"><strong>Role:</strong> {mobUsers.role}</span>
+                              <span className="block md:hidden"><strong>Updated:</strong> {mobUsers.updatedAt}</span>
+                              <span className="block md:hidden"><strong>Created:</strong> {mobUsers.createdAt}</span>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button
@@ -426,8 +456,10 @@ export function UserManagement() {
                       totalPages={totalPages}
                       onPageChange={setCurrentPage} // Pass the state setter function
                   />
-                </CardFooter>
+              </CardFooter>
               </Card>
+              </>
+         )}
         </main>
       </div>
     </div>

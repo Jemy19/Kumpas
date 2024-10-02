@@ -249,10 +249,10 @@ export function Salogs() {
                             <TableCell className="hidden md:table-cell">{log.level}</TableCell>
                             <TableCell className="flex flex-col sm:items-start md:items-center">
                               <span className="block md:hidden"><strong>ID:</strong> {log._id}</span>
-                              <span className="block md:hidden"><strong>Name:</strong> {log.adminName}</span>
-                              <span className="block md:hidden"><strong>Email:</strong> {log.timestamp}</span>
-                              <span className="block md:hidden"><strong>Role:</strong> {log.message}</span>
-                              <span className="block md:hidden"><strong>Updated:</strong> {log.level}</span>
+                              <span className="block md:hidden"><strong>Admin:</strong> {log.adminName}</span>
+                              <span className="block md:hidden"><strong>TimeStamp:</strong> {log.timestamp}</span>
+                              <span className="block md:hidden"><strong>Message:</strong> {log.message}</span>
+                              <span className="block md:hidden"><strong>Level:</strong> {log.level}</span>
                             </TableCell>
                           </TableRow>
                         ))

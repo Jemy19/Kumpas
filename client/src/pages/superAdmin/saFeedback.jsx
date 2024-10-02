@@ -202,7 +202,7 @@ export function SaFeedback() {
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <div className="flex items-center">
-                    <CardTitle>Super Admin Logs</CardTitle>
+                    <CardTitle>Feedback</CardTitle>
                     <div className="ml-auto flex items-center gap-2">
                       <div className="w-full flex-1">
                         <SearchInput 
@@ -270,11 +270,11 @@ export function SaFeedback() {
                           </TableCell>
                           <TableCell className="flex flex-col sm:items-start md:items-center">
                               <span className="block md:hidden"><strong>ID:</strong> {feedback._id}</span>
-                              <span className="block md:hidden"><strong>Name:</strong> {feedback.subject}</span>
-                              <span className="block md:hidden"><strong>Email:</strong> {feedback.email}</span>
-                              <span className="block md:hidden"><strong>Role:</strong> {feedback.rating}</span>
-                              <span className="block md:hidden"><strong>Updated:</strong> {feedback.updatedAt}</span>
-                              <span className="block md:hidden"><strong>Created:</strong> {feedback.createdAt}</span>
+                              <span className="block md:hidden"><strong>Category:</strong> {feedback.subject}</span>
+                              <span className="block md:hidden"><strong>Sender:</strong> {feedback.email}</span>
+                              <span className="block md:hidden"><strong>Rating:</strong> {feedback.rating}</span>
+                              <span className="block md:hidden"><strong>Sent At:</strong> {feedback.updatedAt}</span>
+                              <span className="block md:hidden"><strong>Feedback:</strong></span>
                           <Dialog>
                             <DialogTrigger>
                             <Button size="sm" className="h-8 gap-1">

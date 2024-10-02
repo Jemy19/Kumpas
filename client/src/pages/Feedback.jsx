@@ -14,10 +14,10 @@ import {
   MoreHorizontal,
   PlusCircle,
   File,
-} from "lucide-react";
+} from "lucide-react"
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -25,7 +25,7 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,63 +34,121 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-hot-toast';
-import axios from 'axios';
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table"
+  import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+  } from "@/components/ui/tabs"
+  import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+  } from "@/components/ui/tooltip"
+  import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+    DialogClose,
+  } from "@/components/ui/dialog"
+
+  import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+  
+  import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
+  import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+  } from "@/components/ui/pagination"
+import React, { useContext, useState, useEffect } from 'react';
+import {toast} from 'react-hot-toast'
+import axios from 'axios'
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import SimplePagination from '@/components/simplepagination';
-import SearchInput from '@/components/searchinput';
 import Filter from '@/components/filter';
+import UserSkeleton from '../skeletons/userskeleton';
 
 export function Feedback() {
   const [feedback, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8);
-  const [selectedCategories, setSelectedCategories] = useState([]); // State for selected categories
-
-  // Categories for filtering
+  const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const categories = ["New Feature Requests", "Bug reports", "Performance issues", "New FSL Suggestions"];
 
+  const updateItemsPerPage = () => {
+    if (window.innerHeight <= 800) {
+      setItemsPerPage(6); // Set to your desired number
+    } else {
+      setItemsPerPage(8); // Reset to the default
+    }
+  };
+
   useEffect(() => {
-    axios.get('/getFeedbackForAdmin')
+    // Set initial items per page
+    updateItemsPerPage();
+
+    // Add event listener
+    window.addEventListener('resize', updateItemsPerPage);
+    return () => {
+      // Cleanup listener
+      window.removeEventListener('resize', updateItemsPerPage);
+    };
+  }, []);
+
+  useEffect(() => {
+    axios.get('/getfeedbackforadmin')
       .then(({ data }) => {
         setFeedback(data);
       })
-      .catch(() => {
+      .catch((error) => {
         toast.error('Error fetching feedback data');
       })
       .finally(() => {
@@ -116,9 +174,13 @@ export function Feedback() {
   });
   
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to the first page when search changes
+  };
+
   const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
   const paginatedFeedback = filteredLogs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -127,12 +189,16 @@ export function Feedback() {
       <div className="flex flex-col">
         <Header />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+        {loading ? (
+          <UserSkeleton />
+          ) : (
+          <>
           <Tabs defaultValue="all">
             <TabsContent value="all">
-              <Card>
+              <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <div className="flex items-center">
-                    <CardTitle>Super Admin Logs</CardTitle>
+                    <CardTitle>Feedback</CardTitle>
                     <div className="ml-auto flex items-center gap-2">
                       <div className="flex items-center">
                         <Filter
@@ -152,39 +218,66 @@ export function Feedback() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>ID</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Rating</TableHead>
-                        <TableHead>Sent At</TableHead>
-                        <TableHead>Feedback</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          ID
+                        </TableHead>
+                        <TableHead className="hidden md:table-cell">Category</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Rating
+                        </TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Sent At
+                        </TableHead>
+                        <TableHead className="hidden md:table-cell">Feedback</TableHead>
+                        <TableHead className="hidden md:table-cell">
+                          Actions
+                        </TableHead>
+                        <TableHead className="block md:hidden">
+                          Details
+                        </TableHead>
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
+                    </TableHeader> 
+                    <TableBody >
                     {paginatedFeedback.length > 0 ? (
-                      paginatedFeedback.map((item) => (
-                        <TableRow key={item._id}>
-                          <TableCell>{item._id}</TableCell>
-                          <TableCell>{item.subject}</TableCell>
-                          <TableCell>{item.rating}</TableCell>
-                          <TableCell>{item.createdAt}</TableCell>
-                          <TableCell>
-                            <Dialog>
-                              <DialogTrigger>
-                                <Button size="sm" className="h-8 gap-1">
-                                  <PlusCircle className="h-3.5 w-3.5" />
-                                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                    Open Feedback
-                                  </span>
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent className="w-1/3 h-80 max-w-full">
-                                <DialogHeader>
-                                  <DialogTitle>{item.subject}</DialogTitle>
-                                  <DialogDescription>Feedback</DialogDescription>
-                                </DialogHeader>
-                                {item.feedback}
-                              </DialogContent>
-                            </Dialog>
+                      paginatedFeedback.map((feedback) => (
+                        <TableRow>
+                          <TableCell className="hidden md:table-cell">
+                            {feedback._id}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {feedback.subject}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {feedback.rating}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {feedback.createdAt}
+                          </TableCell>
+                          <TableCell className="flex flex-col sm:items-start md:items-center">
+                              <span className="block md:hidden"><strong>ID:</strong> {feedback._id}</span>
+                              <span className="block md:hidden"><strong>Category:</strong> {feedback.subject}</span>
+                              <span className="block md:hidden"><strong>Rating:</strong> {feedback.rating}</span>
+                              <span className="block md:hidden"><strong>Sent At	:</strong>{feedback.createdAt}</span>
+                              <span className="block md:hidden"><strong>Feedback:</strong> </span>
+                          <Dialog>
+                            <DialogTrigger>
+                            <Button size="sm" className="h-8 gap-1">
+                                <PlusCircle className="h-3.5 w-3.5" />
+                                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                  Open Feedback
+                                </span>
+                            </Button>
+                            </DialogTrigger>
+                            <DialogContent className="w-1/3 h-80 max-w-full">
+                              <DialogHeader>
+                                <DialogTitle>{feedback.subject}</DialogTitle>
+                                <DialogDescription>
+                                  Feedback
+                                </DialogDescription>
+                              </DialogHeader>
+                              {feedback.feedback}
+                            </DialogContent>
+                          </Dialog>
                           </TableCell>
                         </TableRow>
                       ))
@@ -207,12 +300,14 @@ export function Feedback() {
                   />
                 </CardFooter>
               </Card>
-            </TabsContent>
+            </TabsContent> 
           </Tabs>
+          </>
+         )}
         </main>
       </div>
     </div>
-  );
+  )
 }
-
 export default Feedback;
+

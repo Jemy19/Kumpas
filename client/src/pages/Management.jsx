@@ -1,22 +1,7 @@
-import { Link } from 'react-router-dom';
 import {
-  Bell,
-  CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  Search,
-  ShoppingCart,
-  Users,
-  ListFilter,
   MoreHorizontal,
   PlusCircle,
-  File,
 } from "lucide-react"
-
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -62,11 +47,6 @@ import {
     TabsTrigger,
   } from "@/components/ui/tabs"
   import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-  } from "@/components/ui/tooltip"
-  import {
     Dialog,
     DialogContent,
     DialogDescription,
@@ -75,17 +55,6 @@ import {
     DialogTrigger,
     DialogClose,
   } from "@/components/ui/dialog"
-
-  import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-  
   import {
     AlertDialog,
     AlertDialogAction,
@@ -97,22 +66,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-  import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-  } from "@/components/ui/pagination"
-import Alphabet from '../components/managetab/Alphabet'
-import BasicGreetings from '../components/managetab/basicgreetings'
-import CommonWords from '../components/managetab/CommonWords'
-import Questions from '../components/managetab/Questions'
-import SurvivalSigns from '../components/managetab/SurvivalSigns'
 import VidUp from '../components/vidup';
-import { UserContext } from '../../context/userContext';
 import React, { useContext, useState, useEffect, useRef  } from 'react';
 import {toast} from 'react-hot-toast'
 import axios from 'axios'
@@ -121,6 +75,7 @@ import Header from '@/components/Header';
 import SimplePagination from '@/components/simplepagination';
 import SearchInput from '@/components/searchinput';
 import Filter from '@/components/filter';
+import UserSkeleton from '../skeletons/userskeleton';
 
 export function Management() {
     // for creating new sign language
@@ -132,6 +87,7 @@ export function Management() {
       video: '',
     })
     const vidUpRef = useRef(null);
+  
     // for creating new sign language
     const addWord = async (e) => {
       e.preventDefault();
@@ -168,10 +124,30 @@ export function Management() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(8);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
     const [selectedCategories, setSelectedCategories] = useState([]);
 
 
+    const updateItemsPerPage = () => {
+      if (window.innerHeight <= 800) {
+        setItemsPerPage(6); // Set to your desired number
+      } else {
+        setItemsPerPage(8); // Reset to the default
+      }
+    };
+  
+    useEffect(() => {
+      // Set initial items per page
+      updateItemsPerPage();
+  
+      // Add event listener
+      window.addEventListener('resize', updateItemsPerPage);
+      return () => {
+        // Cleanup listener
+        window.removeEventListener('resize', updateItemsPerPage);
+      };
+    }, []);
+    
     useEffect(() => {
         axios.get('/signWords')
             .then(({ data }) => {
@@ -298,74 +274,79 @@ export function Management() {
       <div className="flex flex-col">
         <Header />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          {loading ? (
+            <UserSkeleton />
+            ) : (
+            <>        
           <Tabs defaultValue="all">
             <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
-                <div className="flex items-center mt-5">
-                  <CardTitle>Recently Added</CardTitle>   
-                <div className="ml-auto flex items-center gap-2">
-                  <div className="flex items-center">
+                  <div className="flex items-center mt-5">
+                  <CardTitle>Recently Added</CardTitle>
+                  
                     <div className="ml-auto flex items-center gap-2">
-                      <div className="w-full flex-1">
-                      <SearchInput 
-                          value={searchQuery}
-                          onChange={handleSearchChange}
-                          placeholder="Search by Title..."
-                      />
-                      </div>
                       <div className="flex items-center">
-                        <Filter
-                            selectedCategories={selectedCategories}
-                            handleCategoryChange={handleCategoryChange}
-                            categories={categories}
-                            titlelabel="Filter by Category"
-                        />
-                      </div>
+                        <div className="ml-auto flex items-center gap-2">
+                            <div className="w-full flex-1">
+                            <SearchInput 
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                placeholder="Search by Title..."
+                            />
+                            </div>
+                            <div className="flex items-center">
+                            <Filter
+                                selectedCategories={selectedCategories}
+                                handleCategoryChange={handleCategoryChange}
+                                categories={categories}
+                                titlelabel="Filter by Category"
+                            />
+                            </div>
+                        </div>
+                    </div>
+                      <Dialog>
+                        <DialogTrigger>
+                          <Button size="sm" className="h-8 gap-1">
+                            <PlusCircle className="h-3.5 w-3.5" />
+                            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                              Add New Sign
+                            </span>
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Add New Sign Language</DialogTitle>
+                            <DialogDescription>
+                            <form onSubmit={addWord}>
+                              <div className="grid gap-4">
+                                <Label>Title</Label>
+                                <Input type='text' placeholder='Enter Title...' value={data.title} onChange={(e) => setData({...data, title: e.target.value})} />
+                                <Label>Description</Label>
+                                <Input type='text' placeholder='Enter Description...' value={data.description} onChange={(e) => setData({...data, description: e.target.value})} />
+                                <Label>Category</Label>
+                                <select name="category" value={data.category} onChange={(e) => setData({...data, category: e.target.value})} required>
+                                  <option value="" disabled>Select a category</option>
+                                  {categories.map((category) => (
+                                      <option key={category} value={category}>
+                                          {category}
+                                      </option>
+                                  ))}
+                                </select>
+                                <Label>Video</Label>
+                                <VidUp value={data.video} ref={vidUpRef} />
+                                <Button type="submit" variant="secondary">
+                                  SUBMIT
+                                </Button>
+                              </div>
+                            </form>
+                            </DialogDescription>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
+
                     </div>
                   </div>
-                <Dialog>
-                  <DialogTrigger>
-                    <Button size="sm" className="h-8 gap-1">
-                      <PlusCircle className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                        Add New Sign
-                      </span>
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add New Sign Language</DialogTitle>
-                      <DialogDescription>
-                      <form onSubmit={addWord}>
-                        <div className="grid gap-4">
-                          <Label>Title</Label>
-                          <Input type='text' placeholder='Enter Title...' value={data.title} onChange={(e) => setData({...data, title: e.target.value})} />
-                          <Label>Description</Label>
-                          <Input type='text' placeholder='Enter Description...' value={data.description} onChange={(e) => setData({...data, description: e.target.value})} />
-                          <Label>Category</Label>
-                          <select name="category" value={data.category} onChange={(e) => setData({...data, category: e.target.value})} required>
-                            <option value="" disabled>Select a category</option>
-                            {categories.map((category) => (
-                                <option key={category} value={category}>
-                                    {category}
-                                </option>
-                            ))}
-                          </select>
-                          <Label>Video</Label>
-                          <VidUp value={data.video} ref={vidUpRef} />
-                          <Button type="submit" variant="secondary">
-                            SUBMIT
-                          </Button>
-                        </div>
-                      </form>
-                      </DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-
-              </div>
-            </div>
                   <CardDescription>
                     View the latest sign language phrases, words, and alphabet signs added to our library.
                   </CardDescription>
@@ -374,20 +355,23 @@ export function Management() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="hidden w-[100px] sm:table-cell">
+                        <TableHead className="hidden md:table-cell">
                           VideoPath
                         </TableHead>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Category</TableHead>
+                        <TableHead className="hidden md:table-cell">Title</TableHead>
+                        <TableHead className="hidden md:table-cell">Description</TableHead>
+                        <TableHead className="hidden md:table-cell">Category</TableHead>
                         <TableHead className="hidden md:table-cell">
                           Updated at
                         </TableHead>
                         <TableHead className="hidden md:table-cell">
                           Created at
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="hidden md:table-cell">
                           Actions
+                        </TableHead>
+                        <TableHead className="block md:hidden">
+                          Details
                         </TableHead>
                       </TableRow>
                     </TableHeader> 
@@ -395,7 +379,7 @@ export function Management() {
                     {paginatedWords.length > 0 ? (
                       paginatedWords.map((word) => (
                         <TableRow>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="hidden md:table-cell">
                               <Dialog>
                                   <DialogTrigger>
                                   <Button>
@@ -415,7 +399,7 @@ export function Management() {
                                   </DialogContent>
                                 </Dialog>
                           </TableCell>
-                          <TableCell className="hidden sm:table-cell">
+                          <TableCell className="hidden md:table-cell">
                             {word.title}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
@@ -430,7 +414,32 @@ export function Management() {
                           <TableCell className="hidden md:table-cell">
                             {word.createdAt}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="flex flex-col sm:items-start md:items-center">
+                              <span className="block md:hidden"><strong>Video:</strong>
+                                <Dialog>
+                                    <DialogTrigger>
+                                    <Button>
+                                      Play Video
+                                    </Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                        <DialogTitle>{word.video}</DialogTitle>
+                                        <DialogDescription>
+                                        <div>
+                                        <h2>Video Stream</h2>
+                                        <video controls width="400" src={`https://kumpas.onrender.com/videos/${word.video}`} type="video/mp4" />
+                                        </div>
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    </DialogContent>
+                                </Dialog>
+                              </span>
+                              <span className="block md:hidden"><strong>title:</strong> {word.title}</span>
+                              <span className="block md:hidden"><strong>description:</strong> {word.description}</span>
+                              <span className="block md:hidden"><strong>category:</strong> {word.category}</span>
+                              <span className="block md:hidden"><strong>Updated:</strong> {word.updatedAt}</span>
+                              <span className="block md:hidden"><strong>Created:</strong> {word.createdAt}</span>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button
@@ -539,10 +548,12 @@ export function Management() {
                       totalPages={totalPages}
                       onPageChange={setCurrentPage} // Pass the state setter function
                   />
-                </CardFooter>
+              </CardFooter>
               </Card>
             </TabsContent>
           </Tabs>
+          </>
+         )}
         </main>
       </div>
     </div>
