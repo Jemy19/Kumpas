@@ -305,21 +305,30 @@ const deleteMobUser = async (req, res) => {
         error: 'User not found'
       });
     }
+
+    // Access the collection directly and delete documents where userId matches
+    await mongoose.connection.collection('favorites').deleteMany({ userId: req.params.id });
+
+    // Log the deletion of the user
     await Log.create({
       level: 'info',
       message: `Deleted Admin Account: ${MobileUser.username}`,
       adminId: req.user._id,
       adminName: req.user.name
     });
+
     res.status(200).send({ success: true });
   } catch (error) {
     const userid = req.params.id;
+
+    // Log the error if something goes wrong
     await Log.create({
       level: 'error',
       message: `Error Deleting Admin Account: ${userid}`,
       adminId: req.user._id,
       adminName: req.user.name
     });
+
     res.status(400).send({ error: error.message });
   }
 };
