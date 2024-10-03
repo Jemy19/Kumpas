@@ -305,9 +305,9 @@ const deleteMobUser = async (req, res) => {
         error: 'User not found'
       });
     }
-
+    
     // Access the collection directly and delete documents where userId matches
-    await mongoose.connection.collection('favorites').deleteMany({ userId: req.params.id });
+    await mongoose.connection.collection('favorites').deleteMany({ userId: MobileUser.email });
 
     // Log the deletion of the user
     await Log.create({

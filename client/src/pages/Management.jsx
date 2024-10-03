@@ -191,10 +191,7 @@ export function Management() {
     const updateWord = async (e, id, updatedData) => {
       e.preventDefault();
       const originalData = words.find((word) => word._id === id);
-      
-      console.log(originalData);
-      console.log(updateData);
-      console.log(updatedData);
+
       try {
         let videoUrl = await vidUpRef.current.uploadVideo();
         const urlString = videoUrl;
@@ -499,11 +496,13 @@ export function Management() {
                                       <VidUp ref={vidUpRef} />
                                       <input type="hidden" name="originalVideo" value={word.video} />
                                       <SheetFooter>
-                                          <SheetClose asChild>
-                                          <Button type="submit">
-                                              UPDATE
-                                          </Button>
-                                          </SheetClose>
+                                        <Button
+                                          type="submit"
+                                          disabled={loading}
+                                          className={`w-full h-10 ${loading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                        >
+                                          {loading ? 'Updating...' : 'UPDATE'}
+                                        </Button>
                                       </SheetFooter>
                                       </div>
                                       </form>
