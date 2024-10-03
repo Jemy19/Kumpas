@@ -136,6 +136,7 @@ export function SaSignManagement() {
     // for creating new sign language
     const addWord = async (e) => {
       e.preventDefault();
+      setbutLoading(true); 
       const { title, description, category } = data;
   
       try {
@@ -161,6 +162,8 @@ export function SaSignManagement() {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setbutLoading(false); // Hide loading overlay
       }
     };
   
@@ -387,7 +390,7 @@ export function SaSignManagement() {
                                   disabled={butloading}
                                   className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
                                 >
-                                  {butloading ? 'Updating...' : 'UPDATE'}
+                                  {butloading ? 'Creating...' : 'CREATE'}
                                 </Button>
                               </div>
                             </form>

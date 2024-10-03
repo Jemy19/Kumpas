@@ -117,6 +117,7 @@ export function SaUserManagement() {
 
   const registerMobUser = async (e) => {
     e.preventDefault();
+    setbutLoading(true); 
     const { email, password } = data;
     try {
       const { data } = await axios.post('/createMobUser', {
@@ -133,6 +134,8 @@ export function SaUserManagement() {
       }
     } catch (error) {
       toast.success('Failed to Create new user!');
+    } finally {
+      setbutLoading(false); // Hide loading overlay
     }
   };
   // delete account

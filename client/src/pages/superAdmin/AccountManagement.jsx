@@ -119,6 +119,7 @@ export function AccountManagement() {
   })
   const registerUser = async (e) => {
     e.preventDefault()
+    setbutLoading(true); 
     const {name, email, password} = data
     try {
       const {data} = await axios.post ('/admin/admin', {
@@ -133,6 +134,8 @@ export function AccountManagement() {
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setbutLoading(false); // Hide loading overlay
     }
   }
   // delete account

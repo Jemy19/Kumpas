@@ -117,6 +117,7 @@ export function UserManagement() {
 
   const registerMobUser = async (e) => {
     e.preventDefault();
+    setbutLoading(true); 
     const { email, password } = data;
     try {
       const { data } = await axios.post('/createMobUser', {
@@ -147,6 +148,8 @@ export function UserManagement() {
       }
     } catch (error) {
       toast.error('An error occurred while deleting the account.');
+    }finally {
+      setbutLoading(false); // Hide loading overlay
     }
   };  
   // for updating account

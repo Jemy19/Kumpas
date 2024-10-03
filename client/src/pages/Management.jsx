@@ -91,6 +91,7 @@ export function Management() {
     // for creating new sign language
     const addWord = async (e) => {
       e.preventDefault();
+      setbutLoading(true); 
       const { title, description, category } = data;
   
       try {
@@ -116,6 +117,8 @@ export function Management() {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setbutLoading(false); // Hide loading overlay
       }
     };
   
