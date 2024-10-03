@@ -122,6 +122,7 @@ export function Management() {
     // for fetching sign language
     const [words, setWords] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [butloading, setbutLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(8);
     const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
@@ -191,7 +192,7 @@ export function Management() {
     const updateWord = async (e, id, updatedData) => {
       e.preventDefault();
       const originalData = words.find((word) => word._id === id);
-      setLoading(true); 
+      setbutLoading(true); 
       try {
         let videoUrl = await vidUpRef.current.uploadVideo();
         const urlString = videoUrl;
@@ -226,10 +227,10 @@ export function Management() {
       } catch (error) {
         console.error('An error occurred while updating the word:', error);
       } finally {
-        setLoading(false); // Hide loading overlay
+        setbutLoading(false); // Hide loading overlay
       }
     };
-    
+
     const handleEdit = (word) => {
       setUpdateData({
         id: word._id,
@@ -501,10 +502,10 @@ export function Management() {
                                       <SheetFooter>
                                         <Button
                                           type="submit"
-                                          disabled={loading}
-                                          className={`w-full h-10 ${loading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                          disabled={butloading}
+                                          className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
                                         >
-                                          {loading ? 'Updating...' : 'UPDATE'}
+                                          {butloading ? 'Updating...' : 'UPDATE'}
                                         </Button>
                                       </SheetFooter>
                                       </div>
