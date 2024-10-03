@@ -122,7 +122,7 @@ export function Management() {
     // for fetching sign language
     const [words, setWords] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [butloading, setbutLoading] = useState(true);
+    const [butloading, setbutLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(8);
     const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
