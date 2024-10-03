@@ -83,11 +83,10 @@ const Header = () => {
               </nav>
             </SheetContent>
           </Sheet>
-          <div className="w-full flex-1">
+          <div className="w-full flex-1"></div>
           <p className="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 py-1 px-3 rounded-md shadow-sm text-sm font-medium text-gray-800 dark:text-gray-300 mr-4">
             Welcome, <span className="font-semibold ml-1">{user.name}</span>
           </p>
-          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
