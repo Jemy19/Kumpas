@@ -191,7 +191,7 @@ export function Management() {
     const updateWord = async (e, id, updatedData) => {
       e.preventDefault();
       const originalData = words.find((word) => word._id === id);
-
+      setLoading(true); 
       try {
         let videoUrl = await vidUpRef.current.uploadVideo();
         const urlString = videoUrl;
@@ -225,8 +225,11 @@ export function Management() {
         }
       } catch (error) {
         console.error('An error occurred while updating the word:', error);
+      } finally {
+        setLoading(false); // Hide loading overlay
       }
     };
+    
     const handleEdit = (word) => {
       setUpdateData({
         id: word._id,
