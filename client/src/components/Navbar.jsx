@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom'; // Import useLocation
-import { Package2, Home, Logs, Users, UserRoundPen, HandMetal } from "lucide-react";
+import { Home, Logs, MessageSquareText, UserRoundPen, HandMetal } from "lucide-react";
 
 const Navbar = () => {
   const location = useLocation(); // Get current location
@@ -16,7 +16,6 @@ const Navbar = () => {
     <div className="flex h-full max-h-screen flex-col gap-2">
       <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
         <Link to="/Dashboard" className="flex items-center gap-2 font-semibold">
-          <Package2 className="h-6 w-6" />
           <span className="">E-Kumpas</span>
         </Link>
       </div>
@@ -47,14 +46,14 @@ const Navbar = () => {
             to="/Feedback"
             className={isActive("/Feedback")} // Dynamically apply class
           >
-            <Logs className="h-4 w-4" />
+            <MessageSquareText className="h-4 w-4" />
             Feedback
           </Link>
           <Link
             to="/AdminLogs"
             className={isActive("/AdminLogs")} // Dynamically apply class
           >
-            <Users className="h-4 w-4" />
+            <Logs className="h-4 w-4" />
             Admin Logs
           </Link>
         </nav>

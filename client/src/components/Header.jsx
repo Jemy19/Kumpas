@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../../context/userContext';
 import { Link } from 'react-router-dom';
-import { CircleUser, Package2, Home, Package, Users, Menu, Search} from "lucide-react"
+import { CircleUser, Package2, Home, Menu, Search, Logs, MessageSquareText, UserRoundPen, HandMetal } from "lucide-react"
 import {
     Sheet,
     SheetClose,
@@ -57,28 +57,28 @@ const Header = () => {
                   to="/Management"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Package className="h-5 w-5" />
+                  <HandMetal className="h-5 w-5" />
                   Sign Management
                 </Link>
                 <Link
                   to="/UserManagement"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Users className="h-5 w-5" />
+                  <UserRoundPen className="h-5 w-5" />
                   UserManagement
                 </Link>
                 <Link
                   to="/FeedBack"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Users className="h-5 w-5" />
+                  <MessageSquareText className="h-5 w-5" />
                   Feedback
                 </Link>
                 <Link
                   to="/AdminLogs"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Users className="h-5 w-5" />
+                  <Logs className="h-5 w-5" />
                   Adming Logs
                 </Link>
               </nav>
