@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Package2, Home, Package } from "lucide-react";
+import { Home, Logs, UserRoundCog, UserRoundPen, HandMetal, MessageSquareText  } from "lucide-react";
 
 const NavbarSu = () => {
   const location = useLocation();
@@ -16,7 +16,6 @@ const NavbarSu = () => {
     <div className="flex h-full max-h-screen flex-col gap-2">
       <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
         <Link to="/SaDashboard" className="flex items-center gap-2 font-semibold">
-          <Package2 className="h-6 w-6" />
           <span className="">Super Admin</span>
         </Link>
       </div>
@@ -33,35 +32,35 @@ const NavbarSu = () => {
             to="/AccManagement"
             className={isActive("/AccManagement")}
           >
-            <Package className="h-4 w-4" />
+            <UserRoundCog className="h-4 w-4" />
             Admin Management
           </Link>
           <Link
             to="/SAUserManagement"
             className={isActive("/SAUserManagement")}
           >
-            <Package className="h-4 w-4" />
+            <UserRoundPen className="h-4 w-4" />
             User Management
           </Link>
           <Link
             to="/SASignManagement"
             className={isActive("/SASignManagement")}
           >
-            <Package className="h-4 w-4" />
+            <HandMetal  className="h-4 w-4" />
             Sign Management
           </Link>
           <Link
             to="/SAFeedbacks"
             className={isActive("/SAFeedbacks")}
           >
-            <Package className="h-4 w-4" />
+            <MessageSquareText className="h-4 w-4" />
             Feedbacks
           </Link>
           <Link
             to="/SALogs"
             className={isActive("/SALogs")}
           >
-            <Package className="h-4 w-4" />
+            <Logs  className="h-4 w-4" />
             Security Logs
           </Link>
         </nav>
