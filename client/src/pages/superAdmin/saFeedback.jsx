@@ -284,7 +284,7 @@ export function SaFeedback() {
                                       </span>
                                   </Button>
                                   </DialogTrigger>
-                                  <DialogContent className="w-1/3 h-80 max-w-full">
+                                  <DialogContent>
                                     <DialogHeader>
                                       <DialogTitle>{feedback.email} - {feedback.subject}</DialogTitle>
                                       <DialogDescription>
