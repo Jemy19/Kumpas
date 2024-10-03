@@ -286,8 +286,8 @@ export function Management() {
             <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
-                  <div className="flex items-center mt-5">
-                  <CardTitle>Recently Added</CardTitle>
+                  <div className="flex items-center">
+                  <CardTitle>Sign Language Management</CardTitle>
                   
                     <div className="ml-auto flex items-center gap-2">
                       <div className="flex items-center">
