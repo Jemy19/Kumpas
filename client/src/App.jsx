@@ -35,9 +35,7 @@ function App() {
         <Route path='*' element={<Notfound />} />
         <Route path='/' element={<Homepage />} />
         <Route path='/Login' element={<PublicRoute><Login /></PublicRoute>} />
-        <Route path='/Register' element={<PublicRoute><Register /></PublicRoute>} />
         <Route path='/Dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-        <Route path='/OldDashboard' element={<PrivateRoute><OldDashboard /></PrivateRoute>} />
         <Route path='/Management' element={<PrivateRoute><Management /></PrivateRoute>} />
         <Route path='/vid' element={<PrivateRoute><Vidtest /></PrivateRoute>} />
         <Route path='/UserManagement' element={<PrivateRoute><UserManagement /></PrivateRoute>} />
