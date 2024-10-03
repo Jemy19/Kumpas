@@ -6,10 +6,6 @@ import {
     Sheet,
     SheetClose,
     SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
     SheetTrigger,
   } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -21,6 +17,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
+  import logoname from '@/assets/logoname.svg'
 const HeaderSu = () => {
     const { user, logout } = useContext(UserContext);
   return (
@@ -42,8 +39,7 @@ const HeaderSu = () => {
                   href="#"
                   className="flex items-center gap-2 text-lg font-semibold"
                 >
-                  <Package2 className="h-6 w-6" />
-                  <span className="sr-only">Acme Inc</span>
+                  <img src={logoname} alt="Logoname" className="w-auto h-10" />
                 </Link>
                 <Link
                   to="/SaDashboard"

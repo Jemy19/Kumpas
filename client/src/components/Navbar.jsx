@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom'; // Import useLocation
 import { Home, Logs, MessageSquareText, UserRoundPen, HandMetal } from "lucide-react";
-
+import logoname from '@/assets/logoname.svg'
 const Navbar = () => {
   const location = useLocation(); // Get current location
 
@@ -16,7 +16,7 @@ const Navbar = () => {
     <div className="flex h-full max-h-screen flex-col gap-2">
       <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
         <Link to="/Dashboard" className="flex items-center gap-2 font-semibold">
-          <span className="">E-Kumpas</span>
+          <img src={logoname} alt="Logoname" className="w-auto h-10" />
         </Link>
       </div>
       <div className="flex-1">
