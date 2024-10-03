@@ -171,6 +171,7 @@ export function SaSignManagement() {
     const [itemsPerPage, setItemsPerPage] = useState(8);
     const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [butloading, setbutLoading] = useState(false);
 
 
     const updateItemsPerPage = () => {
@@ -235,11 +236,10 @@ export function SaSignManagement() {
 
     const updateWord = async (e, id, updatedData) => {
       e.preventDefault();
+      setbutLoading(true); 
       const originalData = words.find((word) => word._id === id);
-      
-      console.log(originalData);
-      console.log(updateData);
-      console.log(updatedData);
+
+
       try {
         let videoUrl = await vidUpRef.current.uploadVideo();
         const urlString = videoUrl;
@@ -273,6 +273,8 @@ export function SaSignManagement() {
         }
       } catch (error) {
         console.error('An error occurred while updating the word:', error);
+      } finally {
+        setbutLoading(false); // Hide loading overlay
       }
     };
     const handleEdit = (word) => {
@@ -380,8 +382,12 @@ export function SaSignManagement() {
                                 </select>
                                 <Label>Video</Label>
                                 <VidUp value={data.video} ref={vidUpRef} />
-                                <Button type="submit" variant="secondary">
-                                  SUBMIT
+                                <Button
+                                  type="submit"
+                                  disabled={butloading}
+                                  className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                >
+                                  {butloading ? 'Updating...' : 'UPDATE'}
                                 </Button>
                               </div>
                             </form>
@@ -545,8 +551,12 @@ export function SaSignManagement() {
                                       <input type="hidden" name="originalVideo" value={word.video} />
                                       <SheetFooter>
                                           <SheetClose asChild>
-                                          <Button type="submit">
-                                              UPDATE
+                                          <Button
+                                          type="submit"
+                                          disabled={butloading}
+                                          className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                          >
+                                            {butloading ? 'Updating...' : 'UPDATE'}
                                           </Button>
                                           </SheetClose>
                                       </SheetFooter>

@@ -336,8 +336,12 @@ export function Management() {
                                 </select>
                                 <Label>Video</Label>
                                 <VidUp value={data.video} ref={vidUpRef} />
-                                <Button type="submit" variant="secondary">
-                                  SUBMIT
+                                  <Button
+                                  type="submit"
+                                  disabled={butloading}
+                                  className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                >
+                                  {butloading ? 'Creating...' : 'CREATE'}
                                 </Button>
                               </div>
                             </form>

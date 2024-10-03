@@ -87,7 +87,7 @@ export function AccountManagement() {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
-
+  const [butloading, setbutLoading] = useState(false);
 
   //responsive
 
@@ -159,10 +159,9 @@ export function AccountManagement() {
 
   const updateAcc = async (e, id) => {
     e.preventDefault();
+    setbutLoading(true); 
     const originalData = admins.find((admin) => admin._id === id);
     
-    console.log(originalData);
-    console.log(updateData);
     try { 
       if (updateData.password !== updateData.confirmPassword) {
         setErrorMessage('Passwords do not match.'); // Set error message
@@ -198,6 +197,8 @@ export function AccountManagement() {
       }
     } catch (error) {
       console.error('An error occurred while updating the word:', error);
+    } finally {
+      setbutLoading(false); // Hide loading overlay
     }
   };
   const handleEdit = (admins) => {
@@ -296,8 +297,12 @@ export function AccountManagement() {
                                   <Label htmlFor="password">Password</Label>
                                   <Input type='password' placeholder='Enter Password...' value={data.password} onChange={(e) => setData({...data, password: e.target.value})}/>
                                 </div>
-                                <Button type="submit" className="w-full">
-                                  Create an account
+                                <Button
+                                  type="submit"
+                                  disabled={butloading}
+                                  className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                >
+                                  {butloading ? 'Creating...' : 'CREATE'}
                                 </Button>
                               </div>
                               </form>
@@ -399,9 +404,13 @@ export function AccountManagement() {
                                             <p className="text-red-500 text-sm">{errorMessage}</p>
                                           )}
                                           <SheetFooter>
-                                            <SheetClose asChild>
-                                              <Button type="submit">UPDATE</Button>
-                                            </SheetClose>
+                                            <Button
+                                            type="submit"
+                                            disabled={butloading}
+                                            className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                          >
+                                            {butloading ? 'Updating...' : 'UPDATE'}
+                                          </Button>
                                           </SheetFooter>
                                         </div>
                                       </form>

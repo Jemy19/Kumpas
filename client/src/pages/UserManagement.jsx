@@ -85,6 +85,7 @@ export function UserManagement() {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
+  const [butloading, setbutLoading] = useState(false);
 
     //responsive
 
@@ -158,6 +159,7 @@ export function UserManagement() {
 
   const updateAcc = async (e, id) => {
     e.preventDefault();
+    setbutLoading(true); 
     const originalData = mobUsers.find((mobUser) => mobUser._id === id); // Find the original mob user
     try {
       // Check if passwords match
@@ -202,6 +204,8 @@ export function UserManagement() {
       }
     } catch (error) {
       console.error('An error occurred while updating the MobUser:', error);
+    } finally {
+      setbutLoading(false); // Hide loading overlay
     }
   };
 
@@ -294,8 +298,12 @@ export function UserManagement() {
                                   <Label htmlFor="password">Password</Label>
                                   <Input type='password' placeholder='Enter Password...' value={data.password} onChange={(e) => setData({...data, password: e.target.value})}/>
                                 </div>
-                                <Button type="submit" className="w-full">
-                                  Create an account
+                                <Button
+                                  type="submit"
+                                  disabled={butloading}
+                                  className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                >
+                                  {butloading ? 'Creating...' : 'CREATE'}
                                 </Button>
                               </div>
                               </form>
@@ -407,9 +415,13 @@ export function UserManagement() {
                                       )}
                                       <SheetFooter>
                                           <SheetClose asChild>
-                                            <Button type="submit">
-                                                UPDATE
-                                            </Button>
+                                          <Button
+                                          type="submit"
+                                          disabled={butloading}
+                                          className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                          >
+                                            {butloading ? 'Updating...' : 'UPDATE'}
+                                          </Button>
                                           </SheetClose>
                                       </SheetFooter>
                                       </div>
