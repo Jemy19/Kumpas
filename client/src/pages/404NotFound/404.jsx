@@ -1,6 +1,6 @@
 import "./404.css";
 import React from "react";
-import Logo from '@/assets/lOGOKUMPAS.svg'
+import Logo from '@/assets/LOGOKUMPAS.svg'
 import { useEffect } from 'react';
 
 function Notfound() {

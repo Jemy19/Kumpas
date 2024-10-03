@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
-import Logo from '@/assets/lOGOKUMPAS.svg'
+import Logo from '@/assets/LOGOKUMPAS.svg'
 
 const Navbar = () => {
   const { user, logout } = useContext(UserContext);

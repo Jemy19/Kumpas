@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from '@/assets/lOGOKUMPAS.svg'
+import Logo from '@/assets/LOGOKUMPAS.svg'
 
 const Analytics = () => {
   return (
