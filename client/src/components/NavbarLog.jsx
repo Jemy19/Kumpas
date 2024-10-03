@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
-import Logo from '@/assets/LOGOKUMPAS.svg'
+import Logo from '@/assets/logoname.svg'
 
 const Navbar = () => {
   const { user, logout } = useContext(UserContext);
@@ -18,7 +18,7 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <h1 className="text-2xl font-bold">E-KUMPAS</h1>
+            
           </>
         )}
       </nav>
