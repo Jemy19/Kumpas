@@ -553,7 +553,6 @@ export function SaSignManagement() {
                                       <VidUp ref={vidUpRef} />
                                       <input type="hidden" name="originalVideo" value={word.video} />
                                       <SheetFooter>
-                                          <SheetClose asChild>
                                           <Button
                                           type="submit"
                                           disabled={butloading}
@@ -561,7 +560,6 @@ export function SaSignManagement() {
                                           >
                                             {butloading ? 'Updating...' : 'UPDATE'}
                                           </Button>
-                                          </SheetClose>
                                       </SheetFooter>
                                       </div>
                                       </form>
