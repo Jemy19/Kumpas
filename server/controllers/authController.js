@@ -50,12 +50,18 @@ const loginUser = async (req, res) => {
           });
           res.json({ ...user.toObject(), token }); // Send response with user data and token
         }
-      );      
+      );  
+      await Log.create({
+        level: 'info',
+        message: `Logged in successfully`,
+        adminId: user._id,  
+        adminName: user.name
+      });    
     } else {
       return res.json({ error: 'Unauthorized access' });
     }
   } catch (error) {
-    console.error('Login error:', error);
+      console.error('Login error:', error);
     return res.json({ error: 'Internal server error' });
   }
 };
@@ -85,13 +91,19 @@ const getWords = async (req, res) => {
     }
 }
 
-const logoutUser = (req, res) => {
+const logoutUser = async (req, res) => {
   res.cookie('token', '', { 
       maxAge: 1, 
       httpOnly: true,  // Same as when the token was set
       secure: true,    // Ensure this matches (for HTTPS)
       sameSite: 'None', // Match sameSite policy
       path: '/'        // Ensure the path is correct
+  });
+  await Log.create({
+    level: 'info',
+    message: `Logged out successfully`,
+    adminId: req.user._id, 
+    adminName: req.user.name
   });
   res.json('Logged out');
 };
@@ -127,6 +139,12 @@ const addWord = async (req, res) => {
             category,
             video,
         });
+        await Log.create({
+          level: 'info',
+          message: `added a new sign language word: ${word.title}`,
+          adminId: req.user._id, 
+          adminName: req.user.name
+        });
         return res.json(word);
     } catch (error) {
         console.log(error)
@@ -135,14 +153,20 @@ const addWord = async (req, res) => {
   
 const deleteWordDoc = async (req, res) => {
     const { id } = req.params;
-    console.log('Received delete request for id:', id); 
     try {
+      const word = await Word.findById(id);
         const result = await Word.deleteOne({ _id: id });
         if (result.deletedCount === 0) {
             return res.json({
                 error: 'word not found'
             })
         }
+        await Log.create({
+          level: 'info',
+          message: `deleted sign language word: ${word.title}`,
+          adminId: req.user._id, 
+          adminName: req.user.name
+        });
         res.json({
             message: 'Word deleted successfully'
         });
