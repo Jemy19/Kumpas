@@ -1,7 +1,6 @@
 const User = require('../models/user');
 const Log = require('../models/log'); 
 const { hashPassword, comparePassword} = require('../helpers/auth')
-const logger = require('../config/logger');
 const mongoose = require('mongoose');
 
 
@@ -44,9 +43,6 @@ exports.createAdmin = async (req, res) => {
       });
       return res.json(user)
   } catch (error) {
-      const adminId = req.user._id
-      const adminUsername = req.user.name
- 
       await Log.create({
         level: 'Error',
         message: `Added a new Admin Account`,

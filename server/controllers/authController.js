@@ -171,7 +171,12 @@ const deleteWordDoc = async (req, res) => {
             message: 'Word deleted successfully'
         });
     } catch (error) {
-        console.log(error);
+      await Log.create({
+        level: 'error',
+        message: `Error Deleting word`,
+        adminId: req.user._id,  
+        adminName: req.user.name
+      });
         res.json({
             error: 'An error occurred while deleting the word'
         });
@@ -196,9 +201,21 @@ const updateWordDoc = async (req, res) => {
       word.video = video || word.video;
   
       const updatedWord = await word.save();
+
+      await Log.create({
+        level: 'info',
+        message: `Word update Successfully: ${word.title}`,
+        adminId: req.user._id, 
+        adminName: req.user.name
+      });
       res.json(updatedWord);
     } catch (error) {
-      console.log(error);
+      await Log.create({
+        level: 'error',
+        message: `Error Updating Signlanguage Word`,
+        adminId: req.user._id,  
+        adminName: req.user.name
+      });
       res.status(500).json({
         error: 'An error occurred while updating the word',
       });
