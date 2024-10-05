@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const Word = require('../models/signs')
 const MobUser = require('../models/mobusers')
+const Updates = require('../models/mobusers')
 const { hashPassword, comparePassword} = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
@@ -454,6 +455,77 @@ const getFeedbackForAdmin = async (req, res) => {
   }
 };
 
+const addupdate = async (req, res) => {
+  try {
+      const {title, description} = req.body;
+      if (!title){
+          return res.json({
+          error: 'Title is required'
+          })
+      }
+      if (!description) {
+          return res.json({
+              error: 'Description is Required'
+          })
+      }
+
+      const updates = await Updates.create ({
+          title,
+          description
+      });
+      await Log.create({
+        level: 'info',
+        message: `Created new update log: ${updates.title}`,
+        adminId: req.user._id, 
+        adminName: req.user.name
+      });
+      return res.json(updates);
+  } catch (error) {
+      console.log(error)
+  }
+};
+
+const getUpdates = async (req, res) => {
+  try {
+      const updates = await Updates.find();
+      res.json(updates);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+const deleteUpdate = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updates = await Updates.findById(id);
+      const result = await Updates.deleteOne({ _id: id });
+      if (result.deletedCount === 0) {
+          return res.json({
+              error: 'update log not found'
+          })
+      }
+      await Log.create({
+        level: 'info',
+        message: `deleted update log: ${updates.title}`,
+        adminId: req.user._id, 
+        adminName: req.user.name
+      });
+      res.json({
+          message: 'Word deleted successfully'
+      });
+  } catch (error) {
+    await Log.create({
+      level: 'error',
+      message: `Error Deleting update log`,
+      adminId: req.user._id,  
+      adminName: req.user.name
+    });
+      res.json({
+          error: 'An error occurred while deleting the update log'
+      });
+  }
+};
+
 
 module.exports =  {
     test,
@@ -471,5 +543,8 @@ module.exports =  {
     deleteMobUser,
     updateMobUser,
     adminLogs,
-    getFeedbackForAdmin
+    getFeedbackForAdmin,
+    addupdate,
+    getUpdates,
+    deleteUpdate
 }

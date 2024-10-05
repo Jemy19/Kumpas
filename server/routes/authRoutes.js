@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { test, loginUser, getProfile, logoutUser, addWord, getWords, deleteWordDoc, updateWordDoc, getUsers, getTotalCounts, getWordsSortedByUsage, createMobUser, deleteMobUser, updateMobUser, adminLogs, getFeedbackForAdmin } = require('../controllers/authController')
+const { test, loginUser, getProfile, logoutUser, addWord, getWords, deleteWordDoc, updateWordDoc, getUsers, getTotalCounts, getWordsSortedByUsage, createMobUser, deleteMobUser, updateMobUser, adminLogs, getFeedbackForAdmin, addupdate, getUpdates,
+deleteUpdate } = require('../controllers/authController')
 const checkAdminOrSuperAdmin = require('../middleware/checkAdminSu'); 
 
 router.get('/', test)
@@ -19,5 +20,7 @@ router.delete('/deleteMobUser/:id', checkAdminOrSuperAdmin, deleteMobUser)
 router.put('/updateMobUser/:id', checkAdminOrSuperAdmin, updateMobUser);
 router.get('/adminLogs', checkAdminOrSuperAdmin, adminLogs)
 router.get('/getFeedbackForAdmin', checkAdminOrSuperAdmin, getFeedbackForAdmin)
-
+router.post('/addupdate', checkAdminOrSuperAdmin, addupdate)
+router.put('/getUpdates,/:id', checkAdminOrSuperAdmin, getUpdates);
+router.delete('/deleteUpdate/:id', checkAdminOrSuperAdmin, deleteUpdate);
 module.exports = router
