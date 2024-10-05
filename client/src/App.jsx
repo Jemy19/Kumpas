@@ -40,7 +40,7 @@ function App() {
         <Route path='/UserManagement' element={<PrivateRoute><UserManagement /></PrivateRoute>} />
         <Route path='/Feedback' element={<PrivateRoute><Feedback /></PrivateRoute>} />
         <Route path='/AdminLogs' element={<PrivateRoute><AdminLogs /></PrivateRoute>} />
-        <Route path='/Update' element={<PrivateRoute><Update /></PrivateRoute>} />
+        <Route path='/Updates' element={<PrivateRoute><Update /></PrivateRoute>} />
         <Route path='/SaDashboard' element={<SuperAdminRoute><SaDashboard /></SuperAdminRoute>} />
         <Route path='/AccManagement' element={<SuperAdminRoute><AccountManagement /></SuperAdminRoute>} />
         <Route path='/SAUserManagement' element={<SuperAdminRoute><SAUserManagement /></SuperAdminRoute>} />
