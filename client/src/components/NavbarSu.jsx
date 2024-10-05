@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Logs, UserRoundCog, UserRoundPen, HandMetal, MessageSquareText  } from "lucide-react";
+import { Home, Logs, UserRoundCog, UserRoundPen, HandMetal, MessageSquareText, RefreshCw  } from "lucide-react";
 import logoname from '@/assets/logoname.svg'
 const NavbarSu = () => {
   const location = useLocation();

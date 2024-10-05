@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../../context/userContext';
 import { Link } from 'react-router-dom';
-import { CircleUser, Package2, Home, UserRoundCog, Menu, Logs, MessageSquareText, UserRoundPen, HandMetal } from "lucide-react"
+import { CircleUser, RefreshCw, Home, UserRoundCog, Menu, Logs, MessageSquareText, UserRoundPen, HandMetal } from "lucide-react"
 import {
     Sheet,
     SheetClose,
