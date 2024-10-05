@@ -322,7 +322,7 @@ export function Updates() {
                               <span className="block md:hidden"><strong>ID:</strong> {update._id}</span>
                               <span className="block md:hidden"><strong>Title:</strong> {update.title}</span>
                               <span className="block md:hidden"><strong>Sent At:</strong>{update.createdAt}</span>
-                              <span className="block md:hidden"><strong>Update:</strong> {update.description}</span>
+                              <span className="block md:hidden"><strong>Update:</strong></span>
                               <Dialog>
                                 <DialogTrigger>
                                 <Button size="sm" className="h-8 gap-1">
