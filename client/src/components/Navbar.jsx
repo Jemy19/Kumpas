@@ -50,18 +50,18 @@ const Navbar = () => {
             Feedback
           </Link>
           <Link
-            to="/AdminLogs"
-            className={isActive("/AdminLogs")} // Dynamically apply class
-          >
-            <Logs className="h-4 w-4" />
-            Admin Logs
-          </Link>
-          <Link
             to="/Updates"
             className={isActive("/Updates")} // Dynamically apply class
           >
             <RefreshCw  className="h-4 w-4" />
             Update Logs
+          </Link>
+          <Link
+            to="/AdminLogs"
+            className={isActive("/AdminLogs")} // Dynamically apply class
+          >
+            <Logs className="h-4 w-4" />
+            Admin Logs
           </Link>
         </nav>
       </div>

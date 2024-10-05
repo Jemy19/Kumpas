@@ -19,6 +19,7 @@ import SAFeedbacks from './pages/superAdmin/saFeedback';
 import SALogs from './pages/superAdmin/saLogs';
 import Notfound from './pages/404NotFound/404';
 import Update from './pages/updates';
+import SaUpdate from './pages/superAdmin/saUpdates';
 
 import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
@@ -47,6 +48,7 @@ function App() {
         <Route path='/SASignManagement' element={<SuperAdminRoute><SASignManagement /></SuperAdminRoute>} />
         <Route path='/SAFeedbacks' element={<SuperAdminRoute><SAFeedbacks /></SuperAdminRoute>} />
         <Route path='/SALogs' element={<SuperAdminRoute><SALogs /></SuperAdminRoute>} />
+        <Route path='/SaUpdate' element={<SuperAdminRoute><SaUpdate /></SuperAdminRoute>} />
       </Routes>
     </UserContextProvider>  
   )

@@ -1,22 +1,8 @@
-import { Link } from 'react-router-dom';
 import {
-  Bell,
-  CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  Search,
-  ShoppingCart,
-  Users,
-  ListFilter,
   MoreHorizontal,
   PlusCircle,
   File,
 } from "lucide-react"
-
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -62,11 +48,6 @@ import {
     TabsTrigger,
   } from "@/components/ui/tabs"
   import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-  } from "@/components/ui/tooltip"
-  import {
     Dialog,
     DialogContent,
     DialogDescription,
@@ -75,17 +56,6 @@ import {
     DialogTrigger,
     DialogClose,
   } from "@/components/ui/dialog"
-
-  import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-  
   import {
     AlertDialog,
     AlertDialogAction,
@@ -97,20 +67,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-  import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-  } from "@/components/ui/pagination"
-import Alphabet from '../../components/managetab/Alphabet'
-import BasicGreetings from '../../components/managetab/basicgreetings'
-import CommonWords from '../../components/managetab/CommonWords'
-import Questions from '../../components/managetab/Questions'
-import SurvivalSigns from '../../components/managetab/SurvivalSigns'
 import VidUp from '../../components/vidup';
 import React, { useContext, useState, useEffect, useRef  } from 'react';
 import {toast} from 'react-hot-toast'

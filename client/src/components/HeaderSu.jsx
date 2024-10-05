@@ -77,6 +77,13 @@ const HeaderSu = () => {
                   Feedbacks
                 </Link>
                 <Link
+                  to="/Update"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <RefreshCw  className="h-5 w-5" />
+                  Update Logs
+                </Link>
+                <Link
                   to="/SALogs"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
