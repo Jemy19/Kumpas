@@ -21,6 +21,6 @@ router.put('/updateMobUser/:id', checkAdminOrSuperAdmin, updateMobUser);
 router.get('/adminLogs', checkAdminOrSuperAdmin, adminLogs)
 router.get('/getFeedbackForAdmin', checkAdminOrSuperAdmin, getFeedbackForAdmin)
 router.post('/addupdate', checkAdminOrSuperAdmin, addupdate)
-router.put('/getUpdates,/:id', checkAdminOrSuperAdmin, getUpdates);
+router.get('/getUpdates', checkAdminOrSuperAdmin, getUpdates);
 router.delete('/deleteUpdate/:id', checkAdminOrSuperAdmin, deleteUpdate);
 module.exports = router

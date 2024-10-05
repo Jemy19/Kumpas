@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const Word = require('../models/signs')
 const MobUser = require('../models/mobusers')
-const Updates = require('../models/mobusers')
+const Updates = require('../models/updates')
 const { hashPassword, comparePassword} = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
