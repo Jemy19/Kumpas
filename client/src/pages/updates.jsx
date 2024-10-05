@@ -85,7 +85,7 @@ import SearchInput from '@/components/searchinput';
 import UserSkeleton from '../skeletons/userskeleton';
 
 export function Updates() {
-  const [update, setUpdate] = useState([]);
+  const [updates, setUpdate] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
@@ -269,7 +269,7 @@ export function Updates() {
                     </TableHeader> 
                     <TableBody >
                     {paginatedFeedback.length > 0 ? (
-                      paginatedFeedback.map((feedback) => (
+                      paginatedFeedback.map((update) => (
                         <TableRow>
                           <TableCell className="hidden md:table-cell">
                             {update._id}
