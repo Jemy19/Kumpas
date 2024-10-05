@@ -263,8 +263,8 @@ import {
                             <TableCell className="hidden md:table-cell">
                               {update.createdAt}
                             </TableCell>
-                            <TableCell className="flex flex-col sm:items-start md:items-center">
-                            <span className="block md:hidden"><strong>Update Log:</strong> </span>
+                            <TableCell className="hidden md:table-cell">
+                                <span className="block md:hidden"><strong>Update Log:</strong> </span>
                                 <Dialog>
                                   <DialogTrigger>
                                   <Button size="sm" className="h-8 gap-1">
@@ -284,6 +284,8 @@ import {
                                     {update.description}
                                   </DialogContent>
                                 </Dialog>
+                            </TableCell>
+                            <TableCell className="flex flex-col sm:items-start md:items-center">
                                 <span className="block md:hidden"><strong>ID:</strong> {update._id}</span>
                                 <span className="block md:hidden"><strong>Title:</strong> {update.subject}</span>
                                 <span className="block md:hidden"><strong>Sent At	:</strong>{update.createdAt}</span>

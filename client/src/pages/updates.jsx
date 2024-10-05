@@ -263,27 +263,29 @@ export function Updates() {
                           <TableCell className="hidden md:table-cell">
                             {update.createdAt}
                           </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            <span className="block md:hidden"><strong>Update Log:</strong> </span>
+                            <Dialog>
+                              <DialogTrigger>
+                              <Button size="sm" className="h-8 gap-1">
+                                  <PlusCircle className="h-3.5 w-3.5" />
+                                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                    Open Update Log
+                                  </span>
+                              </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>{update.title}</DialogTitle>
+                                  <DialogDescription>
+                                    Feedback
+                                  </DialogDescription>
+                                </DialogHeader>
+                                {update.description}
+                              </DialogContent>
+                            </Dialog>
+                          </TableCell>
                           <TableCell className="flex flex-col sm:items-start md:items-center">
-                              <span className="block md:hidden"><strong>Update Log:</strong> </span>
-                              <Dialog>
-                                <DialogTrigger>
-                                <Button size="sm" className="h-8 gap-1">
-                                    <PlusCircle className="h-3.5 w-3.5" />
-                                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                      Open Update Log
-                                    </span>
-                                </Button>
-                                </DialogTrigger>
-                                <DialogContent>
-                                  <DialogHeader>
-                                    <DialogTitle>{update.title}</DialogTitle>
-                                    <DialogDescription>
-                                      Feedback
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  {update.description}
-                                </DialogContent>
-                              </Dialog>
                               <span className="block md:hidden"><strong>ID:</strong> {update._id}</span>
                               <span className="block md:hidden"><strong>Title:</strong> {update.subject}</span>
                               <span className="block md:hidden"><strong>Sent At	:</strong>{update.createdAt}</span>
