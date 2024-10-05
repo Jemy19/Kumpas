@@ -488,7 +488,14 @@ const addupdate = async (req, res) => {
 const getUpdates = async (req, res) => {
   try {
       const updates = await Updates.find();
-      res.json(updates);
+      const formattedUpdates = updates.map((update) => ({
+        _id: update._id,
+        title: update.title,
+        description: update.description,
+        createdAt: update.createdAt.toLocaleString(), // Format createdAt
+      }));
+  
+      res.json(formattedUpdates);
   } catch (error) {
       res.status(500).json({ message: error.message });
   }
