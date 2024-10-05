@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom'; // Import useLocation
-import { Home, Logs, MessageSquareText, UserRoundPen, HandMetal } from "lucide-react";
+import { Home, Logs, MessageSquareText, UserRoundPen, HandMetal, RefreshCw  } from "lucide-react";
 import logoname from '@/assets/logoname.svg'
 const Navbar = () => {
   const location = useLocation(); // Get current location
@@ -60,7 +60,7 @@ const Navbar = () => {
             to="/Updates"
             className={isActive("/Updates")} // Dynamically apply class
           >
-            <Logs className="h-4 w-4" />
+            <RefreshCw  className="h-4 w-4" />
             Update Logs
           </Link>
         </nav>

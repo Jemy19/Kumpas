@@ -1,22 +1,7 @@
-import { Link } from 'react-router-dom';
 import {
-  Bell,
-  CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  Search,
-  ShoppingCart,
-  Users,
-  ListFilter,
   MoreHorizontal,
   PlusCircle,
-  File,
 } from "lucide-react"
-
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -48,16 +33,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
 import {
     Table,
     TableBody,
@@ -127,7 +102,7 @@ export function Updates() {
   useEffect(() => {
     axios.get('/getUpdates')
       .then(({ data }) => {
-        setFeedback(data);
+        setUpdate(data);
       })
       .catch((error) => {
         toast.error('Error fetching feedback data');
@@ -312,7 +287,7 @@ export function Updates() {
                             </DialogContent>
                           </Dialog>
                           </TableCell>
-                          <TableCell className="flex flex-col sm:items-start md:items-center">
+                          <TableCell className="hidden md:table-cell">
                           <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button

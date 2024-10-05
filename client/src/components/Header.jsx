@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../../context/userContext';
 import { Link } from 'react-router-dom';
-import { CircleUser, Package2, Home, Menu, Search, Logs, MessageSquareText, UserRoundPen, HandMetal } from "lucide-react"
+import { CircleUser, RefreshCw , Home, Menu, Logs, MessageSquareText, UserRoundPen, HandMetal } from "lucide-react"
 import {
     Sheet,
     SheetClose,
@@ -78,13 +78,13 @@ const Header = () => {
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
                   <Logs className="h-5 w-5" />
-                  Adming Logs
+                  Admin Logs
                 </Link>
                 <Link
                   to="/Update"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Logs className="h-5 w-5" />
+                  <RefreshCw  className="h-5 w-5" />
                   Update Logs
                 </Link>
               </nav>
