@@ -57,7 +57,7 @@ const NavbarSu = () => {
             Feedbacks
           </Link>
           <Link
-            to="/SaUpdates"
+            to="/SaUpdate"
             className={isActive("/Updates")} // Dynamically apply class
           >
             <RefreshCw  className="h-4 w-4" />
