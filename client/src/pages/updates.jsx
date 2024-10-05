@@ -90,6 +90,7 @@ export function Updates() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [butloading, setbutLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
 
   const [data, setData] = useState({
     title: '',
