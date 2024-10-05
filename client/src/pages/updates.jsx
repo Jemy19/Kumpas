@@ -264,7 +264,6 @@ export function Updates() {
                             {update.createdAt}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            <span className="block md:hidden"><strong>Update Log:</strong> </span>
                             <Dialog>
                               <DialogTrigger>
                               <Button size="sm" className="h-8 gap-1">
@@ -286,7 +285,6 @@ export function Updates() {
                             </Dialog>
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                            <span className="block md:hidden"><strong>Action:</strong> </span>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <Button
@@ -322,8 +320,62 @@ export function Updates() {
                           </TableCell>
                           <TableCell className="flex flex-col sm:items-start md:items-center">
                               <span className="block md:hidden"><strong>ID:</strong> {update._id}</span>
-                              <span className="block md:hidden"><strong>Title:</strong> {update.subject}</span>
+                              <span className="block md:hidden"><strong>Title:</strong> {update.title}</span>
                               <span className="block md:hidden"><strong>Sent At:</strong>{update.createdAt}</span>
+                              <span className="block md:hidden"><strong>Update:</strong> {update.description}</span>
+                              <Dialog>
+                                <DialogTrigger>
+                                <Button size="sm" className="h-8 gap-1">
+                                    <PlusCircle className="h-3.5 w-3.5" />
+                                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                      Open Update Log
+                                    </span>
+                                </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                  <DialogHeader>
+                                    <DialogTitle>{update.title}</DialogTitle>
+                                    <DialogDescription>
+                                      Feedback
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  {update.description}
+                                </DialogContent>
+                              </Dialog>
+                              <span className="block md:hidden"><strong>Action:</strong>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    aria-haspopup="true"
+                                    size="icon"
+                                    variant="ghost"
+                                  >
+                                    <MoreHorizontal className="h-4 w-4" />
+                                    <span className="sr-only">Toggle menu</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuLabel>Actions</DropdownMenuLabel> 
+                                  <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                      <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                          This action cannot be undone. This will permanently delete {update.title}.
+                                        </AlertDialogDescription>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction onClick={() => deleteupdate(update._id)}>Continue</AlertDialogAction>
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                              </span>
                           </TableCell>
                         </TableRow>
                         
