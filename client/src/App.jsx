@@ -20,6 +20,8 @@ import SALogs from './pages/superAdmin/saLogs';
 import Notfound from './pages/404NotFound/404';
 import Update from './pages/updates';
 import SaUpdate from './pages/superAdmin/saUpdates';
+import ResetPassword from './pages/resetpassword';
+import ForgotPassword from './pages/forgotpassword';
 
 import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
@@ -35,6 +37,10 @@ function App() {
         <Route path='*' element={<Notfound />} />
         <Route path='/' element={<Homepage />} />
         <Route path='/Login' element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path='/ResetPassword' element={<PublicRoute><ResetPassword /></PublicRoute>} />
+        <Route path='/ForgotPassword' element={<PublicRoute><ForgotPassword /></PublicRoute>} />
+
+
         <Route path='/Dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path='/Management' element={<PrivateRoute><Management /></PrivateRoute>} />
         <Route path='/vid' element={<PrivateRoute><Vidtest /></PrivateRoute>} />
@@ -42,6 +48,8 @@ function App() {
         <Route path='/Feedback' element={<PrivateRoute><Feedback /></PrivateRoute>} />
         <Route path='/AdminLogs' element={<PrivateRoute><AdminLogs /></PrivateRoute>} />
         <Route path='/Updates' element={<PrivateRoute><Update /></PrivateRoute>} />
+
+
         <Route path='/SaDashboard' element={<SuperAdminRoute><SaDashboard /></SuperAdminRoute>} />
         <Route path='/AccManagement' element={<SuperAdminRoute><AccountManagement /></SuperAdminRoute>} />
         <Route path='/SAUserManagement' element={<SuperAdminRoute><SAUserManagement /></SuperAdminRoute>} />

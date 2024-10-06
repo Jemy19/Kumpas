@@ -109,6 +109,9 @@ export function Login() {
                   Login
                 </Button>
               </div>
+              <Link to="/ForgotPassword" className="text-blue-500 hover:underline">
+                Forgot your password?
+              </Link>
             </form>
           </div>
         </div>

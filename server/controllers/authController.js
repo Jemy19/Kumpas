@@ -6,6 +6,9 @@ const { hashPassword, comparePassword} = require('../helpers/auth')
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const Log = require('../models/log'); 
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
 const test = (req, res) => {
     res.json('test is working')
@@ -533,6 +536,64 @@ const deleteUpdate = async (req, res) => {
   }
 };
 
+const forgotpassword = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(400).json({ message: 'User not found' });
+  }
+
+  // Generate reset token
+  const resetToken = crypto.randomBytes(20).toString('hex');
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+  await user.save();
+
+  // Send reset link via email
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+
+  const resetURL = `https://ekumpas.vercel.app/ResetPassword/${resetToken}`;
+  
+  const mailOptions = {
+    to: user.email,
+    from: 'powerpupbois@gmail.com',
+    subject: 'Password Reset',
+    text: `You are receiving this because you requested a password reset. Please click on the link to reset your password: ${resetURL}`,
+  };
+
+  transporter.sendMail(mailOptions, (err) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error sending email' });
+    }
+    res.json({ message: 'Email sent successfully' });
+  });
+};
+
+const resetpassword = async (req, res) => {
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
+  }
+
+  user.password = await bcrypt.hash(req.body.password, 10); // Make sure to hash the password before saving
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+  await user.save();
+
+  res.json({ message: 'Password reset successful' });
+};
+
 
 module.exports =  {
     test,
@@ -553,5 +614,7 @@ module.exports =  {
     getFeedbackForAdmin,
     addupdate,
     getUpdates,
-    deleteUpdate
+    deleteUpdate,
+    forgotpassword,
+    resetpassword
 }
