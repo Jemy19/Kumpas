@@ -619,28 +619,41 @@ const forgotpassword = async (req, res) => {
 
 
 const resetpassword = async (req, res) => {
-  const user = await User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: { $gt: Date.now() },
-  });
-
-  if (!user) {
-    return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
-  }
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  if (!user.password || !passwordRegex.test(user.password)) {
-    return res.json({
-      error: 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() },
     });
-  }
-  const hashedPassword = await hashPassword(user.password)
-  user.password = hashedPassword; // Make sure to hash the password before saving
-  user.resetPasswordToken = undefined;
-  user.resetPasswordExpires = undefined;
-  await user.save();
 
-  res.json({ message: 'Password reset successful' });
+    if (!user) {
+      return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
+    }
+
+    const { password } = req.body;
+    
+    // Validate the new password sent in the request body
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!password || !passwordRegex.test(password)) {
+      return res.status(400).json({
+        error: 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
+      });
+    }
+
+    // Hash the new password before saving
+    const hashedPassword = await hashPassword(password);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    
+    await user.save();
+
+    res.json({ message: 'Password reset successful' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred while resetting the password' });
+  }
 };
+
 
 
 module.exports =  {
