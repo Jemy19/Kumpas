@@ -57,11 +57,20 @@ exports.createAdmin = async (req, res) => {
 exports.getAllAdmins = async (req, res) => {
   try {
     const admins = await User.find({ role: 'admin' });
-    res.status(200).send(admins);
+
+    // Format both createdAt and updatedAt fields for each admin
+    const formattedAdmins = admins.map((admin) => ({
+      ...admin._doc,
+      createdAt: admin.createdAt ? new Date(admin.createdAt).toLocaleString() : null, // Format createdAt
+      updatedAt: admin.updatedAt ? new Date(admin.updatedAt).toLocaleString() : null, // Format updatedAt
+    }));
+
+    res.status(200).send(formattedAdmins);
   } catch (error) {
     res.status(400).send(error);
   }
 };
+
  
 // Controller to delete an admin
 exports.deleteAdmin = async (req, res) => {
@@ -142,17 +151,32 @@ exports.updateAdmin = async (req, res) => {
 exports.logs = async (req, res) => {
   try {
     const logs = await Log.find().sort({ timestamp: -1 }); // Get logs and sort by most recent
-    res.json({ logs });
+
+    // Format the timestamp for each log
+    const formattedLogs = logs.map((log) => ({
+      ...log._doc,
+      timestamp: log.timestamp ? new Date(log.timestamp).toLocaleString() : null, // Format timestamp
+    }));
+
+    res.json({ logs: formattedLogs });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching logs' });
   }
 };
 
+
 exports.getfeedback = async (req, res) => {
   try {
     // Accessing the MongoDB collection directly
     const feedbacks = await mongoose.connection.db.collection('feedbacks').find().toArray();
-    res.json(feedbacks);
+
+    // Format the createdAt field for each feedback
+    const formattedFeedbacks = feedbacks.map((feedback) => ({
+      ...feedback,
+      createdAt: feedback.createdAt ? new Date(feedback.createdAt).toLocaleString() : null, // Format createdAt
+    }));
+
+    res.json(formattedFeedbacks);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

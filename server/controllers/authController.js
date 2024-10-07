@@ -445,11 +445,18 @@ const adminLogs = async (req, res) => {
       return res.status(404).json({ message: 'No logs found for this admin.' });
     }
 
-    res.json({ logs });
+    // Format the timestamp for each log
+    const formattedLogs = logs.map((log) => ({
+      ...log._doc, // Spread other log fields (from Mongoose document)
+      timestamp: log.timestamp ? new Date(log.timestamp).toLocaleString() : null, // Format timestamp
+    }));
+
+    res.json({ logs: formattedLogs });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching logs' });
   }
 };
+
 
 const getFeedbackForAdmin = async (req, res) => {
   try {
