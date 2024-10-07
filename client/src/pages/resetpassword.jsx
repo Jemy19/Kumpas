@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import NavbarLog from "@/components/NavbarLog";
+import { Button } from "@/components/ui/button";
 
 const ResetPassword = () => {
   const { token } = useParams();
