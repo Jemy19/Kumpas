@@ -230,7 +230,15 @@ const getUsers = async (req, res) => {
 try {
     // Accessing the MongoDB collection directly
     const users = await mongoose.connection.db.collection('mobileusers').find().toArray();
-    res.json(users);
+    const formattedUsers = users.map((user) => ({
+      _id: user._id,
+      username: user.title,
+      email: user.description,
+      role: user.role,
+      createdAt: user.createdAt.toLocaleString(), // Format createdAt
+      updatedAt: user.updatedAt.toLocaleString(), // Format updatedAt
+    }));
+    res.json(formattedUsers);
 } catch (error) {
     res.status(500).json({ message: error.message });
 }
@@ -563,11 +571,11 @@ const forgotpassword = async (req, res) => {
   
   const mailOptions = {
     to: user.email,
-    from: 'powerpupbois@gmail.com',
+    from: process.env.EMAIL,
     subject: 'Password Reset',
     text: `You are receiving this because you requested a password reset. Please click on the link to reset your password: ${resetURL}`,
   };
-
+  
   transporter.sendMail(mailOptions, (err) => {
     if (err) {
       return res.status(500).json({ message: 'Error sending email' });
