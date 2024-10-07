@@ -417,7 +417,6 @@ export function SaUserManagement() {
                                         <p className="text-red-500 text-sm">{errorMessage}</p>
                                       )}
                                       <SheetFooter>
-                                          <SheetClose asChild>
                                           <Button
                                           type="submit"
                                           disabled={butloading}
@@ -425,7 +424,6 @@ export function SaUserManagement() {
                                           >
                                             {butloading ? 'Updating...' : 'UPDATE'}
                                           </Button>
-                                          </SheetClose>
                                       </SheetFooter>
                                       </div>
                                     </form>
