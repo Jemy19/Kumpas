@@ -457,7 +457,10 @@ const getFeedbackForAdmin = async (req, res) => {
     const feedbacks = await mongoose.connection.db.collection('feedbacks').find().toArray();
 
     // Remove email field to anonymize feedback
-    const anonymousFeedbacks = feedbacks.map(({ email, ...rest }) => rest);
+    const anonymousFeedbacks = feedbacks.map(({ email, createdAt, ...rest }) => ({
+      ...rest,
+      createdAt: createdAt ? new Date(createdAt).toLocaleString() : null // Format createdAt if it exists
+    }));
 
     res.json(anonymousFeedbacks);
   } catch (error) {
