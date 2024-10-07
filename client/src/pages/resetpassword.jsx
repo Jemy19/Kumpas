@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import NavbarLog from "@/components/NavbarLog";
 import { Button } from "@/components/ui/button";
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -11,6 +13,7 @@ const ResetPassword = () => {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false); // Track error state
   const [butloading, setbutLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +28,8 @@ const ResetPassword = () => {
       await axios.post(`/resetpassword/${token}`, { password });
       setMessage('Password reset successfully.');
       setIsError(false); // Success case
+      navigate('/Login');
+      toast.success('Password reset successfully!')  
     } catch (error) {
       setMessage('Error resetting password.');
       setIsError(true); // Error case
