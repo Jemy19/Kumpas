@@ -37,7 +37,7 @@ function App() {
         <Route path='*' element={<Notfound />} />
         <Route path='/' element={<Homepage />} />
         <Route path='/Login' element={<PublicRoute><Login /></PublicRoute>} />
-        <Route path='/ResetPassword' element={<PublicRoute><ResetPassword /></PublicRoute>} />
+        <Route path='/ResetPassword/:token' element={<PublicRoute><ResetPassword /></PublicRoute>} />
         <Route path='/ForgotPassword' element={<PublicRoute><ForgotPassword /></PublicRoute>} />
 
 
