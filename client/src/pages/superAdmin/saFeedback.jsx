@@ -274,7 +274,7 @@ export function SaFeedback() {
                               <span className="block md:hidden"><strong>Sender:</strong> {feedback.email}</span>
                               <span className="block md:hidden"><strong>Rating:</strong> {feedback.rating}</span>
                               <span className="block md:hidden"><strong>Sent At:</strong> {feedback.createdAt}</span>
-                              <span className="block md:hidden"><strong>Feedback:</strong>
+                              <span className="block md:hidden"><strong>Feedback:</strong></span>
                                 <Dialog>
                                   <DialogTrigger>
                                   <Button size="sm" className="h-8 gap-1">
@@ -293,8 +293,7 @@ export function SaFeedback() {
                                     </DialogHeader>
                                     {feedback.feedback}
                                   </DialogContent>
-                                </Dialog>
-                              </span>
+                                </Dialog>  
                           </TableCell>
                         </TableRow>
                       ))
