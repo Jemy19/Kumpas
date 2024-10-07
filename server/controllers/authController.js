@@ -314,9 +314,13 @@ const createMobUser = async (req, res) => {
     }
 
     // Validate password
-    if (!password || password.length < 6) {
-      return res.json({ error: 'Password is required and should be at least 6 characters long' });
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!password || !passwordRegex.test(password)) {
+      return res.json({
+        error: 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
+      });
     }
+
     console.log('Checking for existing user with email:', email);
     const existingUser = await MobUser.findOne({ email });
     console.log('Existing user found:', existingUser);

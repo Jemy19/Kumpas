@@ -119,6 +119,46 @@ export function UserManagement() {
     e.preventDefault();
     setbutLoading(true); 
     const { email, password } = data;
+  
+    // Frontend password validation
+    
+    // Check if password is at least 8 characters long
+    if (password.length < 8) {
+      toast.error('Password must be at least 8 characters long.');
+      setbutLoading(false); // Stop loading if validation fails
+      return;
+    }
+  
+    // Check if password has at least one uppercase letter, one lowercase letter, one number, and one special character
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+    const numberRegex = /\d/;
+    const specialCharRegex = /[@$!%*?&]/;
+  
+    if (!uppercaseRegex.test(password)) {
+      toast.error('Password must include at least one uppercase letter.');
+      setbutLoading(false);
+      return;
+    }
+  
+    if (!lowercaseRegex.test(password)) {
+      toast.error('Password must include at least one lowercase letter.');
+      setbutLoading(false);
+      return;
+    }
+  
+    if (!numberRegex.test(password)) {
+      toast.error('Password must include at least one number.');
+      setbutLoading(false);
+      return;
+    }
+  
+    if (!specialCharRegex.test(password)) {
+      toast.error('Password must include at least one special character.');
+      setbutLoading(false);
+      return;
+    }
+  
     try {
       const { data } = await axios.post('/createMobUser', {
         email,
@@ -130,12 +170,14 @@ export function UserManagement() {
         setData({ email: '', password: '' });
         toast.success('New User Created!');
         setmobUsers(prevmobUsers => [...prevmobUsers, data]);
-        // Update mobUsers state NOT WORKING
       }
     } catch (error) {
-      toast.success('Failed to Create new user!');
+      toast.error('Failed to Create new user!');
+    } finally {
+      setbutLoading(false); // Ensure loading stops in both success and failure cases
     }
   };
+  
   // delete account
   const deleteAcc = async (id) => {
     try {
