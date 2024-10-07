@@ -18,6 +18,42 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setbutLoading(true); 
+    if (password.length < 8) {
+      toast.error('Password must be at least 8 characters long.');
+      setbutLoading(false); // Stop loading if validation fails
+      return;
+    }
+  
+    // Check if password has at least one uppercase letter, one lowercase letter, one number, and one special character
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+    const numberRegex = /\d/;
+    const specialCharRegex = /[@$!%*?&]/;
+  
+    if (!uppercaseRegex.test(password)) {
+      toast.error('Password must include at least one uppercase letter.');
+      setbutLoading(false);
+      return;
+    }
+  
+    if (!lowercaseRegex.test(password)) {
+      toast.error('Password must include at least one lowercase letter.');
+      setbutLoading(false);
+      return;
+    }
+  
+    if (!numberRegex.test(password)) {
+      toast.error('Password must include at least one number.');
+      setbutLoading(false);
+      return;
+    }
+  
+    if (!specialCharRegex.test(password)) {
+      toast.error('Password must include at least one special character.');
+      setbutLoading(false);
+      return;
+    }
+    
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
       setIsError(true);

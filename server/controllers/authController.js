@@ -413,6 +413,12 @@ const updateMobUser = async (req, res) => {
     // Update name and email if provided
     mobUser.email = email || mobUser.email;
 
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!password || !passwordRegex.test(password)) {
+      return res.json({
+        error: 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
+      });
+    }
     // Check and update password
     if (password) {
       const isSamePassword = await comparePassword(password, mobUser.password);
@@ -620,6 +626,12 @@ const resetpassword = async (req, res) => {
 
   if (!user) {
     return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
+  }
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  if (!user.password || !passwordRegex.test(user.password)) {
+    return res.json({
+      error: 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
+    });
   }
   const hashedPassword = await hashPassword(req.body.password)
   user.password = hashedPassword; // Make sure to hash the password before saving
