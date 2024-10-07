@@ -53,9 +53,10 @@ const ResetPassword = () => {
       setbutLoading(false);
       return;
     }
-    
+
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
+      setbutLoading(false);
       setIsError(true);
       return;
     }

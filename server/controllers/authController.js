@@ -633,7 +633,7 @@ const resetpassword = async (req, res) => {
       error: 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
     });
   }
-  const hashedPassword = await hashPassword(req.body.password)
+  const hashedPassword = await hashPassword(user.password)
   user.password = hashedPassword; // Make sure to hash the password before saving
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
