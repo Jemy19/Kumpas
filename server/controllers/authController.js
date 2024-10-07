@@ -86,13 +86,22 @@ const getProfile = (req, res) => {
 
 
 const getWords = async (req, res) => {
-    try {
-        const words = await Word.find();
-        res.json(words);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
+  try {
+      const words = await Word.find();
+
+      // Format createdAt and updatedAt fields for each word
+      const formattedWords = words.map((word) => ({
+          ...word._doc,
+          createdAt: word.createdAt ? new Date(word.createdAt).toLocaleString() : null, // Format createdAt
+          updatedAt: word.updatedAt ? new Date(word.updatedAt).toLocaleString() : null, // Format updatedAt
+      }));
+
+      res.json(formattedWords);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
 
 const logoutUser = async (req, res) => {
   res.cookie('token', '', { 

@@ -275,25 +275,25 @@ export function SaFeedback() {
                               <span className="block md:hidden"><strong>Rating:</strong> {feedback.rating}</span>
                               <span className="block md:hidden"><strong>Sent At:</strong> {feedback.createdAt}</span>
                               <span className="block md:hidden"><strong>Feedback:</strong></span>
-                                <Dialog>
-                                  <DialogTrigger>
-                                  <Button size="sm" className="h-8 gap-1">
-                                      <PlusCircle className="h-3.5 w-3.5" />
-                                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                                        Open Feedback
-                                      </span>
-                                  </Button>
-                                  </DialogTrigger>
-                                  <DialogContent>
-                                    <DialogHeader>
-                                      <DialogTitle>{feedback.email} - {feedback.subject}</DialogTitle>
-                                      <DialogDescription>
-                                        Feedback
-                                      </DialogDescription>
-                                    </DialogHeader>
-                                    {feedback.feedback}
-                                  </DialogContent>
-                                </Dialog>  
+                              <Dialog>
+                                <DialogTrigger>
+                                <Button size="sm" className="h-8 gap-1">
+                                    <PlusCircle className="h-3.5 w-3.5" />
+                                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                      Open Feedback
+                                    </span>
+                                </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                  <DialogHeader>
+                                    <DialogTitle>{feedback.email} - {feedback.subject}</DialogTitle>
+                                    <DialogDescription>
+                                      Feedback
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  {feedback.feedback}
+                                </DialogContent>
+                              </Dialog>  
                           </TableCell>
                         </TableRow>
                       ))
