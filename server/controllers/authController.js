@@ -570,6 +570,11 @@ const forgotpassword = async (req, res) => {
     return res.status(400).json({ message: 'User not found' });
   }
 
+  // Check if a reset request has been made recently
+  if (user.resetPasswordExpires && Date.now() < user.resetPasswordExpires) {
+    return res.status(429).json({ message: 'A password reset email has already been sent. Please wait before trying again.' });
+  }
+
   // Generate reset token
   const resetToken = crypto.randomBytes(20).toString('hex');
   user.resetPasswordToken = resetToken;
@@ -601,6 +606,7 @@ const forgotpassword = async (req, res) => {
     res.json({ message: 'Email sent successfully' });
   });
 };
+
 
 const resetpassword = async (req, res) => {
   const user = await User.findOne({
