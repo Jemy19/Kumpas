@@ -8,7 +8,6 @@ const mongoose = require('mongoose');
 const Log = require('../models/log'); 
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const bcrypt = require('bcrypt');
 
 const test = (req, res) => {
     res.json('test is working')
@@ -593,8 +592,8 @@ const resetpassword = async (req, res) => {
   if (!user) {
     return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
   }
-
-  user.password = await bcrypt.hash(req.body.password, 10); // Make sure to hash the password before saving
+  const hashedPassword = await hashPassword(req.body.password)
+  user.password = hashedPassword; // Make sure to hash the password before saving
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
   await user.save();
