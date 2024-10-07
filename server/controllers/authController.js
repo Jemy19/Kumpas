@@ -232,8 +232,8 @@ try {
     const users = await mongoose.connection.db.collection('mobileusers').find().toArray();
     const formattedUsers = users.map((user) => ({
       _id: user._id,
-      username: user.title,
-      email: user.description,
+      username: user.username,
+      email: user.email,
       role: user.role,
       createdAt: user.createdAt.toLocaleString(), // Format createdAt
       updatedAt: user.updatedAt.toLocaleString(), // Format updatedAt
