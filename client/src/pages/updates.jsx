@@ -75,7 +75,8 @@ export function Updates() {
 
   const [data, setData] = useState({
     title: '',
-    description: ''
+    description: '',
+    link: ''
   })
   
   const updateItemsPerPage = () => {
@@ -115,18 +116,19 @@ export function Updates() {
   const addupdate = async (e) => {
     e.preventDefault();
     setbutLoading(true); 
-    const { title, description} = data;
+    const { title, description, link} = data;
 
     try {
       const response = await axios.post('/addupdate', {
         title,
         description,
+        link,
       });
 
       if (response.data.error) {
         toast.error(response.data.error);
       } else {
-        setData({ title: '', description: ''});
+        setData({ title: '', description: '', link: ''});
         toast.success('New Update Log Successfully Added!');
         setUpdate(prevUpdates => [...prevUpdates, response.data]);
       }
@@ -212,6 +214,8 @@ export function Updates() {
                                 <Input type='text' placeholder='Enter Title...' value={data.title} onChange={(e) => setData({...data, title: e.target.value})} />
                                 <Label>Description</Label>
                                 <Input type='text' placeholder='Enter Description...' value={data.description} onChange={(e) => setData({...data, description: e.target.value})} />
+                                <Label>Link</Label>
+                                <Input type='text' placeholder='Enter link...' value={data.link} onChange={(e) => setData({...data, link: e.target.value})} />
                                   <Button
                                   type="submit"
                                   disabled={butloading}
@@ -277,10 +281,12 @@ export function Updates() {
                                 <DialogHeader>
                                   <DialogTitle>{update.title}</DialogTitle>
                                   <DialogDescription>
-                                    Feedback
+                                    Description
                                   </DialogDescription>
                                 </DialogHeader>
                                 {update.description}
+                                <br />
+                                <strong>Link: </strong>{update.link}
                               </DialogContent>
                             </Dialog>
                           </TableCell>
@@ -336,10 +342,12 @@ export function Updates() {
                                   <DialogHeader>
                                     <DialogTitle>{update.title}</DialogTitle>
                                     <DialogDescription>
-                                      Feedback
+                                      Description
                                     </DialogDescription>
                                   </DialogHeader>
                                   {update.description}
+                                  <br />
+                                  <strong>Link: </strong>{update.link}
                                 </DialogContent>
                               </Dialog>
                               </span>

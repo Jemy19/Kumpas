@@ -281,12 +281,12 @@ import {
                                 <DialogHeader>
                                   <DialogTitle>{update.title}</DialogTitle>
                                   <DialogDescription>
-                                    Feedback
+                                    Description
                                   </DialogDescription>
                                 </DialogHeader>
-                                Link: {update.link}
-                                Description:
                                 {update.description}
+                                <br />
+                                <strong>Link: </strong>{update.link}
                               </DialogContent>
                             </Dialog>
                           </TableCell>
@@ -342,12 +342,12 @@ import {
                                   <DialogHeader>
                                     <DialogTitle>{update.title}</DialogTitle>
                                     <DialogDescription>
-                                      Feedback
+                                      Description
                                     </DialogDescription>
                                   </DialogHeader>
-                                  Link: {update.link}
-                                  Description:
                                   {update.description}
+                                  <br />
+                                  <strong>Link: </strong>{update.link}
                                 </DialogContent>
                               </Dialog>
                               </span>
