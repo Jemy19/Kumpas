@@ -76,7 +76,7 @@ import {
     const [data, setData] = useState({
       title: '',
       description: '',
-      link: ''
+      link: '',
     })
     
     const updateItemsPerPage = () => {
@@ -116,7 +116,7 @@ import {
     const addupdate = async (e) => {
       e.preventDefault();
       setbutLoading(true); 
-      const { title, description} = data;
+      const { title, description, link} = data;
   
       try {
         const response = await axios.post('/addupdate', {
@@ -128,7 +128,7 @@ import {
         if (response.data.error) {
           toast.error(response.data.error);
         } else {
-          setData({ title: '', description: ''});
+          setData({ title: '', description: '', link: ''});
           toast.success('New Update Log Successfully Added!');
           setUpdate(prevUpdates => [...prevUpdates, response.data]);
         }
@@ -214,6 +214,7 @@ import {
                                   <Input type='text' placeholder='Enter Title...' value={data.title} onChange={(e) => setData({...data, title: e.target.value})} />
                                   <Label>Description</Label>
                                   <Input type='text' placeholder='Enter Description...' value={data.description} onChange={(e) => setData({...data, description: e.target.value})} />
+                                  <Label>Link</Label>
                                   <Input type='text' placeholder='Enter link...' value={data.link} onChange={(e) => setData({...data, link: e.target.value})} />
                                   <Button
                                     type="submit"
