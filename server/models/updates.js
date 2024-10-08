@@ -10,6 +10,10 @@ const updateSchema = new Schema({
         type: String,
         required: true
     },
+    link: {
+        type: String,
+        required: true
+    },
 }, {timestamps: true})
 
 const UpdateModel = mongoose.model('Updates', updateSchema);

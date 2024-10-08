@@ -496,7 +496,7 @@ const getFeedbackForAdmin = async (req, res) => {
 
 const addupdate = async (req, res) => {
   try {
-      const {title, description} = req.body;
+      const {title, description, link} = req.body;
       if (!title){
           return res.json({
           error: 'Title is required'
@@ -507,10 +507,16 @@ const addupdate = async (req, res) => {
               error: 'Description is Required'
           })
       }
+      if (!link) {
+        return res.json({
+            error: 'link is Required'
+        })
+      }
 
       const updates = await Updates.create ({
           title,
-          description
+          description,
+          link
       });
       await Log.create({
         level: 'info',
@@ -531,6 +537,7 @@ const getUpdates = async (req, res) => {
         _id: update._id,
         title: update.title,
         description: update.description,
+        link: update.link,
         createdAt: update.createdAt.toLocaleString(), // Format createdAt
       }));
   

@@ -75,7 +75,8 @@ import {
   
     const [data, setData] = useState({
       title: '',
-      description: ''
+      description: '',
+      link: ''
     })
     
     const updateItemsPerPage = () => {
@@ -121,6 +122,7 @@ import {
         const response = await axios.post('/addupdate', {
           title,
           description,
+          link,
         });
   
         if (response.data.error) {
@@ -212,7 +214,8 @@ import {
                                   <Input type='text' placeholder='Enter Title...' value={data.title} onChange={(e) => setData({...data, title: e.target.value})} />
                                   <Label>Description</Label>
                                   <Input type='text' placeholder='Enter Description...' value={data.description} onChange={(e) => setData({...data, description: e.target.value})} />
-                                    <Button
+                                  <Input type='text' placeholder='Enter link...' value={data.link} onChange={(e) => setData({...data, link: e.target.value})} />
+                                  <Button
                                     type="submit"
                                     disabled={butloading}
                                     className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
@@ -280,6 +283,8 @@ import {
                                     Feedback
                                   </DialogDescription>
                                 </DialogHeader>
+                                Link: {update.link}
+                                Description:
                                 {update.description}
                               </DialogContent>
                             </Dialog>
@@ -339,6 +344,8 @@ import {
                                       Feedback
                                     </DialogDescription>
                                   </DialogHeader>
+                                  Link: {update.link}
+                                  Description:
                                   {update.description}
                                 </DialogContent>
                               </Dialog>
