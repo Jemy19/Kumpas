@@ -21,7 +21,6 @@ export function UserContextProvider({children}) {
             })
             .catch((error) => {
                 console.error("Error fetching profile data:", error);
-                toast.error('Session expired, please login again', { autoClose: 8000 });
             })
             .finally(() => {
                 setLoading(false); // Set loading to false when request completes

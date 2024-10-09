@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import Link from 'react-router-dom';
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -22,6 +23,9 @@ const Navbar = () => {
           </li>
           <li className='p-4'>
             <a href='#contact'>Contact</a>
+          </li>
+          <li className='p-4'>
+            <Link to="/login">Login</Link>
           </li>
         </ul>
         <div onClick={handleNav} className='block md:hidden'>
