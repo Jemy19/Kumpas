@@ -16,17 +16,11 @@ const Analytics = () => {
            over 1.5 billion people globally live with some form of hearing loss. In the Philippines alone, there are an estimated 
            1,784,690 individuals with hearing difficulties.
           </p>
-          <button className='bg-black text-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'>
-          <a 
-          href="https://github.com/XjorLml/E-Kumpas_Mobile_App/releases/download/v1.0.0-beta/E-Kumpas-v1.0.0-beta.apk"  // External download link
-          download="Ekumpass.apk"  // Rename the APK upon download (optional)
-          className="no-underline text-white"
-          target="_blank"  // Opens in a new tab (optional)
-          rel="noopener noreferrer"  // Security best practice when using target="_blank"
+          <button className='bg-black text-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'
+            onClick={() => window.open('https://github.com/XjorLml/E-Kumpas_Mobile_App/releases/download/v1.0.0-beta/E-Kumpas-v1.0.0-beta.apk', '_blank', 'noopener noreferrer')}
           >
             Download APK
-          </a>
-        </button>
+          </button>
           <p>Download the App Now!</p>
         </div>
       </div>
