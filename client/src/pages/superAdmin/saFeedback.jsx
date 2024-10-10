@@ -304,12 +304,12 @@ export function SaFeedback() {
                                         <AlertDialogHeader>
                                           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                           <AlertDialogDescription>
-                                            This action cannot be undone. This will permanently delete the Account: {admin.name}
+                                            This action cannot be undone. This will permanently delete the Feedback
                                           </AlertDialogDescription>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
                                           <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                          <AlertDialogAction onClick={() => deleteAcc(admin._id)}>Continue</AlertDialogAction>
+                                          <AlertDialogAction onClick={() => deleteAcc(feedback._id)}>Continue</AlertDialogAction>
                                         </AlertDialogFooter>
                                       </AlertDialogContent>
                                     </AlertDialog>
@@ -336,7 +336,7 @@ export function SaFeedback() {
                                     <AlertDialogHeader>
                                       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                       <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete the Account: {admin.name}
+                                        This action cannot be undone. This will permanently delete the Feedback
                                       </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
