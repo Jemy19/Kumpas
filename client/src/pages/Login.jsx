@@ -104,7 +104,7 @@ export function Login() {
                     </div>
                   </div>
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full select-none">
                   Login
                 </Button>
               </div>
