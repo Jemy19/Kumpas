@@ -1,19 +1,6 @@
-import { Link } from 'react-router-dom';
 import {
-  Bell,
-  CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  Search,
-  ShoppingCart,
-  Users,
-  ListFilter,
   MoreHorizontal,
   PlusCircle,
-  File,
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -97,15 +84,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-  import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-  } from "@/components/ui/pagination"
 import React, { useContext, useState, useEffect } from 'react';
 import {toast} from 'react-hot-toast'
 import axios from 'axios'
@@ -157,6 +135,19 @@ export function SaFeedback() {
         setLoading(false);
       });
   }, []);
+
+  const deleteFeedback = async (id) => {
+    try {
+      const response = await axios.delete(`/deleteFeedback/${id}`);
+      if (response.status === 200) {
+        console.log('Feedback deleted successfully:');
+        toast.success('Feedback deleted successfully!')  
+        setFeedback(prevFeedbacks => prevFeedbacks.filter((feedback) => feedback._id !== id));
+      } 
+    } catch (error) {
+      console.error('An error occurred while deleting the feedback:', error);
+    }
+  };
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prevCategories) => {
@@ -294,6 +285,68 @@ export function SaFeedback() {
                                   {feedback.feedback}
                                 </DialogContent>
                               </Dialog>  
+                              <span className="block md:hidden"><strong>Action:</strong>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button aria-haspopup="true" size="icon" variant="ghost">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                    <span className="sr-only">Toggle menu</span>
+                                  </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                    <Button>Approve</Button>
+                                    <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                        <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                          <AlertDialogDescription>
+                                            This action cannot be undone. This will permanently delete the Account: {admin.name}
+                                          </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                          <AlertDialogAction onClick={() => deleteAcc(admin._id)}>Continue</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                              </span>
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button aria-haspopup="true" size="icon" variant="ghost">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                  <span className="sr-only">Toggle menu</span>
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <Button>Approve</Button>
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete the Account: {admin.name}
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction onClick={() => deleteFeedback(feedback._id)}>Continue</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </TableCell>
                         </TableRow>
                       ))

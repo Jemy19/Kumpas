@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { test, loginUser, getProfile, logoutUser, addWord, getWords, deleteWordDoc, updateWordDoc, getUsers, getTotalCounts, getWordsSortedByUsage, createMobUser, deleteMobUser, updateMobUser, adminLogs, getFeedbackForAdmin, addupdate, getUpdates,
-deleteUpdate, forgotpassword, resetpassword } = require('../controllers/authController')
+deleteUpdate, forgotpassword, resetpassword, deleteFeedback } = require('../controllers/authController')
 const checkAdminOrSuperAdmin = require('../middleware/checkAdminSu'); 
 
 router.get('/', test)
@@ -23,6 +23,7 @@ router.get('/getFeedbackForAdmin', checkAdminOrSuperAdmin, getFeedbackForAdmin)
 router.post('/addupdate', checkAdminOrSuperAdmin, addupdate)
 router.get('/getUpdates', checkAdminOrSuperAdmin, getUpdates);
 router.delete('/deleteUpdate/:id', checkAdminOrSuperAdmin, deleteUpdate);
+router.delete('/deleteFeedback/:id', checkAdminOrSuperAdmin, deleteFeedback);
 
 router.post('/forgotpassword', forgotpassword);
 router.post('/resetpassword/:token', resetpassword);

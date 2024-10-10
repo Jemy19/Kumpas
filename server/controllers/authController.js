@@ -661,7 +661,42 @@ const resetpassword = async (req, res) => {
   }
 };
 
+const deleteFeedback = async (req, res) => {
+  try {
+    const { id } = req.params; // Get the feedback ID from the request params
 
+    // Ensure that the id is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid feedback ID' });
+    }
+
+    // Delete the feedback from the collection
+    const result = await mongoose.connection.db.collection('feedbacks').deleteOne({ _id: new mongoose.Types.ObjectId(id) });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Feedback not found' });
+    }
+
+    // Log the deletion of the user
+    await Log.create({
+      level: 'info',
+      message: `Deleted feedback: ${id}`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
+    res.status(200).send({ success: true });
+  } catch (error) {
+    // Log the error if something goes wrong
+    await Log.create({
+      level: 'error',
+      message: `Error feedback`,
+      adminId: req.user._id,
+      adminName: req.user.name
+    });
+
+    res.status(400).send({ error: error.message });
+  }
+};
 
 module.exports =  {
     test,
@@ -684,5 +719,6 @@ module.exports =  {
     getUpdates,
     deleteUpdate,
     forgotpassword,
-    resetpassword
+    resetpassword,
+    deleteFeedback
 }
