@@ -114,13 +114,13 @@ export function Login() {
             </form>
           </div>
         </div>
-        <div className="hidden bg-muted lg:block">
+        <div className="hidden bg-muted lg:block pointer-events-none">
           <img
             src={MyImage}
             alt="Image"
             width="1920"
             height="1080"
-            className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale select-none"
+            className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale select-none pointer-events-none"
           />
         </div>
       </div>
