@@ -60,17 +60,6 @@ import {
     DialogTrigger,
     DialogClose,
   } from "@/components/ui/dialog"
-
-  import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-  
   import {
     AlertDialog,
     AlertDialogAction,
@@ -82,15 +71,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-  import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-  } from "@/components/ui/pagination"
 import React, { useContext, useState, useEffect } from 'react';
 import {toast} from 'react-hot-toast'
 import axios from 'axios'
@@ -327,7 +307,7 @@ export function Feedback() {
                                     <AlertDialogHeader>
                                       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                       <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete the Account: {feedback.name}
+                                        This action cannot be undone. This will permanently delete the Feedback
                                       </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>

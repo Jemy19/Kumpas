@@ -173,7 +173,6 @@ export function AccountManagement() {
     try {
       const response = await axios.delete(`/admin/admin/${id}`);
       if (response.status === 200) {
-        console.log('Word deleted successfully:');
         toast.success('account Deleted!')  
         setAdmins(prevAdmins => prevAdmins.filter((admin) => admin._id !== id));
       } 
