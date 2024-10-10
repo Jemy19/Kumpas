@@ -1,9 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { UserContext } from '../../../context/userContext';
-import { Link } from 'react-router-dom';
-
-import { CircleUser, Menu, Package2, Search, MoreHorizontal, PlusCircle, Home, Package} from "lucide-react"
-
+import React, { useState, useEffect } from 'react';
+import {MoreHorizontal, PlusCircle} from "lucide-react"
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -32,16 +29,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -88,6 +75,8 @@ export function AccountManagement() {
   const [errorMessage, setErrorMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
   const [butloading, setbutLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   //responsive
 
@@ -116,11 +105,12 @@ export function AccountManagement() {
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
   })
   const registerUser = async (e) => {
     e.preventDefault()
     setbutLoading(true); 
-    const {name, email, password} = data
+    const {name, email, password, confirmPassword} = data
     if (password.length < 8) {
       toast.error('Password must be at least 8 characters long.');
       setbutLoading(false); // Stop loading if validation fails
@@ -156,6 +146,11 @@ export function AccountManagement() {
       setbutLoading(false);
       return;
     }
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match.');
+      setbutLoading(false);
+      return;
+    }
     try {
       const {data} = await axios.post ('/admin/admin', {
         name, email, password
@@ -163,7 +158,7 @@ export function AccountManagement() {
       if(data.error){
         toast.error(data.error)
       } else {
-        setData({ name: '', email: '', password: ''});
+        setData({ name: '', email: '', password: '', confirmPassword: ''});
         toast.success('New User Created!')
         setAdmins(prevAdmins => [...prevAdmins, data]);
       }
@@ -354,31 +349,77 @@ export function AccountManagement() {
                             <DialogTitle>
                               Create New Account
                             </DialogTitle>
-                              <form  onSubmit={registerUser}>
+                            <form onSubmit={registerUser}>
                               <div className="grid gap-4">
                                 <div className="grid gap-4">
                                   <div className="grid gap-2">
                                     <Label htmlFor="first-name">First name</Label>
-                                    <Input type='text' placeholder='Enter Name...' value={data.name} onChange={(e) => setData({...data, name: e.target.value})} />
+                                    <Input
+                                      type="text"
+                                      placeholder="Enter Name..."
+                                      value={data.name}
+                                      onChange={(e) => setData({ ...data, name: e.target.value })}
+                                    />
                                   </div>
                                 </div>
+
                                 <div className="grid gap-2">
                                   <Label htmlFor="email">Email</Label>
-                                  <Input type='email' placeholder='Enter Email...' value={data.email} onChange={(e) => setData({...data, email: e.target.value})}/>
+                                  <Input
+                                    type="email"
+                                    placeholder="Enter Email..."
+                                    value={data.email}
+                                    onChange={(e) => setData({ ...data, email: e.target.value })}
+                                  />
                                 </div>
-                                <div className="grid gap-2">
+
+                                {/* Password Field */}
+                                <div className="grid gap-2 relative">
                                   <Label htmlFor="password">Password</Label>
-                                  <Input type='password' placeholder='Enter Password...' value={data.password} onChange={(e) => setData({...data, password: e.target.value})}/>
+                                  <div className="relative">
+                                    <Input
+                                      type={showPassword ? "text" : "password"}
+                                      placeholder="Enter Password..."
+                                      value={data.password}
+                                      onChange={(e) => setData({ ...data, password: e.target.value })}
+                                    />
+                                    <div
+                                      className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                      onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                      {showPassword ? <FaEye /> : <FaEyeSlash />}
+                                    </div>
+                                  </div>
                                 </div>
+
+                                {/* Confirm Password Field */}
+                                <div className="grid gap-2 relative">
+                                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                  <div className="relative">
+                                    <Input
+                                      type={showConfirmPassword ? "text" : "password"}
+                                      placeholder="Confirm Password..."
+                                      value={data.confirmPassword}
+                                      onChange={(e) => setData({ ...data, confirmPassword: e.target.value })}
+                                    />
+                                    <div
+                                      className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    >
+                                      {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                                    </div>
+                                  </div>
+                                </div>
+
                                 <Button
                                   type="submit"
                                   disabled={butloading}
-                                  className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                  className={`w-full h-10 ${butloading ? "bg-gray-400 cursor-not-allowed translate-y-1" : ""}`}
                                 >
-                                  {butloading ? 'Creating...' : 'CREATE'}
+                                  {butloading ? "Creating..." : "CREATE"}
                                 </Button>
                               </div>
-                              </form>
+                            </form>
                             </DialogContent>
                         </Dialog>
                         </div>
@@ -449,41 +490,64 @@ export function AccountManagement() {
                                         <div className="grid gap-4">
                                           <Label>Name</Label>
                                           <Input
-                                            type='text'
-                                            placeholder='Enter Name...'
+                                            type="text"
+                                            placeholder="Enter Name..."
                                             value={updateData.name}
                                             onChange={(e) => setUpdateData({ ...updateData, name: e.target.value })}
                                           />
+
                                           <Label>Email</Label>
                                           <Input
-                                            type='email'
-                                            placeholder='Enter Email...'
+                                            type="email"
+                                            placeholder="Enter Email..."
                                             value={updateData.email}
                                             onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
                                           />
+
+                                          {/* New Password Field */}
                                           <Label>New Password</Label>
-                                          <Input
-                                            type='password'
-                                            placeholder='Enter Password...'
-                                            onChange={(e) => setUpdateData({ ...updateData, password: e.target.value })}
-                                          />
+                                          <div className="relative">
+                                            <Input
+                                              type={showPassword ? "text" : "password"}
+                                              placeholder="Enter Password..."
+                                              value={updateData.password || ''}
+                                              onChange={(e) => setUpdateData({ ...updateData, password: e.target.value })}
+                                            />
+                                            <div
+                                              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                              onClick={() => setShowPassword(!showPassword)}
+                                            >
+                                              {showPassword ? <FaEye /> : <FaEyeSlash />}
+                                            </div>
+                                          </div>
+
+                                          {/* Confirm Password Field */}
                                           <Label>Confirm Password</Label>
-                                          <Input
-                                            type='password'
-                                            placeholder='Confirm Password...'
-                                            onChange={(e) => setUpdateData({ ...updateData, confirmPassword: e.target.value })}
-                                          />
-                                          {errorMessage && (
-                                            <p className="text-red-500 text-sm">{errorMessage}</p>
-                                          )}
+                                          <div className="relative">
+                                            <Input
+                                              type={showConfirmPassword ? "text" : "password"}
+                                              placeholder="Confirm Password..."
+                                              value={updateData.confirmPassword || ''}
+                                              onChange={(e) => setUpdateData({ ...updateData, confirmPassword: e.target.value })}
+                                            />
+                                            <div
+                                              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            >
+                                              {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                                            </div>
+                                          </div>
+
+                                          {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+
                                           <SheetFooter>
                                             <Button
-                                            type="submit"
-                                            disabled={butloading}
-                                            className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
-                                          >
-                                            {butloading ? 'Updating...' : 'UPDATE'}
-                                          </Button>
+                                              type="submit"
+                                              disabled={butloading}
+                                              className={`w-full h-10 ${butloading ? "bg-gray-400 cursor-not-allowed translate-y-1" : ""}`}
+                                            >
+                                              {butloading ? "Updating..." : "UPDATE"}
+                                            </Button>
                                           </SheetFooter>
                                         </div>
                                       </form>

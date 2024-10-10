@@ -30,16 +30,6 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
 import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -161,7 +151,7 @@ export function UserManagement() {
     }
     
     if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match.');
+      toast.error('Passwords do not match.');
       setbutLoading(false);
       return;
     }
