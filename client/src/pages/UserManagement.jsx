@@ -1,7 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
-
-import { CircleUser, Menu, Package2, Search, MoreHorizontal, PlusCircle, Home, Package, Users} from "lucide-react"
-
+import React, { useState, useEffect } from 'react';
+import { MoreHorizontal, PlusCircle} from "lucide-react"
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -368,15 +367,33 @@ export function UserManagement() {
                             <DialogTitle>
                               Create New Account
                             </DialogTitle>
-                              <form  onSubmit={registerMobUser}>
+                            <form onSubmit={registerMobUser}>
                               <div className="grid gap-4">
                                 <div className="grid gap-2">
                                   <Label htmlFor="email">Email</Label>
-                                  <Input type='email' placeholder='Enter Email...' value={data.email} onChange={(e) => setData({...data, email: e.target.value})}/>
+                                  <Input 
+                                    type='email' 
+                                    placeholder='Enter Email...' 
+                                    value={data.email} 
+                                    onChange={(e) => setData({...data, email: e.target.value})}
+                                  />
                                 </div>
-                                <div className="grid gap-2">
+                                <div className="grid gap-2 relative">
                                   <Label htmlFor="password">Password</Label>
-                                  <Input type='password' placeholder='Enter Password...' value={data.password} onChange={(e) => setData({...data, password: e.target.value})}/>
+                                  <div className="relative">
+                                    <Input 
+                                      type={showPassword ? 'text' : 'password'} 
+                                      placeholder='Enter Password...' 
+                                      value={data.password} 
+                                      onChange={(e) => setData({...data, password: e.target.value})}
+                                    />
+                                    <div 
+                                      className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" 
+                                      onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                      {showPassword ? <FaEye /> : <FaEyeSlash />}
+                                    </div>
+                                  </div>
                                 </div>
                                 <Button
                                   type="submit"
@@ -386,7 +403,7 @@ export function UserManagement() {
                                   {butloading ? 'Creating...' : 'CREATE'}
                                 </Button>
                               </div>
-                              </form>
+                            </form>  
                             </DialogContent>
                         </Dialog>
                         </div>
@@ -471,37 +488,57 @@ export function UserManagement() {
                                     </SheetHeader>
                                     <form onSubmit={(e) => updateAcc(e, updateData.id, updateData)}>
                                       <div className="grid gap-4">
-                                      <Label>email</Label>
-                                      <Input
-                                          type='email'
-                                          placeholder='Enter Email...'
+                                        <Label>Email</Label>
+                                        <Input
+                                          type="email"
+                                          placeholder="Enter Email..."
                                           value={updateData.email}
                                           onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
-                                      />
-                                      <Label>New Password</Label>
-                                      <Input
-                                          type='text'
-                                          placeholder='Enter Password...'
-                                          onChange={(e) => setUpdateData({ ...updateData, password: e.target.value })}
-                                      />
-                                      <Label>Confirm Password</Label>
-                                      <Input
-                                          type='text'
-                                          placeholder='Enter Password...'
-                                          onChange={(e) => setUpdateData({ ...updateData, confirmPassword: e.target.value })}
-                                      />
-                                      {errorMessage && (
-                                        <p className="text-red-500 text-sm">{errorMessage}</p>
-                                      )}
-                                      <SheetFooter>
+                                        />
+
+                                        <Label>New Password</Label>
+                                        <div className="relative">
+                                          <Input
+                                            type={showPassword ? 'text' : 'password'}
+                                            placeholder="Enter Password..."
+                                            onChange={(e) => setUpdateData({ ...updateData, password: e.target.value })}
+                                          />
+                                          <div
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                          >
+                                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                                          </div>
+                                        </div>
+
+                                        <Label>Confirm Password</Label>
+                                        <div className="relative">
+                                          <Input
+                                            type={showConfirmPassword ? 'text' : 'password'}
+                                            placeholder="Enter Password..."
+                                            onChange={(e) => setUpdateData({ ...updateData, confirmPassword: e.target.value })}
+                                          />
+                                          <div
+                                            className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                          >
+                                            {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                                          </div>
+                                        </div>
+
+                                        {errorMessage && (
+                                          <p className="text-red-500 text-sm">{errorMessage}</p>
+                                        )}
+
+                                        <SheetFooter>
                                           <Button
-                                          type="submit"
-                                          disabled={butloading}
-                                          className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+                                            type="submit"
+                                            disabled={butloading}
+                                            className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
                                           >
                                             {butloading ? 'Updating...' : 'UPDATE'}
                                           </Button>
-                                      </SheetFooter>
+                                        </SheetFooter>
                                       </div>
                                     </form>
                                   </SheetContent>

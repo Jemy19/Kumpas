@@ -100,7 +100,7 @@ export function Login() {
                       className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      {showPassword ? <FaEye /> : <FaEyeSlash />} {/* Reversed icons */}
                     </div>
                   </div>
                 </div>
