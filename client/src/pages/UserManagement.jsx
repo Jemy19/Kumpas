@@ -85,6 +85,7 @@ export function UserManagement() {
   const [errorMessage, setErrorMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
   const [butloading, setbutLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
     //responsive
 
