@@ -86,7 +86,7 @@ export function UserManagement() {
   const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
   const [butloading, setbutLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     //responsive
 
     const updateItemsPerPage = () => {
@@ -113,12 +113,13 @@ export function UserManagement() {
   const [data, setData] = useState({
     email: '',
     password: '',
+    confirmPassword: '',
   });
 
   const registerMobUser = async (e) => {
     e.preventDefault();
     setbutLoading(true); 
-    const { email, password } = data;
+    const { email, password, confirmPassword } = data;
   
     // Frontend password validation
     
@@ -158,7 +159,12 @@ export function UserManagement() {
       setbutLoading(false);
       return;
     }
-  
+    
+    if (password !== confirmPassword) {
+      setErrorMessage('Passwords do not match.');
+      setbutLoading(false);
+      return;
+    }
     try {
       const { data } = await axios.post('/createMobUser', {
         email,
@@ -167,7 +173,7 @@ export function UserManagement() {
       if (data.error) {
         toast.error(data.error);
       } else {
-        setData({ email: '', password: '' });
+        setData({ email: '', password: '', confirmPassword: '' });
         toast.success('New User Created!');
         setmobUsers(prevmobUsers => [...prevmobUsers, data]);
       }
@@ -372,30 +378,52 @@ export function UserManagement() {
                               <div className="grid gap-4">
                                 <div className="grid gap-2">
                                   <Label htmlFor="email">Email</Label>
-                                  <Input 
-                                    type='email' 
-                                    placeholder='Enter Email...' 
-                                    value={data.email} 
-                                    onChange={(e) => setData({...data, email: e.target.value})}
+                                  <Input
+                                    type="email"
+                                    placeholder="Enter Email..."
+                                    value={data.email}
+                                    onChange={(e) => setData({ ...data, email: e.target.value })}
                                   />
                                 </div>
+                                
+                                {/* Password Field */}
                                 <div className="grid gap-2 relative">
                                   <Label htmlFor="password">Password</Label>
                                   <div className="relative">
-                                    <Input 
-                                      type={showPassword ? 'text' : 'password'} 
-                                      placeholder='Enter Password...' 
-                                      value={data.password} 
-                                      onChange={(e) => setData({...data, password: e.target.value})}
+                                    <Input
+                                      type={showPassword ? 'text' : 'password'}
+                                      placeholder="Enter Password..."
+                                      value={data.password}
+                                      onChange={(e) => setData({ ...data, password: e.target.value })}
                                     />
-                                    <div 
-                                      className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" 
+                                    <div
+                                      className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                                       onClick={() => setShowPassword(!showPassword)}
                                     >
                                       {showPassword ? <FaEye /> : <FaEyeSlash />}
                                     </div>
                                   </div>
                                 </div>
+
+                                {/* Confirm Password Field */}
+                                <div className="grid gap-2 relative">
+                                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                  <div className="relative">
+                                    <Input
+                                      type={showConfirmPassword ? 'text' : 'password'}
+                                      placeholder="Confirm Password..."
+                                      value={data.confirmPassword}
+                                      onChange={(e) => setData({ ...data, confirmPassword: e.target.value })}
+                                    />
+                                    <div
+                                      className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    >
+                                      {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                                    </div>
+                                  </div>
+                                </div>
+
                                 <Button
                                   type="submit"
                                   disabled={butloading}
@@ -404,7 +432,7 @@ export function UserManagement() {
                                   {butloading ? 'Creating...' : 'CREATE'}
                                 </Button>
                               </div>
-                            </form>  
+                            </form>
                             </DialogContent>
                         </Dialog>
                         </div>
