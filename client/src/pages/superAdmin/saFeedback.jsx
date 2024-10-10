@@ -268,7 +268,7 @@ export function SaFeedback() {
                               <span className="block md:hidden"><strong>Feedback:</strong></span>
                               <Dialog>
                                 <DialogTrigger>
-                                <Button size="sm" className="h-8 gap-1">
+                                <Button size="sm" className="h-8 gap-1 select-none">
                                     <PlusCircle className="h-3.5 w-3.5" />
                                     <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                                       Open Feedback
@@ -288,17 +288,17 @@ export function SaFeedback() {
                               <span className="block md:hidden"><strong>Action:</strong>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <Button aria-haspopup="true" size="icon" variant="ghost">
+                                  <Button aria-haspopup="true" size="icon" variant="ghost" className="select-none">
                                     <MoreHorizontal className="h-4 w-4" />
                                     <span className="sr-only">Toggle menu</span>
                                   </Button>
                                   </DropdownMenuTrigger>
                                   <DropdownMenuContent align="end">
                                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <Button>Approve</Button>
+                                    <Button className="select-none">Approve</Button>
                                     <AlertDialog>
                                       <AlertDialogTrigger asChild>
-                                        <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
+                                        <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive">Delete</Button>
                                       </AlertDialogTrigger>
                                       <AlertDialogContent>
                                         <AlertDialogHeader>
@@ -320,17 +320,17 @@ export function SaFeedback() {
                           <TableCell className="hidden md:table-cell">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button aria-haspopup="true" size="icon" variant="ghost">
+                                <Button aria-haspopup="true" size="icon" variant="ghost" className="select-none">
                                   <MoreHorizontal className="h-4 w-4" />
                                   <span className="sr-only">Toggle menu</span>
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <Button>Approve</Button>
+                                <Button className="select-none">Approve</Button>
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild>
-                                    <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
+                                    <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive">Delete</Button>
                                   </AlertDialogTrigger>
                                   <AlertDialogContent>
                                     <AlertDialogHeader>

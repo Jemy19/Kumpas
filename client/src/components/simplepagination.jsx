@@ -26,6 +26,7 @@ export function SimplePagination({ currentPage, totalPages, onPageChange }) {
       <PaginationPrevious
         onClick={prev}
         disabled={currentPage === 1}
+        className="select-none"
       />
       <Typography color="gray" className="font-normal">
         Page <strong className="text-gray-900">{currentPage}</strong> of{" "}
@@ -34,6 +35,7 @@ export function SimplePagination({ currentPage, totalPages, onPageChange }) {
       <PaginationNext
         onClick={next}
         disabled={currentPage === totalPages}
+        className="select-none"
       />
     </div>
   );

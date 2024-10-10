@@ -13,7 +13,7 @@ function Notfound() {
 
   return (
     <div className="display">
-      <div className="display__img">
+      <div className="display__img select-none pointer-events-none">
         <img src={Logo}/>
       </div>
       <div className="display__content">

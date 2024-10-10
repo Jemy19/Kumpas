@@ -336,7 +336,7 @@ export function AccountManagement() {
                           </div>
                         <Dialog>
                             <DialogTrigger>
-                            <Button size="sm" className="h-8 gap-1">
+                            <Button size="sm" className="h-8 gap-1 select-none">
                                 <PlusCircle className="h-3.5 w-3.5" />
                                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                                   Create New Account
@@ -413,7 +413,7 @@ export function AccountManagement() {
                                 <Button
                                   type="submit"
                                   disabled={butloading}
-                                  className={`w-full h-10 ${butloading ? "bg-gray-400 cursor-not-allowed translate-y-1" : ""}`}
+                                  className={`w-full h-10 ${butloading ? "bg-gray-400 cursor-not-allowed translate-y-1 select-none" : ""}`}
                                 >
                                   {butloading ? "Creating..." : "CREATE"}
                                 </Button>
@@ -467,7 +467,7 @@ export function AccountManagement() {
                               <span className="block md:hidden"><strong>Created:</strong> {admin.createdAt}</span>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <Button aria-haspopup="true" size="icon" variant="ghost">
+                                  <Button aria-haspopup="true" size="icon" variant="ghost" className="select-none">
                                     <MoreHorizontal className="h-4 w-4" />
                                     <span className="sr-only">Toggle menu</span>
                                   </Button>
@@ -476,7 +476,7 @@ export function AccountManagement() {
                                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                   <Sheet>
                                     <SheetTrigger asChild>
-                                      <Button onClick={() => handleEdit(admin)} className="block py-2 px-4 rounded mb-1 w-32 h-10" variant="outline">Edit</Button>
+                                      <Button onClick={() => handleEdit(admin)} className="block py-2 px-4 rounded mb-1 w-32 h-10 select-none" variant="outline">Edit</Button>
                                     </SheetTrigger>
                                     <SheetContent>
                                       <SheetHeader>
@@ -543,7 +543,7 @@ export function AccountManagement() {
                                             <Button
                                               type="submit"
                                               disabled={butloading}
-                                              className={`w-full h-10 ${butloading ? "bg-gray-400 cursor-not-allowed translate-y-1" : ""}`}
+                                              className={`w-full h-10 ${butloading ? "bg-gray-400 cursor-not-allowed translate-y-1 select-none" : ""}`}
                                             >
                                               {butloading ? "Updating..." : "UPDATE"}
                                             </Button>
@@ -554,7 +554,7 @@ export function AccountManagement() {
                                   </Sheet>
                                   <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                      <Button className="block py-2 px-4 rounded w-32 h-10" variant="destructive">Delete</Button>
+                                      <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive">Delete</Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
                                       <AlertDialogHeader>
