@@ -67,6 +67,7 @@ export function Adminlogs() {
       })
       .catch((err) => {
         setError('Error fetching logs');
+        toast.error('Error fetching Logs');
       })
       .finally(() => {
         setLoading(false);
