@@ -1,16 +1,16 @@
 import MyImage from "../assets/lmao.jpg";
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
 import NavbarLog from "@/components/NavbarLog";
-import LoadingOverlay from "@/components/LoadingOverlay"; // Import LoadingOverlay
+import LoadingOverlay from "@/components/LoadingOverlay";
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
 
 export function Login() {
   useEffect(() => {
@@ -87,23 +87,22 @@ export function Login() {
                     onChange={(e) => setData({ ...data, email: e.target.value })}
                   />
                 </div>
-                <div className="grid gap-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
-                    <Button
-                      type="button"
-                      variant="link"
+                <div className="grid gap-2 relative">
+                  <Label htmlFor="password">Password</Label>
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Enter Password..."
+                      value={data.password}
+                      onChange={(e) => setData({ ...data, password: e.target.value })}
+                    />
+                    <div
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? 'Hide' : 'Show'} Password
-                    </Button>
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </div>
                   </div>
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter Password..."
-                    value={data.password}
-                    onChange={(e) => setData({ ...data, password: e.target.value })}
-                  />
                 </div>
                 <Button type="submit" className="w-full">
                   Login
