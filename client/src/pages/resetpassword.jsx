@@ -100,7 +100,7 @@ const ResetPassword = () => {
         <Button
           type="submit"
           disabled={butloading}
-          className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+          className={`w-full h-10 select-none ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1 select-none' : ''}`}
         >
           {butloading ? 'Sending...' : 'Send Reset Link'}
         </Button>

@@ -344,7 +344,7 @@ export function SaSignManagement() {
                                 <Button
                                   type="submit"
                                   disabled={butloading}
-                                  className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1 select-none' : ''}`}
+                                  className={`w-full h-10 select-none ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1 select-none' : ''}`}
                                 >
                                   {butloading ? 'Creating...' : 'CREATE'}
                                 </Button>
@@ -513,7 +513,7 @@ export function SaSignManagement() {
                                           <Button
                                           type="submit"
                                           disabled={butloading}
-                                          className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1 select-none' : ''}`}
+                                          className={`w-full h-10 select-none ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1 select-none' : ''}`}
                                           >
                                             {butloading ? 'Updating...' : 'UPDATE'}
                                           </Button>

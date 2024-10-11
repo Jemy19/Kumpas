@@ -15,7 +15,7 @@ const Filter = ({ selectedCategories, handleCategoryChange, categories, titlelab
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="h-8 gap-1">
           <ListFilter className="h-3.5 w-3.5" />
-          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">Filter</span>
+          <span className="sr-only sm:not-sr-only sm:whitespace-nowrap select-none">Filter</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

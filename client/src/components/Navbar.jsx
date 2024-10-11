@@ -16,51 +16,51 @@ const Navbar = () => {
     <div className="flex h-full max-h-screen flex-col gap-2">
       <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
         <Link to="/Dashboard" className="flex items-center gap-2 font-semibold">
-          <img src={logoname} alt="Logoname" className="w-auto h-10" />
+          <img src={logoname} alt="Logoname" className="w-auto h-10 pointer-events-none select-none" />
         </Link>
       </div>
       <div className="flex-1">
-        <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+        <nav className="grid items-start px-2 text-sm font-medium lg:px-4 ">
           <Link
             to="/Dashboard"
             className={isActive("/Dashboard")} // Dynamically apply class
           >
-            <Home className="h-4 w-4" />
+            <Home className="h-4 w-4 select-none" />
             Dashboard
           </Link>
           <Link
             to="/Management"
             className={isActive("/Management")} // Dynamically apply class
           >
-            <HandMetal className="h-4 w-4" />
+            <HandMetal className="h-4 w-4 select-none" />
             Sign Management
           </Link>
           <Link
             to="/UserManagement"
             className={isActive("/UserManagement")} // Dynamically apply class
           >
-            <UserRoundPen className="h-4 w-4" />
+            <UserRoundPen className="h-4 w-4 select-none" />
             User Management
           </Link>
           <Link
             to="/Feedback"
             className={isActive("/Feedback")} // Dynamically apply class
           >
-            <MessageSquareText className="h-4 w-4" />
+            <MessageSquareText className="h-4 w-4 select-none" />
             Feedback
           </Link>
           <Link
             to="/Updates"
             className={isActive("/Updates")} // Dynamically apply class
           >
-            <RefreshCw  className="h-4 w-4" />
+            <RefreshCw  className="h-4 w-4 select-none" />
             Update Logs
           </Link>
           <Link
             to="/AdminLogs"
             className={isActive("/AdminLogs")} // Dynamically apply class
           >
-            <Logs className="h-4 w-4" />
+            <Logs className="h-4 w-4 select-none" />
             Admin Logs
           </Link>
         </nav>

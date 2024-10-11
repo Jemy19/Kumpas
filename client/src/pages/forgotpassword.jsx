@@ -43,12 +43,12 @@ const ForgotPassword = () => {
           <Button
             type="submit"
             disabled={butloading}
-            className={`w-full h-10 ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1' : ''}`}
+            className={`w-full h-10 select-none${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1 select-none' : ''}`}
           >
             {butloading ? 'Sending...' : 'Send Reset Link'}
           </Button>
           {message && (
-            <p className={`mt-4 text-sm ${isError ? 'text-red-500' : 'text-green-500'}`}>
+            <p className={`mt-4 text-sm select-none${isError ? 'text-red-500' : 'text-green-500'}`}>
               {message}
             </p>
           )}
