@@ -101,8 +101,6 @@ mongoose.connect(process.env.MONGO_URL)
       }
     });
 
-    const port = 8000;
-    app.listen(port, () => console.log(`Server is running on port ${port}`));
   })
   .catch((err) => console.log('Database not Connected', err));
 
