@@ -29,23 +29,21 @@ export function Login() {
   const loginUser = async (e) => {
     e.preventDefault();
     const { email, password } = data;
-  
+
     if (!email || !password) {
       toast.error('Email and password are required');
       return;
     }
-  
+
     setLoading(true); // Show loading overlay
-  
+
     try {
       const response = await axios.post('/login', { email, password });
       const { data } = response;
-  
+
       if (data.error) {
         toast.error(data.error);
       } else {
-        const token = data.token; // Assuming the token is returned in the response data
-        localStorage.setItem('token', token); // Store the token in local storage
         setUser(data);
         setData({ email: '', password: '' });
         if (data.role === 'super_admin') {

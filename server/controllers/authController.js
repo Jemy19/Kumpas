@@ -46,7 +46,12 @@ const loginUser = async (req, res) => {
             console.error('JWT sign error:', err);
             return res.status(500).json({ error: 'Token generation failed' });
           }
-          res.json({ token, ...user.toObject() }); // Send response with token and user data
+          res.cookie('token', token, {
+            httpOnly: true,// Enable in production (HTTPS)
+            sameSite: 'None', // Allows cross-domain cookies
+            secure: true 
+          });
+          res.json({ ...user.toObject(), token }); // Send response with user data and token
         }
       );  
       await Log.create({
@@ -97,8 +102,15 @@ const getWords = async (req, res) => {
   }
 };
 
-const logoutUser  = async (req, res) => {
-  localStorage.removeItem('token'); // Remove the token from local storage
+
+const logoutUser = async (req, res) => {
+  res.cookie('token', '', { 
+      maxAge: 1, 
+      httpOnly: true,  // Same as when the token was set
+      secure: true,    // Ensure this matches (for HTTPS)
+      sameSite: 'None', // Match sameSite policy
+      path: '/'        // Ensure the path is correct
+  });
   await Log.create({
     level: 'info',
     message: `Logged out successfully`,
@@ -107,6 +119,7 @@ const logoutUser  = async (req, res) => {
   });
   res.json('Logged out');
 };
+
 
 const addWord = async (req, res) => {
     try {
