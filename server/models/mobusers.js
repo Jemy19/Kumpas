@@ -12,6 +12,10 @@ const mobuserSchema = new Schema({
     username: { 
         type: String,
         unique: true 
+    },
+    isVerified: { 
+        type: Boolean,   // Change to Boolean type
+        default: true    // Set default value to true
     }
 }, { timestamps: true });
 
@@ -24,6 +28,5 @@ mobuserSchema.pre('save', function(next) {
 });
 
 const MobUser = mongoose.model('MobUser', mobuserSchema, 'mobileusers');
-
 
 module.exports = MobUser;

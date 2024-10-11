@@ -290,7 +290,6 @@ export function SaFeedback() {
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <Button className="select-none">Approve</Button>
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild>
                                     <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive">Delete</Button>
@@ -348,7 +347,6 @@ export function SaFeedback() {
                                   </DropdownMenuTrigger>
                                   <DropdownMenuContent align="end">
                                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <Button className="select-none">Approve</Button>
                                     <AlertDialog>
                                       <AlertDialogTrigger asChild>
                                         <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive">Delete</Button>
