@@ -8,15 +8,15 @@ const NavbarSu = () => {
   // Function to determine if a link is active
   const isActive = (path) => {
     return location.pathname === path ? 
-      "flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary" : 
-      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary";
+      "flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary select-none" : 
+      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary select-none";
   };
 
   return (
     <div className="flex h-full max-h-screen flex-col gap-2">
       <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
         <Link to="/SaDashboard" className="flex items-center gap-2 font-semibold">
-          <img src={logoname} alt="Logoname" className="w-auto h-10" />
+          <img src={logoname} alt="Logoname" className="w-auto h-10 pointer-events-none select-none" />
         </Link>
       </div>
       <div className="flex-1">
