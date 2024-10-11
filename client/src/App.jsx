@@ -27,7 +27,12 @@ import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
 
 axios.defaults.baseURL = 'https://kumpas.onrender.com';
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true;
+
+const token = localStorage.getItem('token');
+if (token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
 function App() {
   return (
