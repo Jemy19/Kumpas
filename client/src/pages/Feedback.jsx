@@ -231,13 +231,8 @@ export function Feedback() {
                           <TableCell className="hidden md:table-cell">
                             {feedback.createdAt}
                           </TableCell>
-                          <TableCell className="flex flex-col sm:items-start md:items-center">
-                              <span className="block md:hidden"><strong>ID:</strong> {feedback._id}</span>
-                              <span className="block md:hidden"><strong>Category:</strong> {feedback.subject}</span>
-                              <span className="block md:hidden"><strong>Rating:</strong> {feedback.rating}</span>
-                              <span className="block md:hidden"><strong>Sent At	:</strong>{feedback.createdAt}</span>
-                              <span className="block md:hidden"><strong>Feedback:</strong></span>
-                              <Dialog>
+                          <TableCell className="hidden md:table-cell">
+                            <Dialog>
                                 <DialogTrigger>
                                 <Button size="sm" className="h-8 gap-1 select-none">
                                     <PlusCircle className="h-3.5 w-3.5" />
@@ -256,37 +251,6 @@ export function Feedback() {
                                   {feedback.feedback}
                                 </DialogContent>
                               </Dialog>
-                              <span className="block md:hidden"><strong>Action:</strong>
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button aria-haspopup="true" size="icon" variant="ghost">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                    <span className="sr-only">Toggle menu</span>
-                                  </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <Button className="select-none" >Approve</Button>
-                                    <AlertDialog>
-                                      <AlertDialogTrigger asChild>
-                                        <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive">Delete</Button>
-                                      </AlertDialogTrigger>
-                                      <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                          <AlertDialogDescription>
-                                            This action cannot be undone. This will permanently delete the Feedback
-                                          </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                          <AlertDialogAction onClick={() => deleteAcc(feedback._id)}>Continue</AlertDialogAction>
-                                        </AlertDialogFooter>
-                                      </AlertDialogContent>
-                                    </AlertDialog>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                              </span>
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                             <DropdownMenu>
@@ -319,6 +283,65 @@ export function Feedback() {
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </TableCell>
+                          <TableCell className="flex flex-col sm:items-start md:items-center">
+                              <span className="block md:hidden"><strong>ID:</strong> {feedback._id}</span>
+                              <span className="block md:hidden"><strong>Category:</strong> {feedback.subject}</span>
+                              <span className="block md:hidden"><strong>Rating:</strong> {feedback.rating}</span>
+                              <span className="block md:hidden"><strong>Sent At	:</strong>{feedback.createdAt}</span>
+                              <span className="block md:hidden"><strong>Feedback:</strong>
+                              <Dialog>
+                                <DialogTrigger>
+                                <Button size="sm" className="h-8 gap-1 select-none">
+                                    <PlusCircle className="h-3.5 w-3.5" />
+                                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                                      Open Feedback
+                                    </span>
+                                </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                  <DialogHeader>
+                                    <DialogTitle>{feedback.subject}</DialogTitle>
+                                    <DialogDescription>
+                                      Feedback
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  {feedback.feedback}
+                                </DialogContent>
+                              </Dialog>
+                              </span>
+                              <span className="block md:hidden"><strong>Action:</strong>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button aria-haspopup="true" size="icon" variant="ghost">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                    <span className="sr-only">Toggle menu</span>
+                                  </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                    <Button className="select-none" >Approve</Button>
+                                    <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                        <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive">Delete</Button>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                          <AlertDialogDescription>
+                                            This action cannot be undone. This will permanently delete the Feedback
+                                          </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                          <AlertDialogAction onClick={() => deleteAcc(feedback._id)}>Continue</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                              </span>
+                          </TableCell>
+                          
                         </TableRow>
                       ))
                       ) : (
