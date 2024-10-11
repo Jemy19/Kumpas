@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom'; // Import useLocation
 import { Home, Logs, MessageSquareText, UserRoundPen, HandMetal, RefreshCw  } from "lucide-react";
-import logoname from '@/assets/logoname.svg'
+import logoname from '@/assets/logoname.svg';
+
 const Navbar = () => {
   const location = useLocation(); // Get current location
 
   // Function to determine if a link is active
   const isActive = (path) => {
     return location.pathname === path ? 
-      "flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary" : 
-      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary";
+      "flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary select-none" : 
+      "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary select-none";
   };
 
   return (
@@ -53,7 +54,7 @@ const Navbar = () => {
             to="/Updates"
             className={isActive("/Updates")} // Dynamically apply class
           >
-            <RefreshCw  className="h-4 w-4 select-none" />
+            <RefreshCw className="h-4 w-4 select-none" />
             Update Logs
           </Link>
           <Link
