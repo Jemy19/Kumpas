@@ -47,9 +47,9 @@ const loginUser = async (req, res) => {
             return res.status(500).json({ error: 'Token generation failed' });
           }
           res.cookie('token', token, {
-            httpOnly: true,// Enable in production (HTTPS)
-            sameSite: 'None', // Allows cross-domain cookies
-            secure: true 
+            httpOnly: true,
+            sameSite: 'None',
+            secure: req.protocol === 'https' // Only set secure to true when the request is made over HTTPS
           });
           res.json({ ...user.toObject(), token }); // Send response with user data and token
         }
@@ -105,11 +105,11 @@ const getWords = async (req, res) => {
 
 const logoutUser = async (req, res) => {
   res.cookie('token', '', { 
-      maxAge: 1, 
-      httpOnly: true,  // Same as when the token was set
-      secure: true,    // Ensure this matches (for HTTPS)
-      sameSite: 'None', // Match sameSite policy
-      path: '/'        // Ensure the path is correct
+    maxAge: 1, 
+    httpOnly: true,  
+    sameSite: 'None', 
+    secure: req.protocol === 'https', 
+    path: '/'        
   });
   await Log.create({
     level: 'info',
