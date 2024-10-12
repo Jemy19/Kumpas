@@ -226,7 +226,7 @@ export function UserManagement() {
         return;
       }
 
-      if (!updateData.password && !updateData.confirmPassword){
+      if (updateData.password && updateData.confirmPassword){
         if (updateData.password.length < 8) {
           toast.error('Password must be at least 8 characters long.');
           setbutLoading(false); // Stop loading if validation fails
