@@ -114,13 +114,6 @@ exports.updateAdmin = async (req, res) => {
  
     admin.name = name || admin.name;
     admin.email = email || admin.email;
-    
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!password || !passwordRegex.test(password)) {
-      return res.json({
-        error: 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
-      });
-    }
 
     if (password) {
       const isSamePassword = await comparePassword(password, admin.password);
