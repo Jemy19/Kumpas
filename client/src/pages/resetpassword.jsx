@@ -78,8 +78,8 @@ const ResetPassword = () => {
   return (
     <>
       <NavbarLog/>
-    <div className="flex items-center justify-center min-h-screen">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm p-8 space-y-6 bg-white rounded shadow-lg -mt-10">
+      <div className="flex items-start justify-center min-h-screen">
+        <form onSubmit={handleSubmit} className="w-full max-w-sm p-8 space-y-6 bg-white rounded shadow-lg mt-10">
         <h2 className="text-2xl font-bold">Reset Password</h2>
         <input
           type="password"
