@@ -28,8 +28,8 @@ const ForgotPassword = () => {
   return (
     <>
       <NavbarLog/>
-      <div className="flex items-start justify-center min-h-screen">
-        <form onSubmit={handleSubmit} className="w-full max-w-sm p-8 space-y-6 bg-white rounded shadow-lg mt-30">
+      <div className="flex items-center justify-center min-h-screen pt-20">
+        <form onSubmit={handleSubmit} className="w-full max-w-sm p-8 space-y-6 bg-white rounded shadow-lg">
           <h2 className="text-2xl font-bold">Forgot Password</h2>
           <p className="text-gray-600">Enter your email and we'll send you a link to reset your password.</p>
           <input
