@@ -26,7 +26,7 @@ import ForgotPassword from './pages/forgotpassword';
 import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
 
-axios.defaults.baseURL = 'https://kumpas.onrender.com';
+axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true
 
 function App() {

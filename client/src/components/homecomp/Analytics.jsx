@@ -16,7 +16,15 @@ const Analytics = () => {
            over 1.5 billion people globally live with some form of hearing loss. In the Philippines alone, there are an estimated 
            1,784,690 individuals with hearing difficulties.
           </p>
-          <button className='bg-black text-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'>Get Started</button>
+          <button className='bg-black text-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'>
+          <a 
+          href="/app-debug.apk"  // Replace with the actual path to your APK
+          download="Ekumpas.apk"        // Optional: Rename the file when downloading
+          className="no-underline text-white"
+          >
+          Get Started
+          </a>
+        </button>
           <p>Download the App Now!</p>
         </div>
       </div>

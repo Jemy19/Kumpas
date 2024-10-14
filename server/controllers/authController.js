@@ -35,7 +35,7 @@ const loginUser = async (req, res) => {
     if (!match) {
       return res.json({ error: 'Password does not match' });
     }
-
+    console.log("working login")
     // Check if the user has the right role (super_admin or admin)
     if (user.role === 'super_admin' || user.role === 'admin') {
       jwt.sign(
@@ -538,9 +538,11 @@ const deleteUpdate = async (req, res) => {
 
 const forgotpassword = async (req, res) => {
   const { email } = req.body;
-  const user = await User.findOne({ email });
+  console.log('Received forgot password request for email:', email);
 
+  const user = await User.findOne({ email });
   if (!user) {
+    console.error('User not found:', email);
     return res.status(400).json({ message: 'User not found' });
   }
 
@@ -549,31 +551,38 @@ const forgotpassword = async (req, res) => {
   user.resetPasswordToken = resetToken;
   user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
   await user.save();
-
+  
   // Send reset link via email
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
+      user: process.env.EMAIL, // Ensure this is set in your environment
+      pass: process.env.PASSWORD, // Ensure this is set in your environment
     },
   });
+
+  console.log('Using email:', process.env.EMAIL);
+  console.log('Using password:', process.env.PASSWORD); // Avoid logging sensitive information in production
 
   const resetURL = `https://ekumpas.vercel.app/ResetPassword/${resetToken}`;
   
   const mailOptions = {
     to: user.email,
-    from: 'powerpupbois@gmail.com',
+    from: 'powerpupbois@gmail.com', // Consider using a verified email address
     subject: 'Password Reset',
     text: `You are receiving this because you requested a password reset. Please click on the link to reset your password: ${resetURL}`,
   };
 
-  transporter.sendMail(mailOptions, (err) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error sending email' });
-    }
+  console.log('Mail options:', mailOptions);
+
+  try {
+    const info = await transporter.sendMail(mailOptions); // Use await here for better error handling
+    console.log('Email sent successfully:', info);
     res.json({ message: 'Email sent successfully' });
-  });
+  } catch (err) {
+    console.error('Error sending email:', err); // Log the error for debugging
+    return res.status(500).json({ message: 'Error sending email', error: err.message });
+  }
 };
 
 const resetpassword = async (req, res) => {

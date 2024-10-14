@@ -14,7 +14,7 @@ const app = express();
 // Middleware
 app.use(cors({
   credentials: true,
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: 'http://localhost:5173'
 }));
 app.use(express.json());
 app.use(cookieParser());
@@ -102,7 +102,7 @@ mongoose.connect(process.env.MONGO_URL)
     });
 
     const port = 8000;
-    app.listen(port, () => console.log(`Server is running on port ${port}`));
+    app.listen(port, () => console.log(`Server is runnisdang on port ${port}`));
   })
   .catch((err) => console.log('Database not Connected', err));
 
