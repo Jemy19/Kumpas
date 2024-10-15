@@ -9,7 +9,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
-import NavbarLog from "@/components/NavbarLog";
+import NavbarLog from "@/components/Homepage/Navbar";
 import LoadingOverlay from "@/components/LoadingOverlay"; // Import LoadingOverlay
 
 export function Login() {

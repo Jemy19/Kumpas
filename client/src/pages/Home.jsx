@@ -13,10 +13,11 @@ import { Services } from "@/components/Homepage/Services";
 import { Sponsors } from "@/components/Homepage/Sponsors";
 import { Team } from "@/components/Homepage/Team";
 import { Testimonials } from "@/components/Homepage/Testimonials";
+import { ThemeProvider } from "@/components/Homepage/theme-provider";
 
 export function Home() {
   return (
-    <>
+    <ThemeProvider>
       <Navbar />
       <Hero />
       <Sponsors />
@@ -32,7 +33,7 @@ export function Home() {
       <FAQ />
       <Footer />
       <ScrollToTop />
-    </>
+    </ThemeProvider>
   );
 }
 
