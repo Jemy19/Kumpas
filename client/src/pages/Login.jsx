@@ -12,13 +12,6 @@ import LoadingOverlay from "@/components/LoadingOverlay";
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
 
 export function Login() {
-  useEffect(() => {
-    document.body.style.overflowY = 'hidden';
-    return () => {
-      document.body.style.overflowY = 'auto';
-    };
-  }, []);
-
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const [data, setData] = useState({ email: '', password: '' });
