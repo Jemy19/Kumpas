@@ -1,5 +1,5 @@
 import {Routes, Route} from 'react-router-dom'
-import Homepage from './pages/Home'
+import Home from './pages/Home'
 import axios from 'axios';
 import {Toaster} from 'react-hot-toast'
 import { UserContextProvider } from '../context/userContext'
@@ -22,7 +22,7 @@ import Update from './pages/updates';
 import SaUpdate from './pages/superAdmin/saUpdates';
 import ResetPassword from './pages/resetpassword';
 import ForgotPassword from './pages/forgotpassword';
-
+import Homepage from './pages/Homepage'
 import UserManagement from './pages/UserManagement';
 import AdminLogs from './pages/adminLogs';
 
@@ -36,6 +36,7 @@ function App() {
       <Routes>
         <Route path='*' element={<Notfound />} />
         <Route path='/' element={<Homepage />} />
+        <Route path='/Home' element={<Home />} />
         <Route path='/Login' element={<PublicRoute><Login /></PublicRoute>} />
         <Route path='/ResetPassword/:token' element={<PublicRoute><ResetPassword /></PublicRoute>} />
         <Route path='/ForgotPassword' element={<PublicRoute><ForgotPassword /></PublicRoute>} />
