@@ -51,10 +51,11 @@ const ForgotPassword = () => {
               {message}
             </p>
           )}
+          <Link to="/login" className="mt-4 text-blue-500 hover:underline">
+            Go Back to Login
+          </Link>
         </form>
-        <Link to="/login" className="mt-4 text-blue-500 hover:underline">
-          Go Back to Login
-        </Link>
+        
       </div>
     </>
   );
