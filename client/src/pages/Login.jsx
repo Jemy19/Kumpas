@@ -8,7 +8,6 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
-import NavbarLog from "@/components/NavbarLog";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
 
@@ -66,7 +65,6 @@ export function Login() {
   return (
     <>
       {loading && <LoadingOverlay />} {/* Show loading overlay if loading */}
-      <NavbarLog />
       <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
         <div className="flex items-center justify-center mt-20 lg:-mt-20 mb-20">
           <div className="mx-auto grid w-[350px] gap-6">

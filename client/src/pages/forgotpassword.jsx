@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Add axios import
-import NavbarLog from "@/components/NavbarLog";
 import { Button } from "@/components/ui/button"
 
 const ForgotPassword = () => {
@@ -27,7 +26,6 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <NavbarLog/>
       <div className="flex items-center justify-center min-h-screen">
         <form onSubmit={handleSubmit} className="w-full max-w-sm p-8 space-y-6 bg-white rounded shadow-lg">
           <h2 className="text-2xl font-bold">Forgot Password</h2>

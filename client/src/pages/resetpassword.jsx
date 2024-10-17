@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import NavbarLog from "@/components/NavbarLog";
 import { Button } from "@/components/ui/button";
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -77,7 +76,6 @@ const ResetPassword = () => {
 
   return (
     <>
-      <NavbarLog/>
       <div className="flex items-center justify-center min-h-screen">
       <form onSubmit={handleSubmit} className="w-full max-w-sm p-8 space-y-6 bg-white rounded shadow-lg">
         <h2 className="text-2xl font-bold">Reset Password</h2>
