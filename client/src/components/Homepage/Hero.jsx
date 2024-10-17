@@ -1,4 +1,4 @@
-import Spline from '@splinetool/react-spline';
+
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -7,10 +7,7 @@ export const Hero = () => {
   return (
     <section className="relative w-full h-screen">
       {/* Spline Background */}
-      <Spline 
-        scene="https://prod.spline.design/FVZWbQH2B6ndj9UU/scene.splinecode" 
-        className="ml-60 absolute inset-0 w-full h-full object-cover z-0 hidden md:table-cell"
-      />
+      
       
       {/* Content over the Spline background */}
       <div className="container relative z-10 grid lg:grid-cols-2 place-items-center py-20 md:py-32 gap-10 h-full flex items-center justify-center -mt-20">
