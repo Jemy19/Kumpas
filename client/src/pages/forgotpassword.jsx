@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Add axios import
 import { Button } from "@/components/ui/button"
+import { Link } from 'react-router-dom'; // Import Link
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -51,6 +52,9 @@ const ForgotPassword = () => {
             </p>
           )}
         </form>
+        <Link to="/login" className="mt-4 text-blue-500 hover:underline">
+          Go Back to Login
+        </Link>
       </div>
     </>
   );
