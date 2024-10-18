@@ -12,7 +12,7 @@ export const Footer = () => {
             href="/"
             className="font-bold text-xl flex"
           >
-            ShadcnUI/React
+            E-KUMPAS
           </a>
         </div>
 

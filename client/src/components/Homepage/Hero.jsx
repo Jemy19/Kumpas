@@ -6,12 +6,14 @@ import { buttonVariants } from "@/components/ui/button";
 export const Hero = () => {
   return (
     <section className="relative w-full h-screen">
-      {/* Spline Background */}
-      
+      <Spline 
+        scene="https://prod.spline.design/ynIlycxQA-fpTszA/scene.splinecode"
+        className=" absolute inset-0 w-full h-full object-cover z-0 hidden md:table-cell"
+      />
       
       {/* Content over the Spline background */}
-      <div className="container relative z-10 grid lg:grid-cols-2 place-items-center py-20 md:py-32 gap-10 h-full flex items-center justify-center -mt-20">
-        <div className="text-center lg:text-start space-y-6">
+      <div className="container relative z-10 grid lg:grid-cols-2 place-items-center py-20 md:py-32 gap-10 h-full flex items-center justify-center -mt-20 pointer-events-none">
+        <div className="text-center lg:text-start space-y-6 pointer-events-auto">
           <main className="text-5xl md:text-6xl font-bold">
             <h1 className="inline">
               <span className="inline bg-gradient-to-r from-[#3ffb4d] to-[#14572c] text-transparent bg-clip-text">
