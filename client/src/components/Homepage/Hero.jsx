@@ -21,7 +21,15 @@ export const Hero = () => {
           }}
         />
       ) : (
-        <></>
+        <Spline 
+          scene="https://prod.spline.design/ynIlycxQA-fpTszA/scene.splinecode"
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          onLoad={() => console.log('Spline scene loaded successfully')}
+          onError={(error) => {
+            console.error('Error loading Spline scene:', error);
+            // Optionally set a state to show an alternative UI
+          }}
+        />
       )}
       
       {/* Content over the Spline background */}
