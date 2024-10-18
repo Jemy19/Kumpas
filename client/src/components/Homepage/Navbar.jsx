@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { buttonVariants } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { KeyRound } from 'lucide-react';
+import { Download, KeyRound } from 'lucide-react';
 import ModeToggle from './mode-toggle';
 import Logo from '@/assets/LOGOKUMPAS.svg'
 import { Link } from 'react-router-dom';
@@ -85,6 +85,20 @@ export const Navbar = () => {
                   ))}
                   <a
                     rel="noreferrer noopener"
+                    className={`border ${buttonVariants({ variant: "secondary" })}`}
+                    onClick={() =>
+                      window.open(
+                        'https://github.com/XjorLml/E-Kumpas_Mobile_App/releases/download/v1.0.0-beta/E-Kumpas-v1.0.0-beta.apk',
+                        '_blank',
+                        'noopener noreferrer'
+                      )
+                    }
+                  >
+                    <Download  className="mr-2 w-5 h-5" />
+                    Download App
+                  </a>
+                  <a
+                    rel="noreferrer noopener"
                     href="/Login"
                     className={`border ${buttonVariants({ variant: "secondary" })}`}
                   >
@@ -97,7 +111,7 @@ export const Navbar = () => {
           </span>
 
           {/* desktop */}
-          <nav className="hidden md:flex gap-2">
+          <nav className="mr-10 hidden md:flex gap-2">
             {routeList.map((route, i) => (
               <a
                 rel="noreferrer noopener"
@@ -131,7 +145,7 @@ export const Navbar = () => {
               href="/Login"
               className={`border ${buttonVariants({ variant: "secondary" })}`}
             >
-              <KeyRound className="mr-2 w-5 h-5" />
+              <Download  className="mr-2 w-5 h-5" />
               Login
             </a>
             <ModeToggle />
