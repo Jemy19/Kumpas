@@ -58,8 +58,8 @@ export function Login() {
   return (
     <>
       {loading && <LoadingOverlay />} {/* Show loading overlay if loading */}
-      <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
-        <div className="flex items-center justify-center mt-20 lg:-mt-20 mb-20">
+      <div className="w-full h-screen lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+        <div className="flex items-center justify-center h-full mb-20 lg:mb-0">
           <div className="mx-auto grid w-[350px] gap-6">
             <div className="grid gap-2 text-center">
               <h1 className="text-3xl font-bold">Login</h1>
@@ -105,7 +105,7 @@ export function Login() {
             </form>
           </div>
         </div>
-        <div className="hidden bg-muted lg:block pointer-events-none">
+        <div className="hidden bg-muted lg:block pointer-events-none h-full">
           <img
             src={MyImage}
             alt="Image"
