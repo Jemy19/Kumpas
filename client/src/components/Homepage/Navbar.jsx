@@ -111,7 +111,7 @@ export const Navbar = () => {
           </span>
 
           {/* desktop */}
-          <nav className="mr-10 hidden md:flex gap-2">
+          <nav className="mr-3 hidden md:flex gap-2">
             {routeList.map((route, i) => (
               <a
                 rel="noreferrer noopener"
@@ -137,7 +137,7 @@ export const Navbar = () => {
                 )
               }
             >
-              <KeyRound className="mr-2 w-5 h-5" />
+              <Download className="mr-2 w-5 h-5" />
               Download App
             </a>
             <a
@@ -145,7 +145,7 @@ export const Navbar = () => {
               href="/Login"
               className={`border ${buttonVariants({ variant: "secondary" })}`}
             >
-              <Download  className="mr-2 w-5 h-5" />
+              <KeyRound  className="mr-2 w-5 h-5" />
               Login
             </a>
             <ModeToggle />
