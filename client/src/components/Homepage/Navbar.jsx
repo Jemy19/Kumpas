@@ -117,7 +117,7 @@ export const Navbar = () => {
                 rel="noreferrer noopener"
                 href={route.href}
                 key={i}
-                className={`text-[17px] ${buttonVariants({
+                className={`text-[20px] ${buttonVariants({
                   variant: "ghost",
                 })}`}
               >
