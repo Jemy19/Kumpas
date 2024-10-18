@@ -54,7 +54,7 @@ export const Hero = () => {
             </Button>
             <a
               rel="noreferrer noopener"
-              href="https://github.com/leoMirandaa/shadcn-landing-page.git"
+              href="https://github.com/Jemy19/Kumpas"
               target="_blank"
               className={`w-full md:w-1/3 ${buttonVariants({ variant: "outline" })}`}
             >
