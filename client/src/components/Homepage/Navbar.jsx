@@ -111,8 +111,21 @@ export const Navbar = () => {
               </a>
             ))}
           </nav>
-
           <div className="hidden md:flex gap-2">
+            <a
+              rel="noreferrer noopener"
+              className={`border ${buttonVariants({ variant: "secondary" })}`}
+              onClick={() =>
+                window.open(
+                  'https://github.com/XjorLml/E-Kumpas_Mobile_App/releases/download/v1.0.0-beta/E-Kumpas-v1.0.0-beta.apk',
+                  '_blank',
+                  'noopener noreferrer'
+                )
+              }
+            >
+              <KeyRound className="mr-2 w-5 h-5" />
+              Download App
+            </a>
             <a
               rel="noreferrer noopener"
               href="/Login"
