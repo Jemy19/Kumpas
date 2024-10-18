@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button";
-
+import Spline from '@splinetool/react-spline';
 
 export const Hero = () => {
   return (
