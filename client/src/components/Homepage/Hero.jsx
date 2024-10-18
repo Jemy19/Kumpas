@@ -1,15 +1,23 @@
-
+import React from 'react';
+import Spline from '@splinetool/react-spline';
 import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button";
-import Spline from '@splinetool/react-spline';
 
 export const Hero = () => {
+  // Function to detect if the user is using Chrome
+  const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+
   return (
     <section className="relative w-full h-screen">
-      <Spline 
-        scene="https://prod.spline.design/ynIlycxQA-fpTszA/scene.splinecode"
-        className=" absolute inset-0 w-full h-full object-cover z-0 hidden md:table-cell"
-      />
+      {/* Conditionally render Spline Background or alternative content */}
+      {!isChrome ? (
+        <Spline 
+          scene="https://prod.spline.design/ynIlycxQA-fpTszA/scene.splinecode"
+          className="absolute inset-0 w-full h-full object-cover z-0 hidden md:table-cell"
+        />
+      ) : (
+        <></>
+      )}
       
       {/* Content over the Spline background */}
       <div className="container relative z-10 grid lg:grid-cols-2 place-items-center py-20 md:py-32 gap-10 h-full flex items-center justify-center -mt-20 pointer-events-none">
