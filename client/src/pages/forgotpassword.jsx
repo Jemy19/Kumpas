@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios'; // Add axios import
 import { Button } from "@/components/ui/button"
 import { Link } from 'react-router-dom'; // Import Link
+import LogoOverlay from '../components/logooverlay';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -27,6 +28,7 @@ const ForgotPassword = () => {
 
   return (
     <>
+      <LogoOverlay/>
       <div className="flex items-center justify-center min-h-screen">
         <form onSubmit={handleSubmit} className="w-full max-w-sm p-8 space-y-6 bg-white rounded shadow-lg">
           <h2 className="text-2xl font-bold">Forgot Password</h2>

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Button } from "@/components/ui/button";
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import LogoOverlay from '../components/logooverlay';
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -76,6 +77,7 @@ const ResetPassword = () => {
 
   return (
     <>
+      <LogoOverlay/>
       <div className="flex items-center justify-center min-h-screen">
       <form onSubmit={handleSubmit} className="w-full max-w-sm p-8 space-y-6 bg-white rounded shadow-lg">
         <h2 className="text-2xl font-bold">Reset Password</h2>
