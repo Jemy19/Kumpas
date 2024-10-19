@@ -5,12 +5,12 @@ import { buttonVariants } from "@/components/ui/button";
 
 export const Hero = () => {
   // Function to detect if the user is using Chrome
-  const isGoogleChrome = /Chrome/.test(navigator.userAgent) && !/Edg|OPR|CriOS/.test(navigator.userAgent);
+  const isMozilla = typeof navigator !== 'undefined' && navigator.userAgent.includes('Firefox');
 
   return (
     <section className="relative w-full h-screen">
       {/* Conditionally render Spline Background or alternative content */}
-      {!isGoogleChrome ? (
+      {!isMozilla ? (
         <Spline 
           scene="https://prod.spline.design/ynIlycxQA-fpTszA/scene.splinecode"
           className="absolute inset-0 w-full h-full object-cover z-0"
@@ -21,15 +21,7 @@ export const Hero = () => {
           }}
         />
       ) : (
-        <Spline 
-          scene="https://prod.spline.design/ynIlycxQA-fpTszA/scene.splinecode"
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          onLoad={() => console.log('Spline scene loaded successfully')}
-          onError={(error) => {
-            console.error('Error loading Spline scene:', error);
-            // Optionally set a state to show an alternative UI
-          }}
-        />
+        <></>
       )}
       
       {/* Content over the Spline background */}
