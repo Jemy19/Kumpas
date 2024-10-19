@@ -28,8 +28,10 @@ export function UserContextProvider({children}) {
     }, []);    
 
     const logout = () => {
+        setLoading(true);
         axios.post('/logout').then(() => {
             setUser(null);
+            setLoading(false); 
         });
     };
 
