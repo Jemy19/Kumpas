@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
-import LogoOverlay from '../components/LoadingOverlay';
+import LogoOverlay from '../components/logooverlay';
 export function Login() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
