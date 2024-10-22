@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import LogoOverlay from '../components/logooverlay';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const ResetPassword = () => {
   const { token } = useParams();
