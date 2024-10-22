@@ -13,6 +13,8 @@ const ResetPassword = () => {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false); // Track error state
   const [butloading, setbutLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -81,22 +83,38 @@ const ResetPassword = () => {
       <div className="flex items-center justify-center min-h-screen">
       <form onSubmit={handleSubmit} className="w-full max-w-sm p-8 space-y-6 bg-white rounded shadow-lg">
         <h2 className="text-2xl font-bold">Reset Password</h2>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded"
-          placeholder="New password"
-          required
-        />
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className="w-full p-2 border rounded"
-          placeholder="Confirm new password"
-          required
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 border rounded"
+            placeholder="New password"
+            required
+          />
+          <div
+            className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+          </div>
+        </div>
+        <div className="relative">
+          <input
+            type={showConfirmPassword ? 'text' : 'password'}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full p-2 border rounded"
+            placeholder="Confirm new password"
+            required
+          />
+          <div
+            className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+          >
+            {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+          </div>
+        </div>
         <Button
           type="submit"
           disabled={butloading}
