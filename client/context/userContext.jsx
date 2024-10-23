@@ -31,7 +31,7 @@ export function UserContextProvider({children}) {
             .finally(() => {
                 setLoading(false); // Set loading to false when request completes
             });
-    }, []);    
+    }, [user]);    
 
     const logout = () => {
         setLoading(true);
