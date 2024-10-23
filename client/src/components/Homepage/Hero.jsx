@@ -11,16 +11,15 @@ export const Hero = () => {
     <section className="relative w-full h-screen">
       {/* Conditionally render Spline Background or alternative content */}
       {!isMozilla ? (
-        <></>
-        // <Spline 
-        //  scene="https://prod.spline.design/ynIlycxQA-fpTszA/scene.splinecode"
-        //  className="absolute inset-0 w-full h-full object-cover z-0"
-        //  onLoad={() => console.log('Spline scene loaded successfully')}
-        //  onError={(error) => {
-        //    console.error('Error loading Spline scene:', error);
+        <Spline 
+          scene="https://prod.spline.design/CCAm88GlUuWH9hG8/scene.splinecode"
+          className="absolute inset-0 w-full h-full object-cover z-0 hidden md:table-cell"
+          onLoad={() => console.log('Spline scene loaded successfully')}
+          onError={(error) => {
+            console.error('Error loading Spline scene:', error);
             // Optionally set a state to show an alternative UI
-        //  }}
-        // />
+        }}
+        />
       ) : (
         <></>
       )}
