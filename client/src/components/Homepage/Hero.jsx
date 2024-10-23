@@ -13,7 +13,7 @@ export const Hero = () => {
       {!isMozilla ? (
         <Spline 
           scene="https://prod.spline.design/ynIlycxQA-fpTszA/scene.splinecode"
-          className="absolute inset-0 w-full h-full object-cover z-0"
+          className="absolute inset-0 w-full h-full object-cover z-0 hidden md:table-cell"
           onLoad={() => console.log('Spline scene loaded successfully')}
           onError={(error) => {
             console.error('Error loading Spline scene:', error);
