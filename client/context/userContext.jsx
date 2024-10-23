@@ -10,14 +10,19 @@ export function UserContextProvider({children}) {
     const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
+        if (user !== null) {
+            setLoading(false);
+            return; // Early exit if user is already defined
+        }
+    
+        console.log("Fetching user profile...");
         axios.get('/profile', { withCredentials: true })
             .then(({ data }) => {
                 if (!data) {
-                    // If no user data is returned, it may indicate session expiry
-                    console.log("Fetching user profile...");
-                } else {
-                    setUser(data);
+                    // No user data indicates an issue, but we shouldn't show an error yet
+                    return; // Early exit
                 }
+                setUser(data);
             })
             .catch((error) => {
                 console.error("Error fetching profile data:", error);
@@ -31,7 +36,7 @@ export function UserContextProvider({children}) {
             .finally(() => {
                 setLoading(false); // Set loading to false when request completes
             });
-    }, [user]);    
+    }, [user]); 
 
     const logout = () => {
         setLoading(true);
