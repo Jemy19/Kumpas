@@ -80,7 +80,7 @@ const getProfile = (req, res) => {
           res.json(user);
       });
   } else {
-      res.status(401).json({ error: 'No token provided, please log in' });
+      res.json(null)
   }
 };
 
