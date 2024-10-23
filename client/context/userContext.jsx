@@ -14,13 +14,19 @@ export function UserContextProvider({children}) {
             .then(({ data }) => {
                 if (!data) {
                     // If no user data is returned, it may indicate session expiry
-                    toast.error('Session expired, please login again', { autoClose: 8000 });
+                    console.log("Fetching user profile...");
                 } else {
                     setUser(data);
                 }
             })
             .catch((error) => {
                 console.error("Error fetching profile data:", error);
+                
+                // Check if the error response indicates that the session has expired
+                if (error.response && error.response.status === 401) {
+                    // Show session expired message only if 401 Unauthorized is returned
+                    toast.error('Session expired, please login again', { autoClose: 8000 });
+                }
             })
             .finally(() => {
                 setLoading(false); // Set loading to false when request completes

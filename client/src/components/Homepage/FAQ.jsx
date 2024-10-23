@@ -41,7 +41,7 @@ import {
         "How accurate are the FSL animations?",
       answer:
         "We work closely with FSL experts to ensure the animations are accurate and culturally appropriate, but we are continually improving based on user feedback.",
-      value: "item-5",
+      value: "item-6",
     },
   ];
   
