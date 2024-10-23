@@ -7,33 +7,40 @@ import {
   
   const FAQList = [
     {
-      question: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
-      answer: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint labore quidem quam? Consectetur sapiente iste rerum reiciendis animi nihil nostrum sit quo, modi quod.",
+      question: "What is E-Kumpas?",
+      answer: "E-Kumpas is a text-to-sign language mobile app that helps individuals communicate with people who are deaf or hard of hearing by translating text into Filipino Sign Language (FSL). It also offers a platform for users to learn FSL, fostering better communication and inclusivity.",
       value: "item-1",
     },
     {
-      question: "Lorem ipsum dolor sit amet consectetur adipisicing elit?",
+      question: "What makes Filipino Sign Language (FSL) unique?",
       answer:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint labore quidem quam? Consectetur sapiente iste rerum reiciendis animi nihil nostrum sit quo, modi quod.",
+        "FSL has its own grammar, syntax, and morphology. It’s not directly based on Filipino or English, so learning FSL is crucial for effectively communicating with those who use it.",
       value: "item-2",
     },
     {
       question:
-        "Lorem ipsum dolor sit amet  Consectetur natus dolores minus quibusdam?",
+        "How do I use the text-to-sign feature?",
       answer:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore qui nostrum reiciendis veritatis necessitatibus maxime quis ipsa vitae cumque quo?",
+        "Simply type the text you want to convert into sign language, and the app will display animated signs in FSL for each word. This helps you understand and learn sign language in real-time.",
       value: "item-3",
     },
     {
-      question: "Lorem ipsum dolor sit amet, consectetur adipisicing elit?",
-      answer: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
+      question: "Is E-Kumpas free to use?",
+      answer: "Yes, E-Kumpas is free to download and use. We are dedicated to making learning and communication through FSL accessible to everyone.",
       value: "item-4",
     },
     {
       question:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur natus?",
+        "Can I download the app on multiple devices?",
       answer:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint labore quidem quam? Consectetur sapiente iste rerum reiciendis animi nihil nostrum sit quo, modi quod.",
+        "Yes, you can download E-Kumpas on any supported device. Your app activity and progress can be synced if you use the same login credentials across devices.",
+      value: "item-5",
+    },
+    {
+      question:
+        "How accurate are the FSL animations?",
+      answer:
+        "We work closely with FSL experts to ensure the animations are accurate and culturally appropriate, but we are continually improving based on user feedback.",
       value: "item-5",
     },
   ];

@@ -1,15 +1,11 @@
 export const Statistics = () => {
     const stats = [
       {
-        quantity: "2.7K+",
+        quantity: "50+",
         description: "Users",
       },
       {
-        quantity: "1.8K+",
-        description: "Subscribers",
-      },
-      {
-        quantity: "112",
+        quantity: "100+",
         description: "Downloads",
       },
       {
