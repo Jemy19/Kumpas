@@ -86,7 +86,7 @@ export function Feedback() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const categories = ["New Feature Requests", "Bug reports", "Performance issues", "New FSL Suggestions"];
+  const categories = ["New Feature Requests", "Bug Reports", "Performance Issues", "New FSL Suggestions"];
 
   const updateItemsPerPage = () => {
     if (window.innerHeight <= 800) {

@@ -101,7 +101,7 @@ export function SaFeedback() {
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const categories = ["New Feature Requests", "Bug reports", "Performance issues", "New FSL Suggestions"];
+  const categories = ["New Feature Requests", "Bug Reports", "Performance Issues", "New FSL Suggestions"];
 
   const updateItemsPerPage = () => {
     if (window.innerHeight <= 800) {
