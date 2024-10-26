@@ -10,8 +10,8 @@ export const About = () => {
         <div className="px-6 flex flex-col-reverse md:flex-row gap-8 md:gap-12">
           <img
             src={Logo}
-            alt="/"
-            className="w-[900px] object-contain rounded-lg bg-white p-4"
+            alt="Logo"
+            className="w-[900px] object-contain rounded-lg bg-white p-4 select-none pointer-events-none"
           />
           <div className="bg-green-0 flex flex-col justify-between">
             <div className="pb-6">

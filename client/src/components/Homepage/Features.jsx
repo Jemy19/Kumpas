@@ -35,10 +35,10 @@ const featureList = [
   "Feedback",
   "Text translation",
   "Favorites",
-  "Contact form",
+  "Categories",
   "Our team",
   "Responsive design",
-  "Newsletter",
+  "Favorites",
   "Minimalist",
 ];
 
