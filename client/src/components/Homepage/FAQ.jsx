@@ -46,6 +46,10 @@ import {
   ];
   
   export const FAQ = () => {
+    const copyEmailToClipboard = () => {
+      navigator.clipboard.writeText("powerpupbois@gmail.com");
+      alert("Email copied to clipboard!");
+    };
     return (
       <section id="faq" className="container py-24 sm:py-32">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -66,13 +70,12 @@ import {
   
         <h3 className="font-medium mt-4">
           Still have questions?{" "}
-          <a
-            rel="noreferrer noopener"
-            href="#"
+          <button
+            onClick={copyEmailToClipboard}
             className="text-primary transition-all border-primary hover:border-b-2"
           >
             Contact us
-          </a>
+          </button>
         </h3>
       </section>
     );
