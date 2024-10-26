@@ -17,34 +17,13 @@ export const Footer = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <h3 className="font-bold text-lg">Follow US</h3>
+          <h3 className="font-bold text-lg">Contact US</h3>
           <div>
             <a
               rel="noreferrer noopener"
-              href="#"
               className="opacity-60 hover:opacity-100"
             >
-              Github
-            </a>
-          </div>
-
-          <div>
-            <a
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Twitter
-            </a>
-          </div>
-
-          <div>
-            <a
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Dribbble
+              powerpupbois@gmail.com
             </a>
           </div>
         </div>
@@ -54,7 +33,6 @@ export const Footer = () => {
           <div>
             <a
               rel="noreferrer noopener"
-              href="#"
               className="opacity-60 hover:opacity-100"
             >
               Web
@@ -64,20 +42,9 @@ export const Footer = () => {
           <div>
             <a
               rel="noreferrer noopener"
-              href="#"
               className="opacity-60 hover:opacity-100"
             >
               Mobile
-            </a>
-          </div>
-
-          <div>
-            <a
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Desktop
             </a>
           </div>
         </div>
@@ -87,7 +54,7 @@ export const Footer = () => {
           <div>
             <a
               rel="noreferrer noopener"
-              href="#"
+              href="features"
               className="opacity-60 hover:opacity-100"
             >
               Features
@@ -97,53 +64,20 @@ export const Footer = () => {
           <div>
             <a
               rel="noreferrer noopener"
-              href="#"
+              href="howItWorks"
               className="opacity-60 hover:opacity-100"
             >
-              Pricing
+              How It Works
             </a>
           </div>
 
           <div>
             <a
               rel="noreferrer noopener"
-              href="#"
+              href="faq"
               className="opacity-60 hover:opacity-100"
             >
               FAQ
-            </a>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <h3 className="font-bold text-lg">Community</h3>
-          <div>
-            <a
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Youtube
-            </a>
-          </div>
-
-          <div>
-            <a
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Discord
-            </a>
-          </div>
-
-          <div>
-            <a
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Twitch
             </a>
           </div>
         </div>
