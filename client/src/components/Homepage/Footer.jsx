@@ -26,6 +26,15 @@ export const Footer = () => {
               powerpupbois@gmail.com
             </a>
           </div>
+          <div>
+            <a
+              rel="noreferrer noopener"
+              href="#team"
+              className="opacity-60 hover:opacity-100"
+            >
+              Team
+            </a>
+          </div>
         </div>
 
         <div className="flex flex-col gap-2">
@@ -54,7 +63,7 @@ export const Footer = () => {
           <div>
             <a
               rel="noreferrer noopener"
-              href="features"
+              href="#features"
               className="opacity-60 hover:opacity-100"
             >
               Features
@@ -64,7 +73,7 @@ export const Footer = () => {
           <div>
             <a
               rel="noreferrer noopener"
-              href="howItWorks"
+              href="#howItWorks"
               className="opacity-60 hover:opacity-100"
             >
               How It Works
@@ -74,7 +83,7 @@ export const Footer = () => {
           <div>
             <a
               rel="noreferrer noopener"
-              href="faq"
+              href="#faq"
               className="opacity-60 hover:opacity-100"
             >
               FAQ
