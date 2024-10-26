@@ -408,6 +408,15 @@ export function SaUserManagement() {
                                     </div>
                                   </div>
                                 </div>
+                                <div className="bg-gray-100 p-4 border border-gray-300 rounded-md shadow-md">
+                                  <p className="text-gray-800 font-semibold mb-2">Password Requirements:</p>
+                                  <ul className="text-gray-700 text-sm space-y-1">
+                                    <li>Must contain at least 1 uppercase letter ❌</li>
+                                    <li>Must contain at least 1 number ❌</li>
+                                    <li>Must contain at least 1 symbol ❌</li>
+                                    <li>Must be at least 8 characters ❌</li>
+                                  </ul>
+                                </div>
                                 <Button
                                   type="submit"
                                   disabled={butloading}
@@ -543,7 +552,15 @@ export function SaUserManagement() {
                                         {errorMessage && (
                                           <p className="text-red-500 text-sm">{errorMessage}</p>
                                         )}
-
+                                        <div className="bg-gray-100 p-4 border border-gray-300 rounded-md shadow-md">
+                                          <p className="text-gray-800 font-semibold mb-2">Password Requirements:</p>
+                                          <ul className="text-gray-700 text-sm space-y-1">
+                                            <li>Must contain at least 1 uppercase letter ❌</li>
+                                            <li>Must contain at least 1 number ❌</li>
+                                            <li>Must contain at least 1 symbol ❌</li>
+                                            <li>Must be at least 8 characters ❌</li>
+                                          </ul>
+                                        </div>
                                         <SheetFooter>
                                           <Button
                                             type="submit"
