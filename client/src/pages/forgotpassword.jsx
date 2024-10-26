@@ -3,6 +3,7 @@ import axios from 'axios'; // Add axios import
 import { Button } from "@/components/ui/button"
 import { Link } from 'react-router-dom'; // Import Link
 import LogoOverlay from '../components/logooverlay';
+import {toast} from 'react-hot-toast'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -16,9 +17,11 @@ const ForgotPassword = () => {
       await axios.post('/forgotpassword', {
         email,
       });
+      toast.success('Check your email for reset instructions.');
       setMessage('Check your email for reset instructions.');
       setIsError(false); // Success case
     } catch (error) {
+      toast.error('Error sending password reset. Try again.');
       setMessage('Error sending password reset. Try again.');
       setIsError(true); // Error case
     } finally {

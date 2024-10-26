@@ -130,7 +130,7 @@ const ResetPassword = () => {
           disabled={butloading}
           className={`w-full h-10 select-none ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1 select-none' : ''}`}
         >
-          {butloading ? 'Sending...' : 'Send Reset Link'}
+          {butloading ? 'Reseting...' : 'Reset Password'}
         </Button>
         {message && (
           <p className={`mt-4 text-sm ${isError ? 'text-red-500' : 'text-green-500'}`}>
