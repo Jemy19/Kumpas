@@ -72,6 +72,9 @@ import {toast} from 'react-hot-toast'
 import axios from 'axios'
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
+import Level2 from '@/components/level/level2';
+import Level3 from '@/components/level/level3';
+import Level4 from '@/components/level/level4';
 import SimplePagination from '@/components/simplepagination';
 import SearchInput from '@/components/searchinput';
 import Filter from '@/components/filter';
