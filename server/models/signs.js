@@ -10,6 +10,12 @@ const wordSchema = new Schema({
         type: String,
         required: true
     },
+    level: {
+        type: String,
+        enum: ['level 1', 'level 2', 'level 3', 'level 4'], // Restrict level choices
+        required: true,
+        default: 'level 1' // Default level
+    },
     category: {
         type: String,
         required: true
@@ -19,11 +25,11 @@ const wordSchema = new Schema({
         required: true
     },
     frequency: {
-        type: Number,   // Add frequency with Number (integer type)
+        type: Number,
         required: true,
-        default: 0      // Optionally, you can set a default value
+        default: 0
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
 const WordModel = mongoose.model('sign language', wordSchema);
 
