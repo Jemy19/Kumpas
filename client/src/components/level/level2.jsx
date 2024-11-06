@@ -299,7 +299,7 @@ import {
         setCurrentPage(1); // Reset to the first page when search changes
       };
       // Filter for Level 2 words only
-      const filteredLevel2Words = filteredLogs.filter(word => word.level === 'Level 2');
+      const filteredLevel2Words = filteredLogs.filter(word => word.level === 2);
       const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
       const paginatedWords = filteredLevel2Words.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   
