@@ -93,7 +93,15 @@ export function Management() {
       level: '',
       category: '',
       video: '',
-    })
+    });
+    const [updateData, setUpdateData] = useState({
+      id: null,
+      title: '',
+      level: '',
+      description: '',
+      category: '',
+      video: '',
+    });
     const vidUpRef = useRef(null);
     // for fetching sign language
     const [words, setWords] = useState([]);
@@ -108,26 +116,26 @@ export function Management() {
 
     // Update categories based on selected level
     useEffect(() => {
-      const level = updateData.level || data.level;
+      const level = updateData.level || data.level; // Use whichever level is available
       switch (level) {
-          case 'Level 1':
-              setCurrentCategories(categories1);
-              break;
-          case 'Level 2':
-              setCurrentCategories(categories2);
-              break;
-          case 'Level 3':
-              setCurrentCategories(categories3);
-              break;
-          case 'Level 4':
-              setCurrentCategories(categories4);
-              break;
-          default:
-              setCurrentCategories([]);
-              break;
+        case 'Level 1':
+            setCurrentCategories(categories1);
+            break;
+        case 'Level 2':
+            setCurrentCategories(categories2);
+            break;
+        case 'Level 3':
+            setCurrentCategories(categories3);
+            break;
+        case 'Level 4':
+            setCurrentCategories(categories4);
+            break;
+        default:
+            setCurrentCategories([]);
+            break;
       }
-    }, [data.level, updateData.level]); 
-  
+    }, [data.level, updateData.level]);  // This should be fine now that you ensure only one level is used.    
+    
     const addWord = async (e) => {
       e.preventDefault();
       setbutLoading(true); 
@@ -214,15 +222,6 @@ export function Management() {
       }
     };
     // for update function
-
-    const [updateData, setUpdateData] = useState({
-      id: null,
-      title: '',
-      level: '',
-      description: '',
-      category: '',
-      video: '',
-    });
 
     const updateWord = async (e, id, updatedData) => {
       e.preventDefault();
