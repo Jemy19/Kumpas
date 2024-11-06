@@ -293,7 +293,7 @@ export function Management() {
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <div className="flex items-center">
-                  <CardTitle>Sign Language Management</CardTitle>
+                  <CardTitle>Sign Language Management - LEVEL 1</CardTitle>
                   
                     <div className="ml-auto flex items-center gap-2">
                       <div className="flex items-center">
@@ -566,6 +566,15 @@ export function Management() {
                   />
               </CardFooter>
               </Card>
+            </TabsContent>
+            <TabsContent value="level2">
+              <Level2/>
+            </TabsContent>
+            <TabsContent value="level3">
+              <Level3/>
+            </TabsContent>
+            <TabsContent value="level4">
+              <Level4/>
             </TabsContent>
           </Tabs>
           </>
