@@ -283,7 +283,7 @@ export function Management() {
             ) : (
             <>        
           <Tabs defaultValue="level1">
-            <TabsList className="pt-4">
+            <TabsList className="mt-2">
               <TabsTrigger value="level1">Level 1</TabsTrigger>
               <TabsTrigger value="level2">Level 2</TabsTrigger>
               <TabsTrigger value="level3">Level 3</TabsTrigger>
