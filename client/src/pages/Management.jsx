@@ -540,7 +540,7 @@ export function Management() {
                                       />
                                       <Label>Level</Label>
                                       <select name="level" value={updateData.level} onChange={(e) => setData({...updateData, level: e.target.value})} required>
-                                        <option value="" disabled>Select a level</option>
+                                        <option value={updateData.updateData} disabled>Select a level</option>
                                         {levels.map((level) => (
                                             <option key={level} value={level}>
                                                 {level}
