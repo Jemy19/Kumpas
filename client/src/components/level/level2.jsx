@@ -300,7 +300,7 @@ import {
       };
       // Filter for Level 2 words only
       const filteredLevel2Words = filteredLogs.filter(word => word.level === 2);
-      const totalPages = Math.ceil(filteredLogs.length / itemsPerPage);
+      const totalPages = Math.ceil(filteredLevel2Words.length / itemsPerPage);
       const paginatedWords = filteredLevel2Words.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   
     return (
