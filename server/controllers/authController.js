@@ -122,52 +122,56 @@ const logoutUser = async (req, res) => {
 
 
 const addWord = async (req, res) => {
-    try {
-        const {title, description, level, category, video} = req.body;
-        if (!title){
-            return res.json({
-            error: 'Title is required'
-            })
-        }
-        if (!description) {
-            return res.json({
-                error: 'Description is Required'
-            })
-        }
-        if (!level) {
-          return res.json({
-              error: 'Description is Required'
-          })
-        }
-        if (!category) {
-            return res.json({
-            error: 'no category chosen'
-            })
-        }
-        if (!video) {
-            return res.json({
-            error: 'missing video'
-            })
-        }
+  try {
+      const { title, description, level, category, video } = req.body;
 
-        const word = await Word.create ({
-            title,
-            description,
-            level,
-            category,
-            video,
-        });
-        await Log.create({
+      // Validation checks
+      if (!title) {
+          return res.json({ error: 'Title is required' });
+      }
+      if (!description) {
+          return res.json({ error: 'Description is required' });
+      }
+      if (!level) {
+          return res.json({ error: 'Level is required' });
+      }
+      if (!category) {
+          return res.json({ error: 'No category chosen' });
+      }
+      if (!video) {
+          return res.json({ error: 'Missing video' });
+      }
+
+      // Convert level to an integer based on the format "Level 1", "Level 2", etc.
+      let levelNumber = parseInt(level.replace("Level ", ""), 10);
+      if (isNaN(levelNumber)) {
+          return res.json({ error: 'Invalid level format' });
+      }
+
+      // Create a new word
+      const word = await Word.create({
+          title,
+          description,
+          level: levelNumber,  // Use the converted level number
+          category,
+          video,
+      });
+
+      // Log the action
+      await Log.create({
           level: 'info',
-          message: `added a new sign language word: ${word.title}`,
-          adminId: req.user._id, 
-          adminName: req.user.name
-        });
-        return res.json(word);
-    } catch (error) {
-        console.log(error)
-    }
-}
+          message: `Added a new sign language word: ${word.title}`,
+          adminId: req.user._id,
+          adminName: req.user.name,
+      });
+
+      return res.json(word);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Server error' });
+  }
+};
+
   
 const deleteWordDoc = async (req, res) => {
     const { id } = req.params;

@@ -11,8 +11,9 @@ const wordSchema = new Schema({
         required: true
     },
     level: {
-        type: String,
+        type: Number,
         required: true,
+        default: 1
     },
     category: {
         type: String,
