@@ -309,7 +309,7 @@ import {
               <UserSkeleton />
               ) : (
               <>        
-              <TabsContent value="level2">
+              <TabsContent value="level3">
                 <Card x-chunk="dashboard-06-chunk-0">
                   <CardHeader>
                     <div className="flex items-center">
