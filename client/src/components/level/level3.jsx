@@ -73,7 +73,7 @@ import {
   import SimplePagination from '@/components/simplepagination';
   import SearchInput from '@/components/searchinput';
   import Filter from '@/components/filter';
-  import UserSkeleton from '../skeletons/userskeleton';
+  import UserSkeleton from '../../skeletons/userskeleton';
   
   export function Level3() {
       // for creating new sign language
