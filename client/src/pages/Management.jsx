@@ -341,7 +341,7 @@ export function Management() {
                             <Filter
                                 selectedCategories={selectedCategories}
                                 handleCategoryChange={handleCategoryChange}
-                                categories={categories}
+                                categories={categories1}
                                 titlelabel="Filter by Category"
                             />
                             </div>
@@ -366,7 +366,7 @@ export function Management() {
                                 <Input type='text' placeholder='Enter Title...' value={data.title} onChange={(e) => setData({...data, title: e.target.value})} />
                                 <Label>Description</Label>
                                 <Input type='text' placeholder='Enter Description...' value={data.description} onChange={(e) => setData({...data, description: e.target.value})} />
-                                <Label>Category</Label>
+                                <Label>Level</Label>
                                 <select name="level" value={data.level} onChange={(e) => setData({...data, level: e.target.value})} required>
                                   <option value="" disabled>Select a level</option>
                                   {levels.map((level) => (
@@ -535,6 +535,15 @@ export function Management() {
                                           value={updateData.description}
                                           onChange={(e) => setUpdateData({ ...updateData, description: e.target.value })}
                                       />
+                                      <Label>Level</Label>
+                                      <select name="level" value={data.level} onChange={(e) => setData({...data, level: e.target.value})} required>
+                                        <option value="" disabled>Select a level</option>
+                                        {levels.map((level) => (
+                                            <option key={level} value={level}>
+                                                {level}
+                                            </option>
+                                        ))}
+                                      </select>
                                       <Label>Category</Label>
                                       <select
                                           name="category"
@@ -543,7 +552,7 @@ export function Management() {
                                           required
                                       >
                                           <option value="" disabled>Select a category</option>
-                                          {categories.map((category) => (
+                                          {currentCategories.map((category) => (
                                           <option key={category} value={category}>
                                               {category}
                                           </option>
