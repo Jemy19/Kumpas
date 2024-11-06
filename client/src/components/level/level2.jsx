@@ -75,7 +75,7 @@ import {
   import Filter from '@/components/filter';
   import UserSkeleton from '../../skeletons/userskeleton';
   
-  export function Management() {
+  export function Level2() {
       // for creating new sign language
       const categories1 = ['Basic Greetings', 'Survival Signs', 'Common Words', 'Questions', 'Alphabet'];
       const categories2 = ['Level2 test 1', 'Level2 test 2', 'Level2 test 3', 'Level2 test 4', 'Level2 test 5'];
@@ -313,7 +313,7 @@ import {
                 <Card x-chunk="dashboard-06-chunk-0">
                   <CardHeader>
                     <div className="flex items-center">
-                    <CardTitle>Sign Language Management - LEVEL 1</CardTitle>
+                    <CardTitle>Sign Language Management - LEVEL 2</CardTitle>
                     
                       <div className="ml-auto flex items-center gap-2">
                         <div className="flex items-center">
@@ -329,7 +329,7 @@ import {
                               <Filter
                                   selectedCategories={selectedCategories}
                                   handleCategoryChange={handleCategoryChange}
-                                  categories={categories1}
+                                  categories={categories2}
                                   titlelabel="Filter by Category"
                               />
                               </div>
@@ -610,6 +610,6 @@ import {
           </main>
     )
   }
-  export default Management;
+  export default Level2;
   
   
