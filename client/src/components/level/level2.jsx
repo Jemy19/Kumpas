@@ -66,7 +66,7 @@ import {
       AlertDialogTitle,
       AlertDialogTrigger,
     } from "@/components/ui/alert-dialog"
-  import VidUp from '../components/vidup';
+  import VidUp from '../vidup';
   import React, { useContext, useState, useEffect, useRef  } from 'react';
   import {toast} from 'react-hot-toast'
   import axios from 'axios'
