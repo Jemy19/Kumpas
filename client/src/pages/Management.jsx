@@ -82,16 +82,51 @@ import UserSkeleton from '../skeletons/userskeleton';
 
 export function Management() {
     // for creating new sign language
-    const categories = ['Basic Greetings', 'Survival Signs', 'Common Words', 'Questions', 'Alphabet'];
+    const categories1 = ['Basic Greetings', 'Survival Signs', 'Common Words', 'Questions', 'Alphabet'];
+    const categories2 = ['Level2 test 1', 'Level2 test 2', 'Level2 test 3', 'Level2 test 4', 'Level2 test 5'];
+    const categories3 = ['Level3 test 1', 'Level3 test 2', 'Level3 test 3', 'Level3 test 4', 'Level3 test 5'];
+    const categories4 = ['Level4 test 1', 'Level4 test 2', 'Level4 test 3', 'Level4 test 4', 'Level4 test 5'];
+    const levels = ['Level 1', 'Level 2', 'Level 3', 'Level 4'];
     const [data, setData] = useState({
       title: '',
       description: '',
+      level: '',
       category: '',
       video: '',
     })
     const vidUpRef = useRef(null);
-  
+    // for fetching sign language
+    const [words, setWords] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [butloading, setbutLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(8);
+    const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [currentCategories, setCurrentCategories] = useState([]);
     // for creating new sign language
+
+    // Update categories based on selected level
+    useEffect(() => {
+      switch (data.level) {
+          case 'Level 1':
+              setCurrentCategories(categories1);
+              break;
+          case 'Level 2':
+              setCurrentCategories(categories2);
+              break;
+          case 'Level 3':
+              setCurrentCategories(categories3);
+              break;
+          case 'Level 4':
+              setCurrentCategories(categories4);
+              break;
+          default:
+              setCurrentCategories([]);
+              break;
+      }
+    }, [data.level]);
+  
     const addWord = async (e) => {
       e.preventDefault();
       setbutLoading(true); 
@@ -107,6 +142,7 @@ export function Management() {
         const response = await axios.post('/addNewWord', {
           title,
           description,
+          level,
           category,
           video: vidname,
         });
@@ -114,7 +150,7 @@ export function Management() {
         if (response.data.error) {
           toast.error(response.data.error);
         } else {
-          setData({ title: '', description: '', category: '', video: '' });
+          setData({ title: '', description: '', level: '', category: '', video: '' });
           toast.success('New Word Successfully Added!');
           setWords(prevWords => [...prevWords, response.data]);
         }
@@ -124,16 +160,7 @@ export function Management() {
         setbutLoading(false); // Hide loading overlay
       }
     };
-  
-    // for fetching sign language
-    const [words, setWords] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [butloading, setbutLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(8);
-    const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
-    const [selectedCategories, setSelectedCategories] = useState([]);
-
+    
 
     const updateItemsPerPage = () => {
       if (window.innerHeight <= 800) {
@@ -206,6 +233,7 @@ export function Management() {
         console.log(vidname)
         if(originalData.title == updateData.title 
           && originalData.description == updateData.description
+          && originalData.level == updateData.level
           && originalData.category == updateData.category
           && !vidname.endsWith('.mp4') 
         ) 
@@ -241,6 +269,7 @@ export function Management() {
       setUpdateData({
         id: word._id,
         title: word.title,
+        level: word.level,
         description: word.description,
         category: word.category,
         video: word.video,
@@ -338,9 +367,18 @@ export function Management() {
                                 <Label>Description</Label>
                                 <Input type='text' placeholder='Enter Description...' value={data.description} onChange={(e) => setData({...data, description: e.target.value})} />
                                 <Label>Category</Label>
+                                <select name="level" value={data.level} onChange={(e) => setData({...data, level: e.target.value})} required>
+                                  <option value="" disabled>Select a level</option>
+                                  {levels.map((level) => (
+                                      <option key={level} value={level}>
+                                          {level}
+                                      </option>
+                                  ))}
+                                </select>
+                                <Label>Category</Label>
                                 <select name="category" value={data.category} onChange={(e) => setData({...data, category: e.target.value})} required>
                                   <option value="" disabled>Select a category</option>
-                                  {categories.map((category) => (
+                                  {currentCategories.map((category) => (
                                       <option key={category} value={category}>
                                           {category}
                                       </option>

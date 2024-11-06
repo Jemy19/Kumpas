@@ -123,7 +123,7 @@ const logoutUser = async (req, res) => {
 
 const addWord = async (req, res) => {
     try {
-        const {title, description, category, video} = req.body;
+        const {title, description, level, category, video} = req.body;
         if (!title){
             return res.json({
             error: 'Title is required'
@@ -133,7 +133,12 @@ const addWord = async (req, res) => {
             return res.json({
                 error: 'Description is Required'
             })
-            }
+        }
+        if (!level) {
+          return res.json({
+              error: 'Description is Required'
+          })
+        }
         if (!category) {
             return res.json({
             error: 'no category chosen'
@@ -148,6 +153,7 @@ const addWord = async (req, res) => {
         const word = await Word.create ({
             title,
             description,
+            level,
             category,
             video,
         });
@@ -197,7 +203,7 @@ const deleteWordDoc = async (req, res) => {
 
 const updateWordDoc = async (req, res) => {
     const { id } = req.params;
-    const { title, description, category, video } = req.body;
+    const { title, description, level, category, video } = req.body;
     console.log('Received update request for id:', id); 
     try {
       const word = await Word.findById(id);
@@ -209,6 +215,7 @@ const updateWordDoc = async (req, res) => {
   
       word.title = title || word.title;
       word.description = description || word.description;
+      word.level = level || word.level;
       word.category = category || word.category;
       word.video = video || word.video;
   
