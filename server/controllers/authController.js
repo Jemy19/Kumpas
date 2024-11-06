@@ -206,44 +206,54 @@ const deleteWordDoc = async (req, res) => {
 };
 
 const updateWordDoc = async (req, res) => {
-    const { id } = req.params;
-    const { title, description, level, category, video } = req.body;
-    console.log('Received update request for id:', id); 
-    try {
-      const word = await Word.findById(id);
-      if (!word) {
-        return res.status(404).json({
-          error: 'Word not found',
-        });
-      }
-  
-      word.title = title || word.title;
-      word.description = description || word.description;
-      word.level = level || word.level;
-      word.category = category || word.category;
-      word.video = video || word.video;
-  
-      const updatedWord = await word.save();
-
-      await Log.create({
-        level: 'info',
-        message: `Word update Successfully: ${word.title}`,
-        adminId: req.user._id, 
-        adminName: req.user.name
-      });
-      res.json(updatedWord);
-    } catch (error) {
-      await Log.create({
-        level: 'error',
-        message: `Error Updating Signlanguage Word`,
-        adminId: req.user._id,  
-        adminName: req.user.name
-      });
-      res.status(500).json({
-        error: 'An error occurred while updating the word',
+  const { id } = req.params;
+  let { title, description, level, category, video } = req.body;
+  console.log('Received update request for id:', id); 
+  try {
+    const word = await Word.findById(id);
+    if (!word) {
+      return res.status(404).json({
+        error: 'Word not found',
       });
     }
+
+    // Parse level string into integer if it matches the "Level X" format
+    if (typeof level === 'string' && level.toLowerCase().startsWith("level ")) {
+      const levelNumber = parseInt(level.replace("Level ", ""), 10);
+      if (isNaN(levelNumber)) {
+        return res.status(400).json({ error: 'Invalid level format' });
+      }
+      level = levelNumber;
+    }
+
+    word.title = title || word.title;
+    word.description = description || word.description;
+    word.level = level || word.level;
+    word.category = category || word.category;
+    word.video = video || word.video;
+
+    const updatedWord = await word.save();
+
+    await Log.create({
+      level: 'info',
+      message: `Word update successfully: ${word.title}`,
+      adminId: req.user._id, 
+      adminName: req.user.name
+    });
+    res.json(updatedWord);
+  } catch (error) {
+    await Log.create({
+      level: 'error',
+      message: `Error updating sign language word`,
+      adminId: req.user._id,  
+      adminName: req.user.name
+    });
+    res.status(500).json({
+      error: 'An error occurred while updating the word',
+    });
+  }
 };
+
   
 const getUsers = async (req, res) => {
 try {

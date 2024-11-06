@@ -241,6 +241,9 @@ export function Management() {
           toast.error('No changes detected. Word not updated.');
           return;
         }
+        if(originalData.level !== updateData.level && originalData.category == updateData.category) {
+          toast.error('If level is changed the category must also be changed');
+        }
         if(vidname.endsWith('.mp4')) {
           await axios.delete(`https://kumpas.onrender.com/delvideo/${updatedData.video}`);
           updatedData.video = vidname;
