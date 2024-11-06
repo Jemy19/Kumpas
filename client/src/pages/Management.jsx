@@ -289,7 +289,7 @@ export function Management() {
               <TabsTrigger value="level3">Level 3</TabsTrigger>
               <TabsTrigger value="level4">Level 4</TabsTrigger>
             </TabsList>
-            <TabsContent value="all">
+            <TabsContent value="level1">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <div className="flex items-center">
