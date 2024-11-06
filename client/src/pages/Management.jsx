@@ -108,7 +108,8 @@ export function Management() {
 
     // Update categories based on selected level
     useEffect(() => {
-      switch (data.level) {
+      const level = updateData.level || data.level;
+      switch (level) {
           case 'Level 1':
               setCurrentCategories(categories1);
               break;
@@ -125,7 +126,7 @@ export function Management() {
               setCurrentCategories([]);
               break;
       }
-    }, [data.level]);
+    }, [data.level, updateData.level]); 
   
     const addWord = async (e) => {
       e.preventDefault();
@@ -217,6 +218,7 @@ export function Management() {
     const [updateData, setUpdateData] = useState({
       id: null,
       title: '',
+      level: '',
       description: '',
       category: '',
       video: '',
