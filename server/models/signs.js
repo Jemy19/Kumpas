@@ -12,9 +12,7 @@ const wordSchema = new Schema({
     },
     level: {
         type: String,
-        enum: ['level 1', 'level 2', 'level 3', 'level 4'], // Restrict level choices
         required: true,
-        default: 'level 1' // Default level
     },
     category: {
         type: String,
