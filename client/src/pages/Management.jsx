@@ -130,7 +130,7 @@ export function Management() {
     const addWord = async (e) => {
       e.preventDefault();
       setbutLoading(true); 
-      const { title, description, category } = data;
+      const { title, description, level, category } = data;
   
       try {
         let videoUrl = '';
@@ -164,9 +164,9 @@ export function Management() {
 
     const updateItemsPerPage = () => {
       if (window.innerHeight <= 800) {
-        setItemsPerPage(6); // Set to your desired number
+        setItemsPerPage(5); // Set to your desired number
       } else {
-        setItemsPerPage(8); // Reset to the default
+        setItemsPerPage(7); // Reset to the default
       }
     };
   
