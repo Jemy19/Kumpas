@@ -282,12 +282,12 @@ export function Management() {
             <UserSkeleton />
             ) : (
             <>        
-          <Tabs defaultValue="all">
-            <TabsList>
-              <TabsTrigger value="all">Level 0</TabsTrigger>
+          <Tabs defaultValue="level1">
+            <TabsList className="pt-4">
               <TabsTrigger value="level1">Level 1</TabsTrigger>
               <TabsTrigger value="level2">Level 2</TabsTrigger>
               <TabsTrigger value="level3">Level 3</TabsTrigger>
+              <TabsTrigger value="level4">Level 4</TabsTrigger>
             </TabsList>
             <TabsContent value="all">
               <Card x-chunk="dashboard-06-chunk-0">
