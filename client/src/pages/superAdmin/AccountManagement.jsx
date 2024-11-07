@@ -173,13 +173,13 @@ export function AccountManagement() {
   const deleteAcc = async (id, currentStatus) => {
     try {
       // Determine the new status based on the current status
-      const newStatus = currentStatus === 'deactivated' ? 'active' : 'deactivated';
+      const newStatus = currentStatus === 'Deactivated' ? 'Active' : 'Deactivated';
   
       // Send a PATCH request to the backend to update the account status
       const response = await axios.patch(`/admin/admin/${id}`, { status: newStatus });
       
       if (response.status === 200) {
-        toast.success(`Account ${newStatus === 'deactivated' ? 'Deactivated' : 'Activated'}!`);
+        toast.success(`Account ${newStatus === 'Deactivated' ? 'Deactivated' : 'Activated'}!`);
         
         // Update the local state to reflect the new status
         setAdmins(prevAdmins => prevAdmins.map(admin => 
@@ -187,8 +187,8 @@ export function AccountManagement() {
         ));
       }
     } catch (error) {
-      console.error(`An error occurred while ${currentStatus === 'deactivated' ? 'activating' : 'deactivating'} the account:`, error);
-      toast.error(`An error occurred while ${currentStatus === 'deactivated' ? 'activating' : 'deactivating'} the account.`);
+      console.error(`An error occurred while ${currentStatus === 'Deactivated' ? 'activating' : 'deactivating'} the account:`, error);
+      toast.error(`An error occurred while ${currentStatus === 'Deactivated' ? 'activating' : 'deactivating'} the account.`);
     }
   };
   // for updating account
@@ -586,13 +586,13 @@ export function AccountManagement() {
                                   </Sheet>
                                   <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                      <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive"> {admin.status === 'active' ? 'Deactivate' : 'Activate'}</Button>
+                                      <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive"> {admin.status === 'Active' ? 'Deactivate' : 'Activate'}</Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
                                       <AlertDialogHeader>
                                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                         <AlertDialogDescription>
-                                          This will {admin.status === 'active' ? 'deactivate' : 'activate'} the Account: {admin.name}
+                                          This will {admin.status === 'Active' ? 'Deactivate' : 'Activate'} the Account: {admin.name}
                                         </AlertDialogDescription>
                                       </AlertDialogHeader>
                                       <AlertDialogFooter>
