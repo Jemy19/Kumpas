@@ -274,7 +274,7 @@ export function SaSignManagement() {
       setUpdateData({
         id: word._id,
         title: word.title,
-        level: word.level,
+        level: word.level || '',
         description: word.description,
         category: word.category,
         video: word.video,
@@ -542,7 +542,7 @@ export function SaSignManagement() {
                                           onChange={(e) => setUpdateData({ ...updateData, description: e.target.value })}
                                       />
                                       <Label>Level</Label>
-                                      <select name="level" value={updateData.level} onChange={(e) => setUpdateData({...updateData, level: e.target.value})} required>
+                                      <select name="level" value={updateData.level || ''} onChange={(e) => setUpdateData({...updateData, level: e.target.value})} required>
                                         <option value={updateData.updateData} disabled>Select a level</option>
                                         {levels.map((level) => (
                                             <option key={level} value={level}>

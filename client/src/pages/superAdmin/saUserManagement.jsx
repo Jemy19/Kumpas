@@ -77,7 +77,7 @@ export function SaUserManagement() {
   const [butloading, setbutLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const levels = ['Level 1', 'Level 2', 'Level 3', 'Level 4'];
     //responsive
 
     const updateItemsPerPage = () => {
@@ -103,6 +103,7 @@ export function SaUserManagement() {
   // create account
   const [data, setData] = useState({
     email: '',
+    level: '',
     password: '',
     confirmPassword: '',
   });
@@ -110,7 +111,11 @@ export function SaUserManagement() {
   const registerMobUser = async (e) => {
     e.preventDefault();
     setbutLoading(true); 
-    const { email, password, confirmPassword } = data;
+    const { email, level, password, confirmPassword } = data;
+  
+    // Frontend password validation
+    
+    // Check if password is at least 8 characters long
     if (password.length < 8) {
       toast.error('Password must be at least 8 characters long.');
       setbutLoading(false); // Stop loading if validation fails
@@ -146,6 +151,7 @@ export function SaUserManagement() {
       setbutLoading(false);
       return;
     }
+    
     if (password !== confirmPassword) {
       toast.error('Passwords do not match.');
       setbutLoading(false);
@@ -154,22 +160,23 @@ export function SaUserManagement() {
     try {
       const { data } = await axios.post('/createMobUser', {
         email,
+        level,
         password,
       });
       if (data.error) {
         toast.error(data.error);
       } else {
-        setData({ email: '', password: '', confirmPassword: '' });
+        setData({ email: '', level: '', password: '', confirmPassword: '' });
         toast.success('New User Created!');
         setmobUsers(prevmobUsers => [...prevmobUsers, data]);
-        // Update mobUsers state NOT WORKING
       }
     } catch (error) {
-      toast.success('Failed to Create new user!');
+      toast.error('Failed to Create new user!');
     } finally {
-      setbutLoading(false); // Hide loading overlay
+      setbutLoading(false); // Ensure loading stops in both success and failure cases
     }
   };
+  
   // delete account
   const deleteAcc = async (id) => {
     try {
@@ -182,12 +189,15 @@ export function SaUserManagement() {
       }
     } catch (error) {
       toast.error('An error occurred while deleting the account.');
+    }finally {
+      setbutLoading(false); // Hide loading overlay
     }
   };  
   // for updating account
   const [updateData, setUpdateData] = useState({
     id: null,
     email: '',
+    level: '',
     password: '',
     confirmPassword: '',
   });
@@ -214,11 +224,13 @@ export function SaUserManagement() {
       // Check if no changes were made
       if (
         originalData.email === updateData.email &&
+        originalData.level === updateData.level &&
         !updateData.password && !updateData.confirmPassword
       ) {
         toast.error('No changes detected. MobUser account not updated.');
         return;
       }
+
       if (updateData.password || updateData.confirmPassword){
         if (updateData.password.length < 8) {
           toast.error('Password must be at least 8 characters long.');
@@ -285,6 +297,7 @@ export function SaUserManagement() {
     setUpdateData({
       id: mobUser._id,
       email: mobUser.email,
+      level: mobUser.level || '',
       password: '',
       confirmPassword: '',
     });
@@ -370,6 +383,16 @@ export function SaUserManagement() {
                                     onChange={(e) => setData({ ...data, email: e.target.value })}
                                   />
                                 </div>
+
+                                <Label>Level</Label>
+                                <select name="level" value={data.level} onChange={(e) => setData({...data, level: e.target.value})} required>
+                                  <option value="" disabled>Select a level</option>
+                                  {levels.map((level) => (
+                                      <option key={level} value={level}>
+                                          {level}
+                                      </option>
+                                  ))}
+                                </select>
                                 
                                 {/* Password Field */}
                                 <div className="grid gap-2 relative">
@@ -441,6 +464,7 @@ export function SaUserManagement() {
                         </TableHead>
                         <TableHead className="hidden w-[200px] sm:table-cell">Email</TableHead>
                         <TableHead className="hidden w-[200px] sm:table-cell">Role</TableHead>
+                        <TableHead className="hidden w-[200px] sm:table-cell">Level</TableHead>
                         <TableHead className="hidden md:table-cell w-[300px]">
                           Updated at
                         </TableHead>
@@ -472,6 +496,9 @@ export function SaUserManagement() {
                             {mobUsers.role}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
+                            {mobUsers.level}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
                             {mobUsers.updatedAt}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
@@ -482,6 +509,7 @@ export function SaUserManagement() {
                               <span className="block md:hidden"><strong>Name:</strong> {mobUsers.username}</span>
                               <span className="block md:hidden"><strong>Email:</strong> {mobUsers.email}</span>
                               <span className="block md:hidden"><strong>Role:</strong> {mobUsers.role}</span>
+                              <span className="block md:hidden"><strong>Level:</strong> {mobUsers.level}</span>
                               <span className="block md:hidden"><strong>Updated:</strong> {mobUsers.updatedAt}</span>
                               <span className="block md:hidden"><strong>Created:</strong> {mobUsers.createdAt}</span>
                             <DropdownMenu>
@@ -490,7 +518,6 @@ export function SaUserManagement() {
                                   aria-haspopup="true"
                                   size="icon"
                                   variant="ghost"
-                                  className="select-none"
                                 >
                                   <MoreHorizontal className="h-4 w-4" />
                                   <span className="sr-only">Toggle menu</span>
@@ -518,7 +545,15 @@ export function SaUserManagement() {
                                           value={updateData.email}
                                           onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
                                         />
-
+                                        <Label>Level</Label>
+                                        <select name="level" value={updateData.level} onChange={(e) => setUpdateData({ ...updateData, level: e.target.value})} required>
+                                          <option value="" disabled>Select a level</option>
+                                          {levels.map((level) => (
+                                              <option key={level} value={level}>
+                                                  {level}
+                                              </option>
+                                          ))}
+                                        </select>
                                         <Label>New Password</Label>
                                         <div className="relative">
                                           <Input
