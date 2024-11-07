@@ -79,7 +79,7 @@ exports.deleteAdmin = async (req, res) => {
     const { status } = req.body;
 
     // Validate that status is either 'active' or 'deactivated'
-    if (status !== 'active' && status !== 'deactivated') {
+    if (status !== 'Active' && status !== 'Deactivated') {
       return res.status(400).json({ error: 'Invalid status' });
     }
 
