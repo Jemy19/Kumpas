@@ -1,7 +1,6 @@
 import {
   MoreHorizontal,
   PlusCircle,
-  File,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -73,6 +72,9 @@ import {toast} from 'react-hot-toast'
 import axios from 'axios'
 import NavbarSu from '@/components/NavbarSu';
 import HeaderSu from '@/components/HeaderSu';
+import Level2 from '@/components/level/level2';
+import Level3 from '@/components/level/level3';
+import Level4 from '@/components/level/level4';
 import SimplePagination from '@/components/simplepagination';
 import SearchInput from '@/components/searchinput';
 import Filter from '@/components/filter';
@@ -80,20 +82,64 @@ import UserSkeleton from '../../skeletons/userskeleton';
 
 export function SaSignManagement() {
     // for creating new sign language
-    const categories = ['Basic Greetings', 'Survival Signs', 'Common Words', 'Questions', 'Alphabet'];
+    const categories1 = ['Basic Greetings', 'Survival Signs', 'Common Words', 'Questions', 'Alphabet'];
+    const categories2 = ['Level2 test 1', 'Level2 test 2', 'Level2 test 3', 'Level2 test 4', 'Level2 test 5'];
+    const categories3 = ['Level3 test 1', 'Level3 test 2', 'Level3 test 3', 'Level3 test 4', 'Level3 test 5'];
+    const categories4 = ['Level4 test 1', 'Level4 test 2', 'Level4 test 3', 'Level4 test 4', 'Level4 test 5'];
+    const levels = ['Level 1', 'Level 2', 'Level 3', 'Level 4'];
     const [data, setData] = useState({
       title: '',
       description: '',
+      level: '',
       category: '',
       video: '',
-    })
+    });
+    const [updateData, setUpdateData] = useState({
+      id: null,
+      title: '',
+      level: '',
+      description: '',
+      category: '',
+      video: '',
+    });
     const vidUpRef = useRef(null);
-  
+    // for fetching sign language
+    const [words, setWords] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [butloading, setbutLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(8);
+    const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [currentCategories, setCurrentCategories] = useState([]);
     // for creating new sign language
+
+    // Update categories based on selected level
+    useEffect(() => {
+      const level = updateData.level || data.level; // Use whichever level is available
+      switch (level) {
+        case 'Level 1':
+            setCurrentCategories(categories1);
+            break;
+        case 'Level 2':
+            setCurrentCategories(categories2);
+            break;
+        case 'Level 3':
+            setCurrentCategories(categories3);
+            break;
+        case 'Level 4':
+            setCurrentCategories(categories4);
+            break;
+        default:
+            setCurrentCategories([]);
+            break;
+      }
+    }, [data.level, updateData.level]);  // This should be fine now that you ensure only one level is used.    
+    
     const addWord = async (e) => {
       e.preventDefault();
       setbutLoading(true); 
-      const { title, description, category } = data;
+      const { title, description, level, category } = data;
   
       try {
         let videoUrl = '';
@@ -105,6 +151,7 @@ export function SaSignManagement() {
         const response = await axios.post('/addNewWord', {
           title,
           description,
+          level,
           category,
           video: vidname,
         });
@@ -112,7 +159,7 @@ export function SaSignManagement() {
         if (response.data.error) {
           toast.error(response.data.error);
         } else {
-          setData({ title: '', description: '', category: '', video: '' });
+          setData({ title: '', description: '', level: '', category: '', video: '' });
           toast.success('New Word Successfully Added!');
           setWords(prevWords => [...prevWords, response.data]);
         }
@@ -122,22 +169,13 @@ export function SaSignManagement() {
         setbutLoading(false); // Hide loading overlay
       }
     };
-  
-    // for fetching sign language
-    const [words, setWords] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(8);
-    const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
-    const [selectedCategories, setSelectedCategories] = useState([]);
-    const [butloading, setbutLoading] = useState(false);
-
+    
 
     const updateItemsPerPage = () => {
       if (window.innerHeight <= 800) {
-        setItemsPerPage(6); // Set to your desired number
+        setItemsPerPage(5); // Set to your desired number
       } else {
-        setItemsPerPage(8); // Reset to the default
+        setItemsPerPage(7); // Reset to the default
       }
     };
   
@@ -185,20 +223,10 @@ export function SaSignManagement() {
     };
     // for update function
 
-    const [updateData, setUpdateData] = useState({
-      id: null,
-      title: '',
-      description: '',
-      category: '',
-      video: '',
-    });
-
     const updateWord = async (e, id, updatedData) => {
       e.preventDefault();
-      setbutLoading(true); 
       const originalData = words.find((word) => word._id === id);
-
-
+      setbutLoading(true); 
       try {
         let videoUrl = await vidUpRef.current.uploadVideo();
         const urlString = videoUrl;
@@ -206,11 +234,16 @@ export function SaSignManagement() {
         console.log(vidname)
         if(originalData.title == updateData.title 
           && originalData.description == updateData.description
+          && originalData.level == updateData.level
           && originalData.category == updateData.category
           && !vidname.endsWith('.mp4') 
         ) 
         {
           toast.error('No changes detected. Word not updated.');
+          return;
+        }
+        if(originalData.level !== updateData.level && originalData.category == updateData.category) {
+          toast.error('If level is changed the category must also be changed');
           return;
         }
         if(vidname.endsWith('.mp4')) {
@@ -236,10 +269,12 @@ export function SaSignManagement() {
         setbutLoading(false); // Hide loading overlay
       }
     };
+
     const handleEdit = (word) => {
       setUpdateData({
         id: word._id,
         title: word.title,
+        level: word.level,
         description: word.description,
         category: word.category,
         video: word.video,
@@ -284,12 +319,18 @@ export function SaSignManagement() {
             <UserSkeleton />
             ) : (
             <>        
-          <Tabs defaultValue="all">
-            <TabsContent value="all">
+          <Tabs defaultValue="level1">
+            <TabsList className="mt-2">
+              <TabsTrigger value="level1">Level 1</TabsTrigger>
+              <TabsTrigger value="level2">Level 2</TabsTrigger>
+              <TabsTrigger value="level3">Level 3</TabsTrigger>
+              <TabsTrigger value="level4">Level 4</TabsTrigger>
+            </TabsList>
+            <TabsContent value="level1">
               <Card x-chunk="dashboard-06-chunk-0">
                 <CardHeader>
                   <div className="flex items-center">
-                  <CardTitle>Sign Language Management</CardTitle>
+                  <CardTitle>Sign Language Management - LEVEL 1</CardTitle>
                   
                     <div className="ml-auto flex items-center gap-2">
                       <div className="flex items-center">
@@ -305,7 +346,7 @@ export function SaSignManagement() {
                             <Filter
                                 selectedCategories={selectedCategories}
                                 handleCategoryChange={handleCategoryChange}
-                                categories={categories}
+                                categories={categories1}
                                 titlelabel="Filter by Category"
                             />
                             </div>
@@ -330,10 +371,19 @@ export function SaSignManagement() {
                                 <Input type='text' placeholder='Enter Title...' value={data.title} onChange={(e) => setData({...data, title: e.target.value})} />
                                 <Label>Description</Label>
                                 <Input type='text' placeholder='Enter Description...' value={data.description} onChange={(e) => setData({...data, description: e.target.value})} />
+                                <Label>Level</Label>
+                                <select name="level" value={data.level} onChange={(e) => setData({...data, level: e.target.value})} required>
+                                  <option value="" disabled>Select a level</option>
+                                  {levels.map((level) => (
+                                      <option key={level} value={level}>
+                                          {level}
+                                      </option>
+                                  ))}
+                                </select>
                                 <Label>Category</Label>
                                 <select name="category" value={data.category} onChange={(e) => setData({...data, category: e.target.value})} required>
                                   <option value="" disabled>Select a category</option>
-                                  {categories.map((category) => (
+                                  {currentCategories.map((category) => (
                                       <option key={category} value={category}>
                                           {category}
                                       </option>
@@ -341,7 +391,7 @@ export function SaSignManagement() {
                                 </select>
                                 <Label>Video</Label>
                                 <VidUp value={data.video} ref={vidUpRef} />
-                                <Button
+                                  <Button
                                   type="submit"
                                   disabled={butloading}
                                   className={`w-full h-10 select-none ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1 select-none' : ''}`}
@@ -491,6 +541,15 @@ export function SaSignManagement() {
                                           value={updateData.description}
                                           onChange={(e) => setUpdateData({ ...updateData, description: e.target.value })}
                                       />
+                                      <Label>Level</Label>
+                                      <select name="level" value={updateData.level} onChange={(e) => setUpdateData({...updateData, level: e.target.value})} required>
+                                        <option value={updateData.updateData} disabled>Select a level</option>
+                                        {levels.map((level) => (
+                                            <option key={level} value={level}>
+                                                {level}
+                                            </option>
+                                        ))}
+                                      </select>
                                       <Label>Category</Label>
                                       <select
                                           name="category"
@@ -499,7 +558,7 @@ export function SaSignManagement() {
                                           required
                                       >
                                           <option value="" disabled>Select a category</option>
-                                          {categories.map((category) => (
+                                          {currentCategories.map((category) => (
                                           <option key={category} value={category}>
                                               {category}
                                           </option>
@@ -510,13 +569,13 @@ export function SaSignManagement() {
                                       <VidUp ref={vidUpRef} />
                                       <input type="hidden" name="originalVideo" value={word.video} />
                                       <SheetFooter>
-                                          <Button
+                                        <Button
                                           type="submit"
                                           disabled={butloading}
                                           className={`w-full h-10 select-none ${butloading ? 'bg-gray-400 cursor-not-allowed translate-y-1 select-none' : ''}`}
-                                          >
-                                            {butloading ? 'Updating...' : 'UPDATE'}
-                                          </Button>
+                                        >
+                                          {butloading ? 'Updating...' : 'UPDATE'}
+                                        </Button>
                                       </SheetFooter>
                                       </div>
                                       </form>
@@ -563,6 +622,15 @@ export function SaSignManagement() {
                   />
               </CardFooter>
               </Card>
+            </TabsContent>
+            <TabsContent value="level2">
+              <Level2/>
+            </TabsContent>
+            <TabsContent value="level3">
+              <Level3/>
+            </TabsContent>
+            <TabsContent value="level4">
+              <Level4/>
             </TabsContent>
           </Tabs>
           </>
