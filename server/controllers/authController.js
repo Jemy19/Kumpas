@@ -29,6 +29,9 @@ const loginUser = async (req, res) => {
       return res.json({ error: 'No user found with this email' });
     }
 
+    if (user.role === 'admin' && user.status === 'Deactivated') {
+      return res.json({ error: 'Account is deactivated. Please contact the super admin.' });
+    }
     // Compare the provided password with the stored hashed password
     const match = await comparePassword(password, user.password);
     if (!match) {
