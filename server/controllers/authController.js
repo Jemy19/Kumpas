@@ -264,6 +264,7 @@ try {
       username: user.username,
       email: user.email,
       role: user.role,
+      level: user.level,
       createdAt: user.createdAt.toLocaleString(), // Format createdAt
       updatedAt: user.updatedAt.toLocaleString(), // Format updatedAt
     }));
@@ -327,11 +328,15 @@ const getWordsSortedByUsage = async (req, res) => {
 
 const createMobUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, level, password } = req.body;
 
     // Validate email
     if (!email) {
       return res.json({ error: 'Email is required' });
+    }
+
+    if (!level) {
+      return res.json({ error: 'Level is required' });
     }
 
     // Validate password
@@ -340,6 +345,14 @@ const createMobUser = async (req, res) => {
       return res.json({
         error: 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.',
       });
+    }
+
+    if (typeof level === 'string' && level.toLowerCase().startsWith("level ")) {
+      const levelNumber = parseInt(level.replace("Level ", ""), 10);
+      if (isNaN(levelNumber)) {
+        return res.status(400).json({ error: 'Invalid level format' });
+      }
+      level = levelNumber;
     }
 
     console.log('Checking for existing user with email:', email);
@@ -355,6 +368,7 @@ const createMobUser = async (req, res) => {
     // Create the new mobile user
     const user = await MobUser.create({
       email,
+      level,
       password: hashedPassword,
       // Username will be generated automatically from email in the pre-save hook
       role: 'user' // Role is fixed as 'user'
@@ -421,7 +435,7 @@ const deleteMobUser = async (req, res) => {
 
 const updateMobUser = async (req, res) => {
   const { id } = req.params;
-  const {email, password } = req.body;
+  const {email, level, password } = req.body;
   console.log('Received update request for name:', email);
   try {
     const mobUser = await MobUser.findById(id); // Changed from User to MobUser
@@ -431,8 +445,17 @@ const updateMobUser = async (req, res) => {
       });
     }
 
+    if (typeof level === 'string' && level.toLowerCase().startsWith("level ")) {
+      const levelNumber = parseInt(level.replace("Level ", ""), 10);
+      if (isNaN(levelNumber)) {
+        return res.status(400).json({ error: 'Invalid level format' });
+      }
+      level = levelNumber;
+    }
+
     // Update name and email if provided
     mobUser.email = email || mobUser.email;
+    mobUser.level = level || mobUser.level;
 
     // Check and update password
     if (password) {

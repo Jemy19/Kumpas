@@ -13,10 +13,10 @@ const mobuserSchema = new Schema({
         type: String,
         unique: true 
     },
-    level: { 
-        type: String,   
-        enum: ['level 1', 'level 2', 'level 3', 'level 4'], // Add enum for levels
-        default: 'level 1'    // Set default value to 'level 1'
+    level: {
+        type: Number,
+        required: true,
+        default: 1
     },
     isVerified: { 
         type: Boolean,

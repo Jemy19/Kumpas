@@ -77,6 +77,7 @@ export function UserManagement() {
   const [butloading, setbutLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const levels = ['Level 1', 'Level 2', 'Level 3', 'Level 4'];
     //responsive
 
     const updateItemsPerPage = () => {
@@ -102,6 +103,7 @@ export function UserManagement() {
   // create account
   const [data, setData] = useState({
     email: '',
+    level: '',
     password: '',
     confirmPassword: '',
   });
@@ -109,7 +111,7 @@ export function UserManagement() {
   const registerMobUser = async (e) => {
     e.preventDefault();
     setbutLoading(true); 
-    const { email, password, confirmPassword } = data;
+    const { email, level, password, confirmPassword } = data;
   
     // Frontend password validation
     
@@ -158,12 +160,13 @@ export function UserManagement() {
     try {
       const { data } = await axios.post('/createMobUser', {
         email,
+        level,
         password,
       });
       if (data.error) {
         toast.error(data.error);
       } else {
-        setData({ email: '', password: '', confirmPassword: '' });
+        setData({ email: '', level: '', password: '', confirmPassword: '' });
         toast.success('New User Created!');
         setmobUsers(prevmobUsers => [...prevmobUsers, data]);
       }
@@ -194,6 +197,7 @@ export function UserManagement() {
   const [updateData, setUpdateData] = useState({
     id: null,
     email: '',
+    level: '',
     password: '',
     confirmPassword: '',
   });
@@ -220,6 +224,7 @@ export function UserManagement() {
       // Check if no changes were made
       if (
         originalData.email === updateData.email &&
+        originalData.level === updateData.level &&
         !updateData.password && !updateData.confirmPassword
       ) {
         toast.error('No changes detected. MobUser account not updated.');
@@ -292,6 +297,7 @@ export function UserManagement() {
     setUpdateData({
       id: mobUser._id,
       email: mobUser.email,
+      level: mobUser.level,
       password: '',
       confirmPassword: '',
     });
@@ -377,6 +383,16 @@ export function UserManagement() {
                                     onChange={(e) => setData({ ...data, email: e.target.value })}
                                   />
                                 </div>
+
+                                <Label>Level</Label>
+                                <select name="level" value={data.level} onChange={(e) => setData({...data, level: e.target.value})} required>
+                                  <option value="" disabled>Select a level</option>
+                                  {levels.map((level) => (
+                                      <option key={level} value={level}>
+                                          {level}
+                                      </option>
+                                  ))}
+                                </select>
                                 
                                 {/* Password Field */}
                                 <div className="grid gap-2 relative">
@@ -479,6 +495,9 @@ export function UserManagement() {
                             {mobUsers.role}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
+                            {mobUsers.level}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
                             {mobUsers.updatedAt}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
@@ -489,6 +508,7 @@ export function UserManagement() {
                               <span className="block md:hidden"><strong>Name:</strong> {mobUsers.username}</span>
                               <span className="block md:hidden"><strong>Email:</strong> {mobUsers.email}</span>
                               <span className="block md:hidden"><strong>Role:</strong> {mobUsers.role}</span>
+                              <span className="block md:hidden"><strong>Level:</strong> {mobUsers.level}</span>
                               <span className="block md:hidden"><strong>Updated:</strong> {mobUsers.updatedAt}</span>
                               <span className="block md:hidden"><strong>Created:</strong> {mobUsers.createdAt}</span>
                             <DropdownMenu>
@@ -524,7 +544,15 @@ export function UserManagement() {
                                           value={updateData.email}
                                           onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
                                         />
-
+                                        <Label>Level</Label>
+                                        <select name="level" value={updateData.level} onChange={(e) => setUpdateData({...updateData, level: e.target.value})} required>
+                                          <option value={updateData.level} disabled>Select a level</option>
+                                          {levels.map((level) => (
+                                              <option key={level} value={level}>
+                                                  {level}
+                                              </option>
+                                          ))}
+                                        </select>
                                         <Label>New Password</Label>
                                         <div className="relative">
                                           <Input
