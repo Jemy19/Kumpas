@@ -169,15 +169,26 @@ export function AccountManagement() {
     }
   }
   // delete account
-  const deleteAcc = async (id) => {
+
+  const deleteAcc = async (id, currentStatus) => {
     try {
-      const response = await axios.delete(`/admin/admin/${id}`);
+      // Determine the new status based on the current status
+      const newStatus = currentStatus === 'deactivated' ? 'active' : 'deactivated';
+  
+      // Send a PATCH request to the backend to update the account status
+      const response = await axios.patch(`/admin/admin/${id}`, { status: newStatus });
+      
       if (response.status === 200) {
-        toast.success('account Deleted!')  
-        setAdmins(prevAdmins => prevAdmins.filter((admin) => admin._id !== id));
-      } 
+        toast.success(`Account ${newStatus === 'deactivated' ? 'Deactivated' : 'Activated'}!`);
+        
+        // Update the local state to reflect the new status
+        setAdmins(prevAdmins => prevAdmins.map(admin => 
+          admin._id === id ? { ...admin, status: newStatus } : admin
+        ));
+      }
     } catch (error) {
-      console.error('An error occurred while deleting the account:', error);
+      console.error(`An error occurred while ${currentStatus === 'deactivated' ? 'activating' : 'deactivating'} the account:`, error);
+      toast.error(`An error occurred while ${currentStatus === 'deactivated' ? 'activating' : 'deactivating'} the account.`);
     }
   };
   // for updating account
@@ -444,6 +455,7 @@ export function AccountManagement() {
                         </TableHead>
                         <TableHead className="hidden w-[200px] sm:table-cell">Email</TableHead>
                         <TableHead className="hidden w-[200px] sm:table-cell">Role</TableHead>
+                        <TableHead className="hidden w-[200px] sm:table-cell">Status</TableHead>
                         <TableHead className="hidden md:table-cell w-[300px]">
                           Updated at
                         </TableHead>
@@ -466,6 +478,7 @@ export function AccountManagement() {
                             <TableCell className="hidden md:table-cell">{admin.name}</TableCell>
                             <TableCell className="hidden md:table-cell">{admin.email}</TableCell>
                             <TableCell className="hidden md:table-cell">{admin.role}</TableCell>
+                            <TableCell className="hidden md:table-cell">{admin.status}</TableCell>
                             <TableCell className="hidden md:table-cell">{admin.updatedAt}</TableCell>
                             <TableCell className="hidden md:table-cell">{admin.createdAt}</TableCell>
                             <TableCell className="flex flex-col sm:items-start md:items-center">
@@ -473,6 +486,7 @@ export function AccountManagement() {
                               <span className="block md:hidden"><strong>Name:</strong> {admin.name}</span>
                               <span className="block md:hidden"><strong>Email:</strong> {admin.email}</span>
                               <span className="block md:hidden"><strong>Role:</strong> {admin.role}</span>
+                              <span className="block md:hidden"><strong>Status:</strong> {admin.status}</span>
                               <span className="block md:hidden"><strong>Updated:</strong> {admin.updatedAt}</span>
                               <span className="block md:hidden"><strong>Created:</strong> {admin.createdAt}</span>
                               <DropdownMenu>
@@ -572,13 +586,13 @@ export function AccountManagement() {
                                   </Sheet>
                                   <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                      <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive">Delete</Button>
+                                      <Button className="block py-2 px-4 rounded w-32 h-10 select-none" variant="destructive"> {admin.status === 'active' ? 'Deactivate' : 'Activate'}</Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
                                       <AlertDialogHeader>
                                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                         <AlertDialogDescription>
-                                          This action cannot be undone. This will permanently delete the Account: {admin.name}
+                                          This will {admin.status === 'active' ? 'deactivate' : 'activate'} the Account: {admin.name}
                                         </AlertDialogDescription>
                                       </AlertDialogHeader>
                                       <AlertDialogFooter>

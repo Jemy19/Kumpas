@@ -8,6 +8,10 @@ const userSchema = new Schema({
         unique: true
     },
     password: { type: String, required: true },
+    status: { 
+        type: String,
+        default: 'Active'
+    },
     role: { type: String, enum: ['super_admin', 'admin'], required: true },
     resetPasswordToken: { type: String },
     resetPasswordExpires: { type: Date },

@@ -76,30 +76,48 @@ exports.getAllAdmins = async (req, res) => {
 // Controller to delete an admin
 exports.deleteAdmin = async (req, res) => {
   try {
-    const admin = await User.findByIdAndDelete(req.params.id);
-    if (!admin) {
-      return res.json({
-        error: 'Admin not found'
-    })
+    const { status } = req.body;
+
+    // Validate that status is either 'active' or 'deactivated'
+    if (status !== 'active' && status !== 'deactivated') {
+      return res.status(400).json({ error: 'Invalid status' });
     }
+
+    // Find and update the admin's status
+    const admin = await User.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true } // Return the updated document
+    );
+
+    if (!admin) {
+      return res.status(404).json({ error: 'Admin not found' });
+    }
+
+    // Create a log entry for deactivation
     await Log.create({
       level: 'info',
-      message: `Delete Admin Account: ${admin.name}`,
+      message: `Deactivated Admin Account: ${admin.name}`,
       adminId: req.user._id,
       adminName: req.user.name
     });
-    res.status(200).send(admin);
+
+    // Respond with the updated admin data
+    res.status(200).json({ success: true, admin });
   } catch (error) {
+    // Create a log entry for any error during the deactivation process
     await Log.create({
       level: 'info',
-      message: `Error Deleting Admin Account: ${admin.name}`,
+      message: `Error Deactivating Admin Account: ${admin ? admin.name : 'Unknown'}`,
       adminId: req.user._id,
       adminName: req.user.name
     });
-    res.status(400).send(error);
+
+    // Send the error response
+    console.error('Error updating admin status:', error);
+    res.status(400).json({ error: 'Error updating account status' });
   }
 };
- 
 exports.updateAdmin = async (req, res) => {
   const { id } = req.params;
   const { name, email, password } = req.body;
