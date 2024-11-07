@@ -347,13 +347,10 @@ const createMobUser = async (req, res) => {
       });
     }
 
-    if (typeof level === 'string' && level.toLowerCase().startsWith("level ")) {
-      const levelNumber = parseInt(level.replace("Level ", ""), 10);
+    let levelNumber = parseInt(level.replace("Level ", ""), 10);
       if (isNaN(levelNumber)) {
-        return res.status(400).json({ error: 'Invalid level format' });
+          return res.json({ error: 'Invalid level format' });
       }
-      level = levelNumber;
-    }
 
     console.log('Checking for existing user with email:', email);
     const existingUser = await MobUser.findOne({ email });
@@ -368,7 +365,7 @@ const createMobUser = async (req, res) => {
     // Create the new mobile user
     const user = await MobUser.create({
       email,
-      level,
+      level: levelNumber,
       password: hashedPassword,
       // Username will be generated automatically from email in the pre-save hook
       role: 'user' // Role is fixed as 'user'
@@ -435,7 +432,7 @@ const deleteMobUser = async (req, res) => {
 
 const updateMobUser = async (req, res) => {
   const { id } = req.params;
-  const {email, level, password } = req.body;
+  let {email, level, password } = req.body;
   console.log('Received update request for name:', email);
   try {
     const mobUser = await MobUser.findById(id); // Changed from User to MobUser

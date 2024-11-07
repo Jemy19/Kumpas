@@ -464,6 +464,7 @@ export function UserManagement() {
                         </TableHead>
                         <TableHead className="hidden w-[200px] sm:table-cell">Email</TableHead>
                         <TableHead className="hidden w-[200px] sm:table-cell">Role</TableHead>
+                        <TableHead className="hidden w-[200px] sm:table-cell">Level</TableHead>
                         <TableHead className="hidden md:table-cell w-[300px]">
                           Updated at
                         </TableHead>
@@ -545,7 +546,7 @@ export function UserManagement() {
                                           onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
                                         />
                                         <Label>Level</Label>
-                                        <select name="level" value={updateData.level} onChange={(e) => setUpdateData({...updateData, level: e.target.value})} required>
+                                        <select name="level" value={updateData.level} onChange={(e) => setUpdateData({ ...updateData, level: e.target.value})} required>
                                           <option value={updateData.level} disabled>Select a level</option>
                                           {levels.map((level) => (
                                               <option key={level} value={level}>
