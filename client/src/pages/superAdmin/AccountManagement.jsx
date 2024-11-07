@@ -597,7 +597,7 @@ export function AccountManagement() {
                                       </AlertDialogHeader>
                                       <AlertDialogFooter>
                                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction onClick={() => deleteAcc(admin._id)}>Continue</AlertDialogAction>
+                                        <AlertDialogAction onClick={() => deleteAcc(admin._id, admin.status)}>Continue</AlertDialogAction>
                                       </AlertDialogFooter>
                                     </AlertDialogContent>
                                   </AlertDialog>
