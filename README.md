@@ -12,7 +12,6 @@ E-Kumpas is a mobile and web application designed to bridge communication gaps b
 - [Project Scope and Limitations](#project-scope-and-limitations)
 - [Development Objectives](#development-objectives)
 - [Evaluation Model](#evaluation-model)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Purpose and Description
