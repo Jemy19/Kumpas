@@ -36,15 +36,14 @@ E-Kumpas serves:
 - **Android OS**: Requires Android Oreo (8.0) or later.
 
 ### Installation Steps
-1. Download the E-Kumpas APK from the official source.
-2. Install the APK on an Android device.
-3. (Optional) Connect to the internet to check for updates or additional resources.
+1. Download the E-Kumpas APK from the website.
+2. Install the APK on your Android device.
+3. Use the app in **offline mode** or **connect to the internet** to access additional features and updates.
 
 ## Usage
 1. Open the E-Kumpas app on your device.
-2. Select a category (Alphabets, Common Words, Greetings, etc.).
-3. Enter the text you want to translate.
-4. View the animated FSL translation on the screen.
+2. Select a category (Alphabets, Common Words, Greetings, etc.) or enter any text you wish to translate.
+3. View the animated FSL translation on the screen.
 
 ## Project Scope and Limitations
 ### Scope
@@ -75,8 +74,6 @@ The E-Kumpas system will be evaluated based on the **FURPS Model**:
 - **Performance**: Efficient text-to-animation translations.
 - **Security**: Secure handling of user data and feedback.
 
-## Contributing
-We welcome contributions to enhance E-Kumpas! Please see [CONTRIBUTING.md](link-to-contributing-guidelines) for details on our code of conduct and how to submit pull requests.
-
 ## License
-This project is licensed under the [MIT License](link-to-license). See the LICENSE file for details.
+This project is proprietary. All rights reserved. See the LICENSE file for details.
+
