@@ -32,7 +32,7 @@ E-Kumpas serves:
 
 ## Installation
 ### Prerequisites
-- **Android OS**: Requires Android Oreo (8.0) or later.
+- **Android OS**: Requires Android (11.0) or later.
 
 ### Installation Steps
 1. Download the E-Kumpas APK from the website.
