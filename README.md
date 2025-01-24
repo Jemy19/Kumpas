@@ -16,16 +16,16 @@ E-Kumpas is a mobile and web application designed to bridge communication gaps b
 
 
 ## Web Screenshots
-- HomePage
+  HomePage
 ![image](https://github.com/user-attachments/assets/e33c8cee-dc22-4e58-8c8a-c446632c2c87)
 
-- LoginPage
+  LoginPage
 ![image](https://github.com/user-attachments/assets/e1b33590-3d8d-4f67-851c-5aa0f172192b)
 
-- Dashboard
+  Dashboard
 ![image](https://github.com/user-attachments/assets/29637bd7-836b-45d2-b6f9-e3f70fb23e81)
 
-- SignManagement
+  SignManagement
 ![image](https://github.com/user-attachments/assets/32b18e9b-a89f-4875-8079-938e206a30cd)
 
 
