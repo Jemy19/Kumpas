@@ -14,6 +14,21 @@ E-Kumpas is a mobile and web application designed to bridge communication gaps b
 - [Evaluation Model](#evaluation-model)
 - [License](#license)
 
+
+## Web Screenshots
+- HomePage
+![image](https://github.com/user-attachments/assets/e33c8cee-dc22-4e58-8c8a-c446632c2c87)
+
+- LoginPage
+![image](https://github.com/user-attachments/assets/e1b33590-3d8d-4f67-851c-5aa0f172192b)
+
+- Dashboard
+![image](https://github.com/user-attachments/assets/29637bd7-836b-45d2-b6f9-e3f70fb23e81)
+
+- SignManagement
+![image](https://github.com/user-attachments/assets/32b18e9b-a89f-4875-8079-938e206a30cd)
+
+
 ## Purpose and Description
 The primary goal of E-Kumpas is to educate hearing individuals and individuals with diverse hearing abilities in FSL, enabling better communication with the Deaf community. E-Kumpas includes animated translations for the FSL alphabet, common words, basic greetings, commonly asked questions, and survival signs. The app fosters awareness of FSL, making it easier for both hearing and Deaf communities to interact and engage meaningfully.
 
